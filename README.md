@@ -2,7 +2,7 @@
 
 The React Native UI library built for AI development.
 
-Material Design 3 components for Expo — with a built-in MCP server and Claude Skills that give AI the context to generate consistent, theme-aware code instead of generic boilerplate.
+Includes a built-in MCP server and Claude Skills that give AI the context to generate consistent, theme-aware code instead of generic boilerplate.
 
 🌐 **[Live Demo](https://demo-zero-to-app--lbqs9orlsl.expo.app)** &nbsp;·&nbsp; 📦 **[NPM](https://www.npmjs.com/package/zero-to-app)**
 
