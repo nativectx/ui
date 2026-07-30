@@ -28,6 +28,8 @@ npx nativectx skills --contributor
 
 All 8 skills are also readable on demand through the MCP server, regardless of which set is installed.
 
+Re-running without the flag removes any contributor skills a previous install left behind, so an upgraded project doesn't keep stale files. Nothing else in `.claude/skills/` is touched.
+
 ### MCP Server
 
 Add to your Claude Code `.mcp.json` or Claude Desktop config:
