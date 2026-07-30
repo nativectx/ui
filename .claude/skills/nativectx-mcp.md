@@ -1,125 +1,117 @@
 ---
-description: How to use the @nativectx/ui MCP server tools to answer questions and generate code accurately
+description: How to wire up the @nativectx/ui MCP server, which tool to reach for when, and where its answers are incomplete
 ---
 
-# NativeCtx UI AI Tools
+# NativeCtx UI MCP Server
 
-NativeCtx UI ships two AI tools via its CLI:
-- `npx nativectx skills` — installs 8 Claude Skill files into `.claude/skills/` (Claude Code reads these automatically)
-- `npx nativectx mcp` — starts the MCP server for live tool access mid-conversation
+NativeCtx UI ships two AI integrations from one CLI:
 
-The MCP server exposes 7 tools and 6 resources. Use them proactively — do not guess component props or token names from memory.
+| Command | What it does |
+|---|---|
+| `npx nativectx skills` | Copies 8 skill files into `.claude/skills/` — static, read automatically by Claude Code |
+| `npx nativectx mcp` | Starts the MCP server — live tools that read a manifest generated from component source |
+
+The skills stand alone. The MCP server is enrichment: it answers *lookups* (exact props, real token names, generated palettes) that would go stale if written down. When it's connected, prefer it over recalling props from memory.
 
 ---
 
-## When to call which tool
+## Wiring it up
 
-### `get_component(name)`
-Call whenever you need accurate props for a specific component. Use this before writing any JSX that uses a @nativectx/ui component.
+**Claude Code** — add to `.mcp.json` in the project root:
 
-```
-get_component("Button")       → props, variants, JSDoc examples
-get_component("AppTabs")      → tabs config shape, platform notes
-get_component("ThemedView")   → variant options, elevation range
-```
-
-### `search_components(query)`
-Call when the user describes a need but hasn't named a component. Returns the top 5 matches with key props.
-
-```
-search_components("expandable section")   → Collapsible
-search_components("image with fallback")  → ThemedImage, Avatar
-search_components("tab bar navigation")   → AppTabs
+```json
+{
+  "mcpServers": {
+    "nativectx": {
+      "command": "npx",
+      "args": ["-y", "nativectx", "mcp"]
+    }
+  }
+}
 ```
 
-### `list_components(category?)`
-Call at the start of a screen-building task to see all available components. Filter by category to narrow results.
+**Claude Desktop** — same block, in `claude_desktop_config.json` (`~/Library/Application Support/Claude/` on macOS). This file lives outside the project, so it isn't touched by `npx nativectx skills` or `npx nativectx migrate`.
 
-```
-list_components()               → all 28 components grouped by category
-list_components("navigation")   → AppTabs, Sidebar, NativeHeader, etc.
-list_components("controls")     → Button, Chip, FAB, Switch, Slider, etc.
-```
+Restart the client after editing. Verify with `list_components()` — it should return 28 components.
 
-Categories: `layout`, `display`, `controls`, `input`, `feedback`, `collections`, `navigation`
+`nativectx` is a thin alias package that forwards to `@nativectx/ui`; `npx -y @nativectx/ui mcp` is equivalent. If the project already depends on `@nativectx/ui`, the server runs against the installed version, so its answers track the version actually in `node_modules`.
 
-### `get_theme_tokens(component?)`
-Call when writing inline styles or applying semantic colors. Pass a component name to get its specific token group.
+---
 
-```
-get_theme_tokens()           → full token tree
-get_theme_tokens("button")   → theme.tokens.button.filledBg, etc.
-get_theme_tokens("input")    → theme.tokens.input.background, border, etc.
-```
+## Which tool to reach for
 
-### `generate_palette(primaryHex, secondaryHex?, tertiaryHex?)`
-Call when the user provides a color and wants a full M3 palette. Returns both light and dark Colors objects as TypeScript code.
+Full parameter schemas come from the server — this is the routing, not the signatures.
 
-```
-generate_palette("#1B5E20")              → full palette from seed
-generate_palette("#0D47A1", "#880E4F")   → with explicit secondary
-```
+| Situation | Tool |
+|---|---|
+| About to write JSX using a component | `get_component` — before writing, not after a type error |
+| User described a need but named no component | `search_components` — top 5 by use case |
+| Starting a screen and need the vocabulary | `list_components`, optionally by category |
+| Writing inline styles or picking a semantic colour | **nativectx-theme** first; `get_theme_tokens` has drifted (below) |
+| User gave a brand colour and wants a palette | `generate_palette` |
+| New app / new brand from scratch | `generate_brand_config` → paste into `brand.ts` |
+| Need expo-router navigation boilerplate | `generate_navigation` — but see the caveat below |
 
-### `generate_brand_config(name, primaryHex, spacing?, borderRadius?)`
-Call when starting a new app or brand. Returns a complete `createBrand({...})` snippet ready to paste.
+Categories for `list_components`: `layout`, `display`, `controls`, `input`, `feedback`, `collections`, `navigation`.
+Presets for `generate_brand_config`: spacing `compact` / `default` / `comfortable`, radius `sharp` / `default` / `rounded`.
+Patterns for `generate_navigation`: `flat-tabs`, `tabs-sidebar`, `tabs-stack`.
 
-```
-generate_brand_config("Acme", "#6750A4")
-generate_brand_config("Fintech", "#1B5E20", "compact", "sharp")
-```
+---
 
-Spacing presets: `compact`, `default`, `comfortable`
-Border radius presets: `sharp`, `default`, `rounded`
+## Where the tools are incomplete
 
-### `generate_navigation(pattern, tabs?)`
-Call when setting up navigation. Patterns map to common expo-router layouts.
+The manifest is extracted from source by `build-manifest.ts`. It reads the `<Name>Props` interface declared in each component's own file, and only that interface's **own** properties. So:
 
-```
-generate_navigation("flat-tabs")       → simple tab bar, no stack
-generate_navigation("tabs-sidebar")    → tabs on mobile, sidebar on tablet
-generate_navigation("tabs-stack")      → tabs with nested detail screens
-```
+- **Inherited props never appear.** `Button` really does accept `disabled` and `loading`; `Chip` and `ListItem` accept `onPress` and `disabled`. See **nativectx-components** for the shared base interfaces.
+- **`Sidebar` and `ThemedStack` report zero props.** Their props live in a platform file or come from expo-router. **nativectx-navigation** is the reference for both.
+- **`AppTabConfig` is not expanded.** `get_component("AppTabs")` shows `tabs: AppTabConfig[]` without the field list. It's in **nativectx-navigation**.
+- **`IconButton` is missing entirely** — exported from the package, absent from the manifest.
+- **`get_theme_tokens` is not generated from source.** It is a hand-maintained string and has drifted: it reports `input.focusedBorder`, `list.itemSubText`, `modal.overlay`, `appbar.iconColor` and `link` / `badge` groups that no longer exist in `ThemeValuesType`. **nativectx-theme** is authoritative for token names.
+- **`generate_navigation` output is boilerplate, not a reviewed pattern.** It has emitted `<SidebarItem href=...>` and `<ThemedStack.Screen>`, neither of which exists. Treat its output as a starting sketch and reconcile it against the scenarios in **nativectx-navigation**, which are the authoritative layouts.
 
-Pass `tabs` to customize tab names, labels, and icons. Defaults to Home / Explore / Settings.
+A prop being absent from tool output is not evidence the prop doesn't exist. Check the skill, then the source.
 
 ---
 
 ## Resources
 
-Six skill files are available as resources. Claude reads these automatically when relevant context is needed:
+The 8 skill files are also served as MCP resources, so a client without `.claude/skills/` can still read them:
 
 | Resource URI | Content |
 |---|---|
-| `@nativectx/ui://setup` | Installation, provider setup, troubleshooting |
-| `@nativectx/ui://components` | Component reference table |
-| `@nativectx/ui://theme` | Theme hooks, tokens, responsive patterns |
-| `@nativectx/ui://navigation` | Navigation pattern examples |
-| `@nativectx/ui://dev` | Development commands and repo structure |
-| `@nativectx/ui://contributing` | Checklist for adding new components |
-| `@nativectx/ui://mcp` | This file |
+| `nativectx://setup` | Installation, provider setup, troubleshooting |
+| `nativectx://components` | Choosing and composing components |
+| `nativectx://theme` | Theme hooks, tokens, responsive patterns |
+| `nativectx://navigation` | Navigation patterns and layout shapes |
+| `nativectx://dev` | Development commands and repo structure |
+| `nativectx://contributing` | Checklist for adding new components |
+| `nativectx://migration` | Upgrading from `zero-to-app` |
+| `nativectx://mcp` | This file |
 
 ---
 
-## Common patterns
+## Workflows
 
-### Building a new screen
-1. `search_components("...")` or `list_components(category)` to find the right components
-2. `get_component(name)` for each component used — get real prop names before writing JSX
-3. `get_theme_tokens("button")` etc. if applying custom styles
+**Building a new screen**
+1. `search_components(...)` or `list_components(category)` to find the right pieces
+2. `get_component(name)` for each one — real prop names before writing JSX
+3. **nativectx-theme** for token names if applying custom styles
 
-### Starting a new app
-1. `generate_brand_config(name, hex)` → paste into `brand.ts`
-2. `generate_navigation(pattern)` → paste into `app/_layout.tsx` and `app/(tabs)/_layout.tsx`
-3. Use `@nativectx/ui://setup` resource to confirm provider wiring
+**Starting a new app**
+1. `generate_brand_config(name, hex)` → `brand.ts`
+2. Pick a layout shape from **nativectx-navigation**, optionally seeding it with `generate_navigation(pattern)`
+3. Confirm provider wiring against **nativectx-setup**
 
-### Theming a color
-1. `generate_palette(hex)` → see full 30-token palette before choosing
-2. Use the output in `createBrand({ colors: { colorSeed: { primary: hex } } })`
+**Theming a colour**
+1. `generate_palette(hex)` to see the full palette before committing
+2. Use the seed in `createBrand({ colors: { colorSeed: { primary: hex } } })`
 
 ---
 
 ## Do not
 
 - Guess prop names from memory — call `get_component()` first
-- Invent token names — call `get_theme_tokens()` to get real names
-- Use `SchemeContent` or other `@material/material-color-utilities` internals directly — use `createBrand({ colors: { colorSeed: { primary: hex } } })` instead
+- Invent token names — take them from **nativectx-theme**, not from memory
+- Assume a prop is unsupported because the tool didn't list it — see "Where the tools are incomplete"
+- Paste `generate_navigation` output unreviewed
+- Use `SchemeContent` or other `@material/material-color-utilities` internals directly — use `createBrand({ colors: { colorSeed: { primary: hex } } })`
