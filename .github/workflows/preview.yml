@@ -1,9 +1,12 @@
 name: Preview Deploy
 
+# Opt-in only. EAS Hosting is metered, so preview deploys do not run on
+# every PR — add the `preview` label to a PR to deploy it, remove and
+# re-add to redeploy. Pushes to a labelled PR redeploy automatically.
 on:
   pull_request:
     branches: [master, main]
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, labeled]
 
 concurrency:
   group: preview-${{ github.head_ref }}
@@ -13,6 +16,7 @@ jobs:
   preview:
     name: Deploy Preview
     runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'preview')
 
     steps:
       - name: Checkout
