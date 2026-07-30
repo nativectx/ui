@@ -10,8 +10,8 @@
     "web": "expo start --web",
     "export:web": "expo export --platform web",
     "lint": "expo lint",
-    "deploy": "eas deploy --prod",
-    "deploy:preview": "eas deploy"
+    "deploy:web": "eas deploy --prod",
+    "deploy:web:preview": "eas deploy"
   },
   "dependencies": {
     "@expo/ui": "~56.0.15",
