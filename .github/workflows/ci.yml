@@ -33,6 +33,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Must precede typecheck: apps/demo, apps/storybook and the nativectx
+      # wrapper all resolve @nativectx/ui through its compiled dist/, which
+      # does not exist on a fresh checkout.
+      - name: Build package
+        run: pnpm build
+
       - name: Lint
         run: pnpm lint
 
@@ -41,9 +47,6 @@ jobs:
 
       - name: Test
         run: pnpm test
-
-      - name: Build package
-        run: pnpm build
 
       - name: Build demo
         run: pnpm export:web
