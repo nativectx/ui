@@ -21,6 +21,7 @@
     "deploy:preview": "pnpm build && pnpm --filter demo publish:preview",
     "release": "pnpm build && pnpm --filter @nativectx/ui publish --access public --no-git-checks",
     "typecheck": "pnpm -r exec tsc --noEmit",
+    "test": "pnpm --filter @nativectx/ui test",
     "lint": "pnpm --filter demo lint",
     "lint:fix": "pnpm --filter demo lint -- --fix",
     "clean": "rm -rf ui/dist apps/*/dist apps/*/.expo"

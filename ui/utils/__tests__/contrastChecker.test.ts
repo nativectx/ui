@@ -64,9 +64,11 @@ describe('Contrast Checker', () => {
 
     it('should throw for invalid theme', () => {
       // Create an intentionally bad theme with poor contrast
-      const badColors = generateLightColors({ primary: '#FFFF00' });
-      // Force bad contrast by setting onPrimary to a similar color
-      badColors.onPrimary = '#FFFFAA';
+      const badColors = generateLightColors({ primary: '#6750A4' });
+      // Force bad contrast by making onPrimary identical to primary (ratio 1:1).
+      // Don't pick a "looks light/dark" hex here — the seed is mapped onto an M3
+      // tonal palette, so the generated primary is not the colour you passed in.
+      badColors.onPrimary = badColors.primary;
 
       expect(() => {
         assertThemeContrast(badColors);

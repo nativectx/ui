@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [master, main]
   pull_request:
-    branches: [main]
+    branches: [master, main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   ci:
-    name: Lint, Typecheck, Build
+    name: Lint, Typecheck, Test, Build
     runs-on: ubuntu-latest
 
     steps:
@@ -39,8 +39,11 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
+      - name: Test
+        run: pnpm test
+
       - name: Build package
         run: pnpm build
 
       - name: Build demo
-        run: pnpm build:demo
+        run: pnpm export:web
