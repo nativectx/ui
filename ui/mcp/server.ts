@@ -15,7 +15,7 @@ const server = new McpServer({
   version: '0.1.0',
 });
 
-// Resources: the 6 Claude skill files
+// Resources: the 8 Claude skill files
 registerResources(server);
 
 // Tools
