@@ -36,3 +36,6 @@ coverage/
 # Copied from the repo root at pack time (see ui/package.json prepack)
 ui/README.md
 ui/LICENSE
+
+# agent worktrees
+.claude/worktrees/
