@@ -15,9 +15,10 @@ export function runSkillsCommand() {
 
   mkdirSync(dest, { recursive: true });
 
-  const files = readdirSync(SKILLS_SOURCE).filter(
-    (f) => f.startsWith('nativectx-') && f.endsWith('.md'),
-  );
+  // Exact shape only. A loose startsWith/endsWith check also matches
+  // sync-conflict copies like "nativectx-setup 2.md", which would install
+  // stale duplicates alongside the real skills.
+  const files = readdirSync(SKILLS_SOURCE).filter((f) => /^nativectx-[a-z]+\.md$/.test(f));
 
   if (files.length === 0) {
     console.error('Error: no @nativectx/ui skill files found.');

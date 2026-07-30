@@ -79,14 +79,18 @@
   "files": [
     "dist",
     "package.json",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
-    "build": "pnpm exec tsc -p tsconfig.build.json && pnpm run build:mcp",
+    "clean": "rm -rf dist",
+    "build": "pnpm run clean && pnpm exec tsc -p tsconfig.build.json && pnpm run build:mcp",
     "build:manifest": "tsx mcp/build-manifest.ts",
     "build:mcp": "tsx mcp/build-manifest.ts && esbuild mcp/cli.ts --bundle --platform=node --format=esm --outfile=dist/mcp/cli.mjs --banner:js='#!/usr/bin/env node' && rm -rf dist/mcp/skills && cp -r ../.claude/skills dist/mcp/skills",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "prepack": "cp ../README.md ./README.md && cp ../LICENSE ./LICENSE",
+    "prepublishOnly": "pnpm run build && pnpm run test"
   },
   "dependencies": {
     "@material/material-color-utilities": "^0.4.0"
