@@ -8,6 +8,7 @@ export type { NativeHeaderProps } from './native-header';
 
 // ThemedStack — Stack wrapper with automatic theme token header styling
 export { ThemedStack } from './themed-stack';
+export type { ThemedStackProps } from './themed-stack';
 
 // Drawer — low-level animated side drawer (used by Sidebar and AppTabs)
 export { Drawer } from './drawer/drawer';

@@ -5,6 +5,29 @@ import { useTheme } from '../../theme';
 type StackProps = ComponentProps<typeof Stack>;
 
 /**
+ * Props for ThemedStack.
+ *
+ * Accepts everything expo-router's `Stack` accepts — `initialRouteName`,
+ * `screenListeners`, `id` and friends are forwarded untouched. The members
+ * below are the ones that behave differently here or are set on nearly every
+ * usage.
+ */
+export interface ThemedStackProps extends StackProps {
+  /**
+   * `Stack.Screen` declarations for the routes in this stack.
+   */
+  children: React.ReactNode;
+  /**
+   * Screen options merged on top of the themed header defaults
+   * (`headerStyle`, `headerTintColor`, `headerBackVisible`,
+   * `headerBackButtonDisplayMode`). Anything set here wins.
+   *
+   * Accepts an object, or a function receiving `{ route, navigation, theme }`.
+   */
+  screenOptions?: StackProps['screenOptions'];
+}
+
+/**
  * A themed wrapper around Expo Router's Stack that automatically applies
  * the app's header styling from the design token system.
  *
@@ -20,7 +43,7 @@ type StackProps = ComponentProps<typeof Stack>;
  * </ThemedStack>
  * ```
  */
-export function ThemedStack({ screenOptions, ...props }: StackProps) {
+export function ThemedStack({ screenOptions, ...props }: ThemedStackProps) {
   const theme = useTheme();
 
   const defaults = {
