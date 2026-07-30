@@ -18,7 +18,15 @@ NativeCtx UI ships a CLI with two AI tools: an MCP server that gives Claude live
 npx nativectx skills
 ```
 
-Copies 8 skill files into `.claude/skills/` in your project. Claude Code reads these automatically — no further configuration needed. Re-run after upgrading @nativectx/ui to get updated skills.
+Copies the 6 app-building skill files (setup, components, theme, navigation, mcp, migration) into `.claude/skills/` in your project. Claude Code reads these automatically — no further configuration needed. Re-run after upgrading @nativectx/ui to get updated skills.
+
+Two further skills cover developing @nativectx/ui itself (repo structure, dev commands, and the checklist for adding a component). They are held back by default so they don't compete for context in your app, and install with:
+
+```bash
+npx nativectx skills --contributor
+```
+
+All 8 skills are also readable on demand through the MCP server, regardless of which set is installed.
 
 ### MCP Server
 
@@ -144,6 +152,8 @@ npx nativectx skills
 ```
 
 Skills cover components, theming, navigation patterns, and responsive layout — so Claude generates code that uses your actual tokens and follows your conventions from the first prompt. Run the command once after install, and again after any upgrade.
+
+Contributing to @nativectx/ui rather than building with it? Add `--contributor` to also install the library-development skills.
 
 ---
 
