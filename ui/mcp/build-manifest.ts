@@ -1,4 +1,12 @@
-import { Project, InterfaceDeclaration, JSDoc, Node, SourceFile } from 'ts-morph';
+import {
+  Project,
+  InterfaceDeclaration,
+  JSDoc,
+  Node,
+  PropertySignature,
+  SourceFile,
+  SyntaxKind,
+} from 'ts-morph';
 import { writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -111,10 +119,8 @@ function resolveTypeText(prop: { getTypeNode: () => Node | undefined; getType: (
  * interface is declared in a sibling file. Falling back to the resolved export
  * map follows the re-export chain to the real declaration.
  *
- * Only the interface's own members are read, never its heritage chain: most
- * props interfaces extend a large React Native type (ViewProps, TextInputProps,
- * ...) and expanding those adds ~100 inherited entries that bury the
- * component's actual API.
+ * Heritage is expanded, but only across first-party types — see
+ * `collectPropSignatures`.
  */
 function findPropsInterface(sourceFile: SourceFile, componentName: string): InterfaceDeclaration | undefined {
   const name = `${componentName}Props`;
@@ -129,10 +135,84 @@ function findPropsInterface(sourceFile: SourceFile, componentName: string): Inte
   return undefined;
 }
 
-function processProps(iface: InterfaceDeclaration): PropEntry[] {
+/**
+ * Is this declaration authored in this package, as opposed to a dependency?
+ *
+ * This is the boundary that decides which inherited props reach the manifest,
+ * and it is derived from where the declaration actually lives rather than from
+ * a hand-maintained list of type names — a name list is exactly the kind of
+ * thing that silently drifts out of date.
+ */
+function isFirstParty(sourceFile: SourceFile): boolean {
+  const path = sourceFile.getFilePath();
+  return path.startsWith(`${root}/`) && !path.includes('/node_modules/');
+}
+
+/**
+ * First-party interfaces reachable from an interface's `extends` clauses.
+ *
+ * Used only by the build-time guard, so it works off the syntax rather than the
+ * resolved type: it answers "was this interface written to inherit from one of
+ * ours?", which stays true even if the expansion below returns nothing.
+ *
+ * Descending into every identifier is what makes `Omit<InteractiveComponentProps,
+ * 'onPress'>` resolve — `Omit` itself lands in lib.es5.d.ts and is skipped,
+ * while the wrapped interface resolves normally. Type aliases are deliberately
+ * not counted: `ThemedStackProps extends StackProps` names a local alias for an
+ * expo-router type, which is external despite the alias being declared here.
+ */
+function firstPartyBaseInterfaces(iface: InterfaceDeclaration): InterfaceDeclaration[] {
+  const bases: InterfaceDeclaration[] = [];
+
+  for (const clause of iface.getExtends()) {
+    for (const identifier of clause.getDescendantsOfKind(SyntaxKind.Identifier)) {
+      const symbol = identifier.getSymbol();
+      const target = symbol?.getAliasedSymbol() ?? symbol;
+      for (const decl of target?.getDeclarations() ?? []) {
+        if (Node.isInterfaceDeclaration(decl) && isFirstParty(decl.getSourceFile())) bases.push(decl);
+      }
+    }
+  }
+
+  return bases;
+}
+
+/**
+ * Every prop signature that makes up a props interface: its own members first,
+ * then the ones it inherits from other first-party types.
+ *
+ * The resolved type is used for the inherited half so the checker does the hard
+ * parts for us — `Omit<...>` subtractions, multiple heritage clauses, and
+ * transitive chains such as `InteractiveComponentProps extends
+ * BaseComponentProps` all come out correct without special cases.
+ *
+ * Filtering the result by declaration site is what stops the expansion at the
+ * package boundary. `ContainerProps extends ThemedViewProps extends ViewProps`
+ * resolves to well over a hundred properties; the handful authored in
+ * themed-view.tsx are the component's real API, and the ~100 React Native ones
+ * behind them would bury it.
+ */
+function collectPropSignatures(iface: InterfaceDeclaration): PropertySignature[] {
+  const own = iface.getProperties();
+  // An own member always wins over the inherited one it narrows or redeclares
+  const seen = new Set(own.map(p => p.getName()));
+
+  const inherited: PropertySignature[] = [];
+  for (const symbol of iface.getType().getProperties()) {
+    if (seen.has(symbol.getName())) continue;
+    const decl = symbol.getDeclarations().find(Node.isPropertySignature);
+    if (!decl || !isFirstParty(decl.getSourceFile())) continue;
+    seen.add(symbol.getName());
+    inherited.push(decl);
+  }
+
+  return [...own, ...inherited];
+}
+
+function toPropEntries(signatures: PropertySignature[]): PropEntry[] {
   const props: PropEntry[] = [];
 
-  for (const prop of iface.getProperties()) {
+  for (const prop of signatures) {
     const jsDocs = prop.getJsDocs();
     const firstDoc = jsDocs[0];
     const description = firstDoc ? extractJsDocText(firstDoc) : '';
@@ -157,7 +237,23 @@ function processProps(iface: InterfaceDeclaration): PropEntry[] {
   return props;
 }
 
-function processFile(project: Project, filePath: string, componentName: string): ComponentEntry | null {
+/**
+ * What the extractor saw while resolving a component's heritage. Not part of
+ * the manifest — it only feeds the build-time guard.
+ */
+interface HeritageReport {
+  /** Names of first-party interfaces this component's props interface extends */
+  firstPartyBases: string[];
+  /** How many props the heritage expansion contributed */
+  inheritedCount: number;
+}
+
+interface ProcessedComponent {
+  entry: ComponentEntry;
+  heritage: HeritageReport;
+}
+
+function processFile(project: Project, filePath: string, componentName: string): ProcessedComponent | null {
   const meta = COMPONENT_META[componentName];
   if (!meta) return null;
 
@@ -166,7 +262,13 @@ function processFile(project: Project, filePath: string, componentName: string):
 
   // Find the main *Props interface (may live in a re-exported platform file)
   const propsDecl = findPropsInterface(sourceFile, componentName);
-  const props = propsDecl ? processProps(propsDecl) : [];
+  const signatures = propsDecl ? collectPropSignatures(propsDecl) : [];
+  const props = toPropEntries(signatures);
+
+  const heritage: HeritageReport = {
+    firstPartyBases: propsDecl ? firstPartyBaseInterfaces(propsDecl).map(b => b.getName()) : [],
+    inheritedCount: propsDecl ? signatures.length - propsDecl.getProperties().length : 0,
+  };
 
   // Variants live next to the props declaration, which is not always the entry file
   const declSource = propsDecl?.getSourceFile() ?? sourceFile;
@@ -187,14 +289,17 @@ function processFile(project: Project, filePath: string, componentName: string):
   const relPath = filePath.replace(root + '/', '');
 
   return {
-    name: componentName,
-    file: relPath,
-    category: meta.category,
-    description: meta.description,
-    platforms: meta.platforms ?? ['ios', 'android', 'web'],
-    variants,
-    props,
-    examples,
+    entry: {
+      name: componentName,
+      file: relPath,
+      category: meta.category,
+      description: meta.description,
+      platforms: meta.platforms ?? ['ios', 'android', 'web'],
+      variants,
+      props,
+      examples,
+    },
+    heritage,
   };
 }
 
@@ -205,8 +310,9 @@ function processFile(project: Project, filePath: string, componentName: string):
  * component that quietly loses its props ships as a component with no API.
  * Fail the build loudly instead.
  */
-function assertManifestComplete(components: ComponentEntry[]): void {
+function assertManifestComplete(processed: ProcessedComponent[]): void {
   const errors: string[] = [];
+  const components = processed.map(p => p.entry);
 
   const emitted = new Set(components.map(c => c.name));
   const missing = Object.keys(COMPONENT_META).filter(name => !emitted.has(name));
@@ -225,11 +331,23 @@ function assertManifestComplete(components: ComponentEntry[]): void {
     errors.push(
       `No props extracted for: ${emptyProps.join(', ')}\n` +
         '  The extractor looks for an exported `<Component>Props` interface, following\n' +
-        "  re-exports such as `export { type XProps } from './x.web'`, and reads only\n" +
-        "  that interface's own members (not its `extends` chain).\n" +
+        "  re-exports such as `export { type XProps } from './x.web'`.\n" +
         '  Declare an interface under that exact name with the props worth documenting,\n' +
         '  or — if the component really takes none — add it to PROPLESS_COMPONENTS with\n' +
         '  a comment saying why.',
+    );
+  }
+
+  const lostHeritage = processed
+    .filter(p => p.heritage.firstPartyBases.length > 0 && p.heritage.inheritedCount === 0)
+    .map(p => `${p.entry.name} (extends ${p.heritage.firstPartyBases.join(', ')})`);
+  if (lostHeritage.length) {
+    errors.push(
+      `Inherited props were dropped for: ${lostHeritage.join(', ')}\n` +
+        '  These props interfaces extend a first-party base, so the expansion should have\n' +
+        '  contributed members from it — it contributed none. That is how Container came\n' +
+        '  to advertise only `maxWidth` while hiding everything ThemedViewProps gives it.\n' +
+        '  Check isFirstParty() and collectPropSignatures() before touching this list.',
     );
   }
 
@@ -281,16 +399,23 @@ async function main() {
     project.addSourceFileAtPath(join(root, file));
   }
 
-  // Also add shared types so extends resolution works
+  // The shared base interfaces (BaseComponentProps, InteractiveComponentProps,
+  // LoadableComponentProps, ...) that most props interfaces extend, and whose
+  // members collectPropSignatures pulls into the manifest. The checker would
+  // load this file anyway when it resolves those `extends` clauses; adding it
+  // explicitly states the dependency rather than leaving it to a side effect of
+  // lazy resolution.
   project.addSourceFileAtPath(join(root, 'components/shared/types.ts'));
 
-  const components: ComponentEntry[] = [];
+  const processed: ProcessedComponent[] = [];
   for (const { file, name } of componentFiles) {
-    const entry = processFile(project, join(root, file), name);
-    if (entry) components.push(entry);
+    const result = processFile(project, join(root, file), name);
+    if (result) processed.push(result);
   }
 
-  assertManifestComplete(components);
+  assertManifestComplete(processed);
+
+  const components = processed.map(p => p.entry);
 
   mkdirSync(join(root, 'dist/mcp'), { recursive: true });
   writeFileSync(
