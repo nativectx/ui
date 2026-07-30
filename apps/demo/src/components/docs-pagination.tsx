@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { Button, Typography, useTheme } from 'zero-to-app';
+import { Button, Typography, useTheme } from '@nativectx/ui';
 import { usePathname, useRouter } from 'expo-router';
 import { NAV_PAGES } from '../config/nav';
 

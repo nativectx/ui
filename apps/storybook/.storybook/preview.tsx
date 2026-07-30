@@ -1,5 +1,5 @@
 import type { Preview } from "@storybook/react-native";
-import { withZeroToApp } from "./decorators";
+import { withNativeCtxProvider } from "./decorators";
 
 const preview: Preview = {
   globalTypes: {
@@ -26,7 +26,7 @@ const preview: Preview = {
     },
   },
 
-  decorators: [withZeroToApp],
+  decorators: [withNativeCtxProvider],
 
   tags: ["autodocs"],
 };

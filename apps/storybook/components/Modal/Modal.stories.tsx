@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { Modal, Button, Typography } from 'zero-to-app';
+import { Modal, Button, Typography } from '@nativectx/ui';
 
 const meta = {
   title: 'Components/Modal',

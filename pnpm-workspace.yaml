@@ -1,5 +1,6 @@
 packages:
-  - zero-to-app
+  - ui
+  - nativectx
   - apps/*
 
 nodeLinker: hoisted

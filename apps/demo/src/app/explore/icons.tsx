@@ -5,7 +5,7 @@ import {
   ThemedView,
   useTheme,
   renderIcon,
-} from 'zero-to-app';
+} from '@nativectx/ui';
 import { DemoSection } from '../../components/demo-section';
 import { DocsPagination } from '../../components/docs-pagination';
 import { DocsPage } from '../../components/docs-page';
@@ -74,7 +74,7 @@ export default function IconsPage() {
       <DemoSection
         title="Icon Usage"
         description="renderIcon() accepts a PlatformIcon or string, with optional library, size, and color"
-        code={`import { renderIcon } from 'zero-to-app';
+        code={`import { renderIcon } from '@nativectx/ui';
 
 // Basic usage
 renderIcon({ library: 'Feather', name: 'star' }, 'Feather', 24, theme.primary)

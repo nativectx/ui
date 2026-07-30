@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Slider } from 'zero-to-app';
+import { Slider } from '@nativectx/ui';
 
 const meta = {
   title: 'Components/Slider',

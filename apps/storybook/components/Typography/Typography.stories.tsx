@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Typography, ThemedView } from 'zero-to-app';
+import { Typography, ThemedView } from '@nativectx/ui';
 
 /**
  * Typography (Material 3)

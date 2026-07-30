@@ -1,5 +1,5 @@
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
-import { useTheme } from "zero-to-app";
+import { useTheme } from "@nativectx/ui";
 
 interface MyButtonProps {
   onPress: () => void;

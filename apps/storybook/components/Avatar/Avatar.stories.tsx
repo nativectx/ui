@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
 import React from 'react';
 import { View } from 'react-native';
-import { Avatar, Typography } from 'zero-to-app';
+import { Avatar, Typography } from '@nativectx/ui';
 
 const meta = {
   title: 'Components/Avatar',

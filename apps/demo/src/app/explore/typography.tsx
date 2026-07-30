@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Typography, ThemedView, useTheme } from 'zero-to-app';
+import { Typography, ThemedView, useTheme } from '@nativectx/ui';
 import { DemoSection } from '../../components/demo-section';
 import { DocsPagination } from '../../components/docs-pagination';
 import { PropsTable, type PropDefinition } from '../../components/props-table';

@@ -1,4 +1,4 @@
-import { useTheme, renderIcon } from 'zero-to-app';
+import { useTheme, renderIcon } from '@nativectx/ui';
 import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { useState } from 'react';

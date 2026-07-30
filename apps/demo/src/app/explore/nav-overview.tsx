@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { Typography } from 'zero-to-app';
+import { Typography } from '@nativectx/ui';
 import { DocsPage } from '../../components/docs-page';
 import { DocsPagination } from '../../components/docs-pagination';
 import { CodeBlock } from '../../components/code-block';
@@ -8,7 +8,7 @@ export default function NavOverviewPage() {
   return (
     <DocsPage
       title="Navigation"
-      description="zero-to-app builds on expo-router's file-based routing with platform-adaptive components. Pick the pattern that fits your appapp's depthapos;s depth."
+      description="@nativectx/ui builds on expo-router's file-based routing with platform-adaptive components. Pick the pattern that fits your app's depth."
     >
       <View style={{ gap: 24 }}>
         <Typography variant="titleLarge" weight="bold">Choose a pattern</Typography>
@@ -20,7 +20,7 @@ export default function NavOverviewPage() {
             Use when tabs don&apos;t need headers or sub-screens.
           </Typography>
           <CodeBlock variant="code" language="text" code={`app/
-  _layout.tsx      ← ZeroToApp + AppTabs
+  _layout.tsx      ← NativeCtxProvider + AppTabs
   index.tsx        ← Home tab
   settings.tsx     ← Settings tab`} />
         </View>
@@ -32,7 +32,7 @@ export default function NavOverviewPage() {
             Persistent sidebar on web desktop.
           </Typography>
           <CodeBlock variant="code" language="text" code={`app/
-  _layout.tsx      ← ZeroToApp + AppTabs + Sidebar
+  _layout.tsx      ← NativeCtxProvider + AppTabs + Sidebar
   index.tsx
   explore.tsx`} />
         </View>
@@ -44,7 +44,7 @@ export default function NavOverviewPage() {
             Each tab folder gets its own ThemedStack.
           </Typography>
           <CodeBlock variant="code" language="text" code={`app/
-  _layout.tsx                  ← ZeroToApp + AppTabs
+  _layout.tsx                  ← NativeCtxProvider + AppTabs
   items/
     _layout.native.tsx         ← ThemedStack (iOS + Android)
     _layout.tsx                ← Slot (web fallback — required)

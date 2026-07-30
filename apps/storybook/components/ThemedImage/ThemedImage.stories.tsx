@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { ThemedImage, Typography } from 'zero-to-app';
+import { ThemedImage, Typography } from '@nativectx/ui';
 
 const meta = {
   title: 'Components/ThemedImage',

@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { ThemedView } from 'zero-to-app';
-import { Typography } from 'zero-to-app';
+import { ThemedView } from '@nativectx/ui';
+import { Typography } from '@nativectx/ui';
 
 const meta = {
   title: 'Components/ThemedView',

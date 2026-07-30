@@ -15,7 +15,7 @@ import {
   Avatar,
   ListItem,
   renderIcon,
-} from 'zero-to-app';
+} from '@nativectx/ui';
 import { router } from 'expo-router';
 import { Image, Linking, Platform, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -31,7 +31,7 @@ function formatStat(n: number): string {
 function useGithubStars() {
   const [stars, setStars] = useState<string | null>(null);
   useEffect(() => {
-    fetch('https://api.github.com/repos/Alex-Amayo/zero-to-app')
+    fetch('https://api.github.com/repos/nativectx/ui')
       .then((r) => r.json())
       .then((d) => setStars(formatStat(d.stargazers_count)))
       .catch(() => setStars(null));
@@ -42,7 +42,7 @@ function useGithubStars() {
 function useNpmDownloads() {
   const [downloads, setDownloads] = useState<string | null>(null);
   useEffect(() => {
-    fetch('https://api.npmjs.org/downloads/point/last-week/zero-to-app')
+    fetch('https://api.npmjs.org/downloads/point/last-week/@nativectx/ui')
       .then((r) => r.json())
       .then((d) => setDownloads(formatStat(d.downloads)))
       .catch(() => setDownloads(null));
@@ -575,7 +575,7 @@ export default function HomeScreen() {
 
           <ThemedView variant="primary" style={{ borderRadius: borderRadius.lg, padding: spacing.xxl, gap: spacing.md }}>
             <Typography variant="headlineSmall" weight="bold" color={theme.onPrimary}>
-              Built with zero-to-app
+              Built with NativeCtx UI
             </Typography>
             <Typography variant="bodyMedium" color={theme.onPrimary}>
               Every component on this page — buttons, cards, navigation, typography — is rendered by the same library you install. What you see is what you ship.
@@ -591,10 +591,10 @@ export default function HomeScreen() {
       {/* ── Footer ── */}
       <Container>
         <View style={[styles.footer, { paddingVertical: spacing.xl }]}>
-          <Typography variant="bodySmall" color={theme.onSurfaceVariant}>© 2025 zero-to-app</Typography>
+          <Typography variant="bodySmall" color={theme.onSurfaceVariant}>© 2025 NativeCtx UI</Typography>
           <View style={[styles.row, { gap: spacing.lg }]}>
-            <Typography variant="bodySmall" color={theme.onSurfaceVariant} onPress={() => Linking.openURL('https://github.com/Alex-Amayo/zero-to-app')}>GitHub</Typography>
-            <Typography variant="bodySmall" color={theme.onSurfaceVariant} onPress={() => Linking.openURL('https://www.npmjs.com/package/zero-to-app')}>NPM</Typography>
+            <Typography variant="bodySmall" color={theme.onSurfaceVariant} onPress={() => Linking.openURL('https://github.com/nativectx/ui')}>GitHub</Typography>
+            <Typography variant="bodySmall" color={theme.onSurfaceVariant} onPress={() => Linking.openURL('https://www.npmjs.com/package/@nativectx/ui')}>NPM</Typography>
           </View>
         </View>
       </Container>

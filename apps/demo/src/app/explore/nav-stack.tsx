@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { Typography } from 'zero-to-app';
+import { Typography } from '@nativectx/ui';
 import { DocsPage } from '../../components/docs-page';
 import { DocsPagination } from '../../components/docs-pagination';
 import { CodeBlock } from '../../components/code-block';
@@ -21,7 +21,7 @@ export default function NavStackPage() {
     <DocsPage
       title="Stack & Headers"
       description="ThemedStack wraps expo-router's Stack with automatic header theming. NativeHeader adds icon buttons to the native header bar. They are almost always used together."
-      importLine="{ ThemedStack, NativeHeader } from 'zero-to-app'"
+      importLine="{ ThemedStack, NativeHeader } from '@nativectx/ui'"
     >
       <View style={{ gap: 8 }}>
         <Typography variant="titleLarge" weight="bold">ThemedStack</Typography>
@@ -32,7 +32,7 @@ export default function NavStackPage() {
           variant="code"
           filename="app/items/_layout.native.tsx"
           code={`import { Stack } from 'expo-router';
-import { ThemedStack } from 'zero-to-app';
+import { ThemedStack } from '@nativectx/ui';
 
 export default function ItemsLayout() {
   return (
@@ -63,7 +63,7 @@ export default function ItemsLayout() {
         <CodeBlock
           variant="code"
           filename="app/items/index.tsx"
-          code={`import { Screen, NativeHeader } from 'zero-to-app';
+          code={`import { Screen, NativeHeader } from '@nativectx/ui';
 import { useRouter } from 'expo-router';
 
 export default function ItemsScreen() {

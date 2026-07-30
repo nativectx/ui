@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Typography, ThemedView, useTheme } from 'zero-to-app';
+import { Typography, ThemedView, useTheme } from '@nativectx/ui';
 import { DemoSection } from '../../components/demo-section';
 import { DocsPagination } from '../../components/docs-pagination';
 import { PropsTable, type PropDefinition } from '../../components/props-table';
@@ -33,7 +33,7 @@ export default function ThemedStackPage() {
         description="Replace Stack in your native layout file. Use Stack.Screen to declare screen titles."
         code={`// _layout.native.tsx
 import { Stack } from 'expo-router';
-import { ThemedStack } from 'zero-to-app';
+import { ThemedStack } from '@nativectx/ui';
 
 export default function Layout() {
   return (

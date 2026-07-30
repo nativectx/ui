@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { Typography } from 'zero-to-app';
+import { Typography } from '@nativectx/ui';
 import { DocsPage } from '../../components/docs-page';
 import { DocsPagination } from '../../components/docs-pagination';
 import { CodeBlock } from '../../components/code-block';
@@ -29,23 +29,23 @@ export default function NavTabsPage() {
     <DocsPage
       title="Tabs"
       description="AppTabs is the root navigator. On native it renders true UITabBarController (iOS) or NavigationBar (Android). On web it renders a fixed top app bar using expo-router/ui."
-      importLine="{ AppTabs } from 'zero-to-app'"
+      importLine="{ AppTabs } from '@nativectx/ui'"
     >
       <View style={{ gap: 8 }}>
         <Typography variant="titleLarge" weight="bold">Setup</Typography>
         <Typography variant="bodyMedium" muted>
-          Place AppTabs in your root <Typography variant="bodyMedium" style={{ fontFamily: 'monospace' }}>_layout.tsx</Typography>, wrapped in ZeroToApp. The tab names must match your route file or folder names.
+          Place AppTabs in your root <Typography variant="bodyMedium" style={{ fontFamily: 'monospace' }}>_layout.tsx</Typography>, wrapped in NativeCtxProvider. The tab names must match your route file or folder names.
         </Typography>
         <CodeBlock
           variant="code"
           filename="app/_layout.tsx"
-          code={`import { ZeroToApp, AppTabs, createBrand } from 'zero-to-app';
+          code={`import { NativeCtxProvider, AppTabs, createBrand } from '@nativectx/ui';
 
 const brand = createBrand({ ... });
 
 export default function Layout() {
   return (
-    <ZeroToApp brand={brand}>
+    <NativeCtxProvider brand={brand}>
       <AppTabs
         brandName="My App"
         tabs={[
@@ -65,7 +65,7 @@ export default function Layout() {
           },
         ]}
       />
-    </ZeroToApp>
+    </NativeCtxProvider>
   );
 }`}
         />

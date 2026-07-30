@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView, Text, View } from 'react-native';
-import { Typography, ThemedView, useTheme } from 'zero-to-app';
+import { Typography, ThemedView, useTheme } from '@nativectx/ui';
 
 export interface PropDefinition {
   name: string;

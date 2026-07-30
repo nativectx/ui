@@ -7,7 +7,7 @@ import {
     SidebarSection,
     SidebarItem,
     useRouteNavigation,
-} from 'zero-to-app';
+} from '@nativectx/ui';
 import { NAV_SECTIONS } from '../../config/nav';
 
 export default function ExploreLayout() {
@@ -19,7 +19,7 @@ export default function ExploreLayout() {
                 header={
                     <SidebarHeader
                         title="Docs"
-                        subtitle="Zero to App UI"
+                        subtitle="NativeCtx UI"
                         onPress={() => navigateTo('/explore')}
                     />
                 }

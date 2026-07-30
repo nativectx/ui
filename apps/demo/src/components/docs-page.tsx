@@ -1,11 +1,11 @@
 import React from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
-import { Typography, Screen, NativeHeader, useSidebar, useTheme } from 'zero-to-app';
+import { Typography, Screen, NativeHeader, useSidebar, useTheme } from '@nativectx/ui';
 
 interface DocsPageProps {
   title: string;
   description: string;
-  /** Import statement shown below description, e.g. "import { Button } from 'zero-to-app'" */
+  /** Import statement shown below description, e.g. "import { Button } from '@nativectx/ui'" */
   importLine?: string;
   /** Category label above the title, e.g. "Component", "Navigation", "Foundation" */
   category?: string;

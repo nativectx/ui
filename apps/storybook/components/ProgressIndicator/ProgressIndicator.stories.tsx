@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Animated } from 'react-native';
-import { ProgressIndicator, Typography } from 'zero-to-app';
+import { ProgressIndicator, Typography } from '@nativectx/ui';
 
 const meta = {
   title: 'Components/ProgressIndicator',

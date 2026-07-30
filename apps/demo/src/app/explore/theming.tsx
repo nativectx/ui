@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Linking, Pressable } from 'react-native';
-import { Typography, ThemedView, useTheme } from 'zero-to-app';
+import { Typography, ThemedView, useTheme } from '@nativectx/ui';
 import { DemoSection } from '../../components/demo-section';
 import { CodeBlock } from '../../components/code-block';
 import { DocsPagination } from '../../components/docs-pagination';
@@ -13,15 +13,15 @@ export default function ThemingPage() {
   return (
     <DocsPage
       title="Theming"
-      description="Zero To App uses a Brand config to drive the entire design system — colors, spacing, shape, and dark mode."
+      description="NativeCtx UI uses a Brand config to drive the entire design system — colors, spacing, shape, and dark mode."
     >
       <DemoSection
         title="Brand config"
-        description="Pass a Brand object to ZeroToApp at the root of your app. Everything in the design system reads from it."
+        description="Pass a Brand object to NativeCtxProvider at the root of your app. Everything in the design system reads from it."
       >
         <CodeBlock
           variant="code"
-          code={"import { ZeroToApp, createBrand } from 'zero-to-app';\n\nconst brand = createBrand({ ... });\n\nexport default function RootLayout() {\n  return (\n    <ZeroToApp brand={brand}>\n      <Stack />\n    </ZeroToApp>\n  );\n}"}
+          code={"import { NativeCtxProvider, createBrand } from '@nativectx/ui';\n\nconst brand = createBrand({ ... });\n\nexport default function RootLayout() {\n  return (\n    <NativeCtxProvider brand={brand}>\n      <Stack />\n    </NativeCtxProvider>\n  );\n}"}
         />
       </DemoSection>
 
@@ -31,7 +31,7 @@ export default function ThemingPage() {
       >
         <View style={{ gap: spacing.lg }}>
           <Typography variant="bodyMedium" color={theme.onSurfaceVariant}>
-            Rather than manually selecting every shade, M3&apos;s dynamic color system uses color algorithms to derive a complete, accessible scheme from one seed. Zero To App implements this via{' '}
+            Rather than manually selecting every shade, M3&apos;s dynamic color system uses color algorithms to derive a complete, accessible scheme from one seed. NativeCtx UI implements this via{' '}
             <Pressable onPress={() => Linking.openURL('https://github.com/material-foundation/material-color-utilities')}>
               <Typography variant="bodyMedium" color={theme.primary} style={{ textDecorationLine: 'underline' }}>material-color-utilities</Typography>
             </Pressable>
@@ -76,7 +76,7 @@ export default function ThemingPage() {
 
       <DemoSection
         title="Seed-based colors (recommended)"
-        description="Provide a single primary hex color. Zero To App generates all 26 M3 color tokens for both light and dark themes automatically — contrast ratios guaranteed."
+        description="Provide a single primary hex color. NativeCtx UI generates all 26 M3 color tokens for both light and dark themes automatically — contrast ratios guaranteed."
       >
         <CodeBlock
           variant="code"
@@ -158,17 +158,17 @@ export default function ThemingPage() {
       >
         <CodeBlock
           variant="code"
-          code={"import { useThemeMode } from 'zero-to-app';\n\nconst { mode, toggleTheme } = useThemeMode();\n// mode: 'light' | 'dark'"}
+          code={"import { useThemeMode } from '@nativectx/ui';\n\nconst { mode, toggleTheme } = useThemeMode();\n// mode: 'light' | 'dark'"}
         />
       </DemoSection>
 
       <DemoSection
         title="defaultBrand"
-        description="Zero To App ships a ready-to-use brand using M3 reference purple (#6750A4). Import it directly to get started without any configuration."
+        description="NativeCtx UI ships a ready-to-use brand using M3 reference purple (#6750A4). Import it directly to get started without any configuration."
       >
         <CodeBlock
           variant="code"
-          code={"import { ZeroToApp, defaultBrand } from 'zero-to-app';\n\n<ZeroToApp brand={defaultBrand}>\n  <Stack />\n</ZeroToApp>"}
+          code={"import { NativeCtxProvider, defaultBrand } from '@nativectx/ui';\n\n<NativeCtxProvider brand={defaultBrand}>\n  <Stack />\n</NativeCtxProvider>"}
         />
       </DemoSection>
 

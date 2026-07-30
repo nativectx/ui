@@ -1,6 +1,6 @@
-# zero-to-app Demo App
+# @nativectx/ui Demo App
 
-This is the demo Expo app for testing **zero-to-app** components that require expo-router or complex native dependencies.
+This is the demo Expo app for testing **@nativectx/ui** components that require expo-router or complex native dependencies.
 
 ## Purpose
 
@@ -24,4 +24,4 @@ pnpm dev:demo:web          # Run in web browser
 
 ## Usage Reference
 
-For using zero-to-app in your own project, see the main [zero-to-app README](../../README.md).
+For using @nativectx/ui in your own project, see the main [@nativectx/ui README](../../README.md).
