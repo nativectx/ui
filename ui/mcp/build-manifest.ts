@@ -1,4 +1,4 @@
-import { Project, InterfaceDeclaration, JSDoc, Node } from 'ts-morph';
+import { Project, InterfaceDeclaration, JSDoc, Node, SourceFile } from 'ts-morph';
 import { writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -44,6 +44,15 @@ const COMPONENT_META: Record<string, { category: string; description: string; pl
   ThemedStack: { category: 'navigation', description: 'expo-router Stack with auto-applied theme colors and header styling.' },
   Drawer: { category: 'navigation', description: 'Animated side drawer primitive.' },
 };
+
+/**
+ * Components that genuinely accept no props.
+ *
+ * An entry here opts the component out of the zero-props build check in
+ * `assertManifestComplete`. Only add a component when it really takes nothing —
+ * never to silence an extractor that failed to find an existing props type.
+ */
+const PROPLESS_COMPONENTS: string[] = [];
 
 interface PropEntry {
   name: string;
@@ -93,7 +102,34 @@ function resolveTypeText(prop: { getTypeNode: () => Node | undefined; getType: (
   return prop.getType().getText();
 }
 
-function processInterface(iface: InterfaceDeclaration, file: string): PropEntry[] {
+/**
+ * Locate the `<Component>Props` interface for a component.
+ *
+ * A direct lookup in the entry file is not enough: platform entry files are
+ * often nothing but a re-export (sidebar.tsx is just
+ * `export { Sidebar, type SidebarProps } from './sidebar.web'`), so the props
+ * interface is declared in a sibling file. Falling back to the resolved export
+ * map follows the re-export chain to the real declaration.
+ *
+ * Only the interface's own members are read, never its heritage chain: most
+ * props interfaces extend a large React Native type (ViewProps, TextInputProps,
+ * ...) and expanding those adds ~100 inherited entries that bury the
+ * component's actual API.
+ */
+function findPropsInterface(sourceFile: SourceFile, componentName: string): InterfaceDeclaration | undefined {
+  const name = `${componentName}Props`;
+
+  const local = sourceFile.getInterface(name);
+  if (local) return local;
+
+  for (const decl of sourceFile.getExportedDeclarations().get(name) ?? []) {
+    if (Node.isInterfaceDeclaration(decl)) return decl;
+  }
+
+  return undefined;
+}
+
+function processProps(iface: InterfaceDeclaration): PropEntry[] {
   const props: PropEntry[] = [];
 
   for (const prop of iface.getProperties()) {
@@ -128,12 +164,15 @@ function processFile(project: Project, filePath: string, componentName: string):
   const sourceFile = project.getSourceFile(filePath);
   if (!sourceFile) return null;
 
-  // Find the main *Props interface
-  const propsInterface = sourceFile.getInterface(`${componentName}Props`);
-  const props = propsInterface ? processInterface(propsInterface, filePath) : [];
+  // Find the main *Props interface (may live in a re-exported platform file)
+  const propsDecl = findPropsInterface(sourceFile, componentName);
+  const props = propsDecl ? processProps(propsDecl) : [];
+
+  // Variants live next to the props declaration, which is not always the entry file
+  const declSource = propsDecl?.getSourceFile() ?? sourceFile;
 
   // Extract variant type union values (e.g. ButtonVariant = 'filled' | 'elevated' | ...)
-  const variantType = sourceFile.getTypeAlias(`${componentName}Variant`);
+  const variantType = declSource.getTypeAlias(`${componentName}Variant`);
   const variants: string[] = [];
   if (variantType) {
     // Use getTypeNode() to get source text like "'filled' | 'elevated'" rather than the resolved type
@@ -142,8 +181,8 @@ function processFile(project: Project, filePath: string, componentName: string):
     if (matches) variants.push(...matches.map(m => m.replace(/'/g, '')));
   }
 
-  // Extract @example blocks from the Props interface JSDoc
-  const examples = propsInterface ? extractExamples(propsInterface.getJsDocs()) : [];
+  // Extract @example blocks from the Props declaration JSDoc
+  const examples = propsDecl ? extractExamples(propsDecl.getJsDocs()) : [];
 
   const relPath = filePath.replace(root + '/', '');
 
@@ -157,6 +196,46 @@ function processFile(project: Project, filePath: string, componentName: string):
     props,
     examples,
   };
+}
+
+/**
+ * Guard against silent extraction failures.
+ *
+ * The manifest is the only thing the MCP `get_component` tool serves, so a
+ * component that quietly loses its props ships as a component with no API.
+ * Fail the build loudly instead.
+ */
+function assertManifestComplete(components: ComponentEntry[]): void {
+  const errors: string[] = [];
+
+  const emitted = new Set(components.map(c => c.name));
+  const missing = Object.keys(COMPONENT_META).filter(name => !emitted.has(name));
+  if (missing.length) {
+    errors.push(
+      `Declared in COMPONENT_META but absent from the manifest: ${missing.join(', ')}\n` +
+        '  Every component in COMPONENT_META needs a matching entry in componentFiles,\n' +
+        '  and that file path must still exist.',
+    );
+  }
+
+  const emptyProps = components
+    .filter(c => c.props.length === 0 && !PROPLESS_COMPONENTS.includes(c.name))
+    .map(c => `${c.name} (${c.file})`);
+  if (emptyProps.length) {
+    errors.push(
+      `No props extracted for: ${emptyProps.join(', ')}\n` +
+        '  The extractor looks for an exported `<Component>Props` interface, following\n' +
+        "  re-exports such as `export { type XProps } from './x.web'`, and reads only\n" +
+        "  that interface's own members (not its `extends` chain).\n" +
+        '  Declare an interface under that exact name with the props worth documenting,\n' +
+        '  or — if the component really takes none — add it to PROPLESS_COMPONENTS with\n' +
+        '  a comment saying why.',
+    );
+  }
+
+  if (errors.length) {
+    throw new Error(`Component manifest is incomplete:\n\n${errors.join('\n\n')}\n`);
+  }
 }
 
 async function main() {
@@ -210,6 +289,8 @@ async function main() {
     const entry = processFile(project, join(root, file), name);
     if (entry) components.push(entry);
   }
+
+  assertManifestComplete(components);
 
   mkdirSync(join(root, 'dist/mcp'), { recursive: true });
   writeFileSync(
