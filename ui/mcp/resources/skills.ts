@@ -15,6 +15,7 @@ const skills: Array<{ name: string; uri: string; file: string; description: stri
   { name: 'Dev', uri: 'nativectx://dev', file: 'nativectx-dev.md', description: 'Development commands, repo structure, and key files.' },
   { name: 'Contributing', uri: 'nativectx://contributing', file: 'nativectx-contributing.md', description: 'Checklist for adding new components to @nativectx/ui.' },
   { name: 'MCP', uri: 'nativectx://mcp', file: 'nativectx-mcp.md', description: 'How to use the @nativectx/ui MCP server tools effectively.' },
+  { name: 'Migration', uri: 'nativectx://migration', file: 'nativectx-migration.md', description: 'Upgrading a project from the old zero-to-app package to @nativectx/ui.' },
 ];
 
 export function registerResources(server: McpServer): void {

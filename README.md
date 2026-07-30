@@ -18,7 +18,7 @@ NativeCtx UI ships a CLI with two AI tools: an MCP server that gives Claude live
 npx @nativectx/ui skills
 ```
 
-Copies 7 skill files into `.claude/skills/` in your project. Claude Code reads these automatically — no further configuration needed. Re-run after upgrading @nativectx/ui to get updated skills.
+Copies 8 skill files into `.claude/skills/` in your project. Claude Code reads these automatically — no further configuration needed. Re-run after upgrading @nativectx/ui to get updated skills.
 
 ### MCP Server
 
@@ -83,6 +83,18 @@ npx expo install @nativectx/ui
 # Required peer dependencies
 npx expo install react-native-reanimated react-native-gesture-handler react-native-safe-area-context react-native-screens expo-router @expo/vector-icons
 ```
+
+### Upgrading from `zero-to-app`
+
+This library was formerly published as `zero-to-app`. To move an existing project over:
+
+```bash
+npx @nativectx/ui migrate
+```
+
+That rewrites the dependency, import specifiers, the renamed `ZeroToApp` → `NativeCtxProvider` provider, your `.mcp.json` server entry, and replaces the stale `zero-to-app-*.md` skill files. Pass `--dry-run` to preview. Anything it can't safely automate is printed as a review list at the end.
+
+`ZeroToApp` still works in v5 as a deprecated alias, so a dependency bump alone won't break your build — but it is removed in v6.
 
 ---
 

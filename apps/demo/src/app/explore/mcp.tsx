@@ -48,7 +48,7 @@ export default function McpPage() {
         </Typography>
         <CodeBlock variant="shell" code={SKILLS_COMMAND} />
         <Typography variant="bodyMedium" muted>
-          Copies 7 skill files into <Typography variant="bodyMedium" style={{ fontFamily: 'monospace' }}>.claude/skills/</Typography> covering components, theming, navigation, and setup. Re-run after upgrading @nativectx/ui.
+          Copies 8 skill files into <Typography variant="bodyMedium" style={{ fontFamily: 'monospace' }}>.claude/skills/</Typography> covering components, theming, navigation, and setup. Re-run after upgrading @nativectx/ui.
         </Typography>
       </View>
 

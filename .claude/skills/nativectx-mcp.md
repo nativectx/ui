@@ -5,7 +5,7 @@ description: How to use the @nativectx/ui MCP server tools to answer questions a
 # NativeCtx UI AI Tools
 
 NativeCtx UI ships two AI tools via its CLI:
-- `npx @nativectx/ui skills` — installs 7 Claude Skill files into `.claude/skills/` (Claude Code reads these automatically)
+- `npx @nativectx/ui skills` — installs 8 Claude Skill files into `.claude/skills/` (Claude Code reads these automatically)
 - `npx @nativectx/ui mcp` — starts the MCP server for live tool access mid-conversation
 
 The MCP server exposes 7 tools and 6 resources. Use them proactively — do not guess component props or token names from memory.
