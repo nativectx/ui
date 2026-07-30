@@ -10,17 +10,36 @@ description: Use when developing, building, or testing the @nativectx/ui library
 
 ## Commands
 
+Run every command from the repo root.
+
 ```bash
-pnpm dev:storybook:web   # Isolated component dev — fastest inner loop
-pnpm dev:demo            # Full app (expo-router, navigation, native features)
-pnpm typecheck           # Type-check all workspaces
-pnpm build               # Build the @nativectx/ui package (required before demo picks up changes)
-pnpm release             # Publish to npm
+# Develop
+pnpm dev                 # Demo app on web — expo-router, navigation, docs pages
+pnpm dev:storybook       # Storybook on web — isolated component work, fastest loop
+pnpm dev:ios             # Demo on an iOS simulator
+pnpm dev:android         # Demo on an Android emulator
+
+# Check
+pnpm typecheck           # Type-check every workspace
+pnpm test                # Jest suite for the library
+pnpm lint                # ESLint
+
+# Build & ship
+pnpm build               # Compile @nativectx/ui to dist/
+pnpm deploy:web          # Export the docs site and deploy it to EAS Hosting
 ```
+
+`pnpm dev` and `pnpm dev:storybook` both run `pnpm build` first, so the
+library is always current. If you run `expo` directly from `apps/demo`
+instead, build first — the demo imports `@nativectx/ui` from `dist/`, not
+from source, so a stale or missing `dist/` gives you
+`Cannot find module '@nativectx/ui'` or silently old components.
 
 **When to use which:**
 - Storybook → isolated UI work (Button, Typography, inputs, display components)
 - Demo → navigation, expo-router layouts, native-platform behaviour
+
+Publishing is handled by the release workflow on a `v*` tag, not by hand.
 
 ---
 
