@@ -9,9 +9,9 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "export:web": "expo export --platform web",
-    "publish": "eas update --branch production --message \"Production update\"",
-    "publish:preview": "eas update --branch preview --message \"Preview update\"",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "deploy": "eas deploy --prod",
+    "deploy:preview": "eas deploy"
   },
   "dependencies": {
     "@expo/ui": "~56.0.15",

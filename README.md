@@ -4,7 +4,7 @@ The React Native UI library built for AI development.
 
 Material Design 3 components for Expo — with a built-in MCP server and Claude Skills that give AI the context to generate consistent, theme-aware code instead of generic boilerplate.
 
-🌐 **[Live Demo](https://demo-zero-to-app--lbqs9orlsl.expo.app)** &nbsp;·&nbsp; 📦 **[NPM](https://www.npmjs.com/package/@nativectx/ui)**
+🌐 **[Live Demo](https://nativectx.com)** &nbsp;·&nbsp; 📦 **[NPM](https://www.npmjs.com/package/@nativectx/ui)**
 
 ---
 
@@ -252,7 +252,7 @@ pnpm release              # Publish to npm
 
 ## Resources
 
-- [Live Demo](https://demo-zero-to-app--lbqs9orlsl.expo.app)
+- [Live Demo](https://nativectx.com)
 - [Material Design 3](https://m3.material.io)
 - [NPM Package](https://www.npmjs.com/package/@nativectx/ui)
 - [GitHub](https://github.com/nativectx/ui)
