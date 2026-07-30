@@ -56,7 +56,7 @@ function SidebarDemo() {
       </SidebarSection>
       <View style={{ height: 1, backgroundColor: theme.outlineVariant, marginVertical: 4 }} />
       <SidebarFooter>
-        <Typography variant="bodySmall" muted>Zero to App v3.3</Typography>
+        <Typography variant="bodySmall" muted>NativeCtx UI</Typography>
       </SidebarFooter>
     </View>
   );

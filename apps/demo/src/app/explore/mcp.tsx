@@ -4,13 +4,13 @@ import { CodeBlock } from '../../components/code-block';
 import { DocsPagination } from '../../components/docs-pagination';
 import { DocsPage } from '../../components/docs-page';
 
-const SKILLS_COMMAND = `npx @nativectx/ui skills`;
+const SKILLS_COMMAND = `npx nativectx skills`;
 
 const CLAUDE_CODE_CONFIG = `{
   "mcpServers": {
     "nativectx": {
       "command": "npx",
-      "args": ["@nativectx/ui", "mcp"]
+      "args": ["nativectx", "mcp"]
     }
   }
 }`;
@@ -28,7 +28,7 @@ const CLAUDE_DESKTOP_CONFIG = `{
   "mcpServers": {
     "nativectx": {
       "command": "npx",
-      "args": ["@nativectx/ui", "mcp"]
+      "args": ["nativectx", "mcp"]
     }
   }
 }`;

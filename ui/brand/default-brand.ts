@@ -10,7 +10,7 @@ import { createBrand } from './brand-config';
  * Reference: https://m3.material.io/styles/color/the-color-system/color-roles
  */
 export const defaultBrand = createBrand({
-  name: 'Zero to App',
+  name: 'NativeCtx UI',
   // Use seed-based palette generation (recommended)
   // This automatically generates all 26 M3 color tokens and matching dark theme
   colors: {

@@ -4,6 +4,7 @@
   "private": true,
   "workspaces": [
     "ui",
+    "nativectx",
     "apps/*"
   ],
   "scripts": {
@@ -20,6 +21,7 @@
     "deploy": "pnpm build && pnpm --filter demo publish",
     "deploy:preview": "pnpm build && pnpm --filter demo publish:preview",
     "release": "pnpm build && pnpm --filter @nativectx/ui publish --access public --no-git-checks",
+    "release:cli": "pnpm --filter nativectx publish --access public --no-git-checks",
     "typecheck": "pnpm -r exec tsc --noEmit",
     "test": "pnpm --filter @nativectx/ui test",
     "lint": "pnpm --filter demo lint",

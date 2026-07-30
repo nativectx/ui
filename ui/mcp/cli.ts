@@ -27,9 +27,9 @@ switch (command) {
     console.log('Flags:');
     console.log('  --dry-run  (migrate) preview changes without writing\n');
     console.log('Examples:');
-    console.log('  npx @nativectx/ui mcp');
-    console.log('  npx @nativectx/ui skills');
-    console.log('  npx @nativectx/ui migrate --dry-run');
+    console.log('  npx nativectx mcp');
+    console.log('  npx nativectx skills');
+    console.log('  npx nativectx migrate --dry-run');
     if (command && command !== '--help' && command !== 'help') {
       console.error(`\nUnknown command: ${command}`);
       process.exit(1);

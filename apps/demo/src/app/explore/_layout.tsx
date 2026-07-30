@@ -25,7 +25,7 @@ export default function ExploreLayout() {
                 header={
                     <SidebarHeader
                         title="Docs"
-                        subtitle="Zero to App UI"
+                        subtitle="NativeCtx UI"
                         onPress={() => navigateTo('/explore')}
                     />
                 }

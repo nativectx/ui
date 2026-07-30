@@ -42,8 +42,15 @@ jobs:
       - name: Build package
         run: pnpm build
 
-      - name: Publish to npm
+      - name: Publish @nativectx/ui to npm
         run: pnpm --filter @nativectx/ui publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # Must come second: the wrapper depends on @nativectx/ui, and pnpm
+      # resolves workspace:^ to a real range at publish time.
+      - name: Publish nativectx CLI alias to npm
+        run: pnpm --filter nativectx publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

@@ -13,7 +13,7 @@ export default function ThemingPage() {
   return (
     <DocsPage
       title="Theming"
-      description="Zero To App uses a Brand config to drive the entire design system — colors, spacing, shape, and dark mode."
+      description="NativeCtx UI uses a Brand config to drive the entire design system — colors, spacing, shape, and dark mode."
     >
       <DemoSection
         title="Brand config"
@@ -31,7 +31,7 @@ export default function ThemingPage() {
       >
         <View style={{ gap: spacing.lg }}>
           <Typography variant="bodyMedium" color={theme.onSurfaceVariant}>
-            Rather than manually selecting every shade, M3&apos;s dynamic color system uses color algorithms to derive a complete, accessible scheme from one seed. Zero To App implements this via{' '}
+            Rather than manually selecting every shade, M3&apos;s dynamic color system uses color algorithms to derive a complete, accessible scheme from one seed. NativeCtx UI implements this via{' '}
             <Pressable onPress={() => Linking.openURL('https://github.com/material-foundation/material-color-utilities')}>
               <Typography variant="bodyMedium" color={theme.primary} style={{ textDecorationLine: 'underline' }}>material-color-utilities</Typography>
             </Pressable>
@@ -76,7 +76,7 @@ export default function ThemingPage() {
 
       <DemoSection
         title="Seed-based colors (recommended)"
-        description="Provide a single primary hex color. Zero To App generates all 26 M3 color tokens for both light and dark themes automatically — contrast ratios guaranteed."
+        description="Provide a single primary hex color. NativeCtx UI generates all 26 M3 color tokens for both light and dark themes automatically — contrast ratios guaranteed."
       >
         <CodeBlock
           variant="code"
@@ -164,7 +164,7 @@ export default function ThemingPage() {
 
       <DemoSection
         title="defaultBrand"
-        description="Zero To App ships a ready-to-use brand using M3 reference purple (#6750A4). Import it directly to get started without any configuration."
+        description="NativeCtx UI ships a ready-to-use brand using M3 reference purple (#6750A4). Import it directly to get started without any configuration."
       >
         <CodeBlock
           variant="code"

@@ -8,7 +8,7 @@ export default function GettingStartedPage() {
   return (
     <DocsPage
       title="Getting Started"
-      description="Add Zero To App to your Expo project in two steps."
+      description="Add NativeCtx UI to your Expo project in two steps."
     >
       <View style={{ gap: 12 }}>
         <Typography variant="titleLarge" weight="bold">Installation</Typography>

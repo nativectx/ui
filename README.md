@@ -15,7 +15,7 @@ NativeCtx UI ships a CLI with two AI tools: an MCP server that gives Claude live
 ### Install Claude Skills
 
 ```bash
-npx @nativectx/ui skills
+npx nativectx skills
 ```
 
 Copies 8 skill files into `.claude/skills/` in your project. Claude Code reads these automatically — no further configuration needed. Re-run after upgrading @nativectx/ui to get updated skills.
@@ -29,7 +29,7 @@ Add to your Claude Code `.mcp.json` or Claude Desktop config:
   "mcpServers": {
     "nativectx": {
       "command": "npx",
-      "args": ["@nativectx/ui", "mcp"]
+      "args": ["nativectx", "mcp"]
     }
   }
 }
@@ -66,7 +66,7 @@ Skill docs (setup, components, theme, navigation) are also exposed as resources 
 
 ## Why NativeCtx UI
 
-LLMs produce better code when they understand your design system. Zero-to-app ships with an MCP server and Claude Skills — live tools and structured context that teach Claude your tokens, component API, and conventions. Generated code uses the right values from the first prompt.
+LLMs produce better code when they understand your design system. NativeCtx UI ships with an MCP server and Claude Skills — live tools and structured context that teach Claude your tokens, component API, and conventions. Generated code uses the right values from the first prompt.
 
 - **MCP Server** — Claude calls live tools for props, tokens, and code generation mid-conversation
 - **Claude Skills** — Structured context files for components, theming, and navigation patterns
@@ -89,7 +89,7 @@ npx expo install react-native-reanimated react-native-gesture-handler react-nati
 This library was formerly published as `zero-to-app`. To move an existing project over:
 
 ```bash
-npx @nativectx/ui migrate
+npx nativectx migrate
 ```
 
 That rewrites the dependency, import specifiers, the renamed `ZeroToApp` → `NativeCtxProvider` provider, your `.mcp.json` server entry, and replaces the stale `zero-to-app-*.md` skill files. Pass `--dry-run` to preview. Anything it can't safely automate is printed as a review list at the end.
@@ -140,7 +140,7 @@ function MyScreen() {
 Claude Skills are context files that teach Claude your design system. Install them with:
 
 ```bash
-npx @nativectx/ui skills
+npx nativectx skills
 ```
 
 Skills cover components, theming, navigation patterns, and responsive layout — so Claude generates code that uses your actual tokens and follows your conventions from the first prompt. Run the command once after install, and again after any upgrade.
@@ -234,15 +234,17 @@ theme.borderRadius.md
 
 ```bash
 pnpm install              # Install deps
-pnpm dev:storybook:web    # Component development
-pnpm dev:demo             # Full app testing
+pnpm dev:storybook       # Component development
+pnpm dev                 # Full app testing
 pnpm typecheck            # Type check
+pnpm test                 # Run tests
 pnpm build                # Build package
 pnpm release              # Publish to npm
 ```
 
 **Structure:**
-- `ui/` — Component library (npm package)
+- `ui/` — Component library (`@nativectx/ui` on npm)
+- `nativectx/` — Thin CLI alias package (`nativectx` on npm)
 - `apps/storybook/` — Isolated component development
 - `apps/demo/` — Integrated testing with expo-router
 

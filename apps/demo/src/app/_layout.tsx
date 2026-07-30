@@ -20,7 +20,7 @@ function TabLayoutInner() {
         <Sidebar
           header={
             <SidebarHeader
-              title="Zero To App"
+              title="NativeCtx UI"
               subtitle="Demo"
               onPress={() => navigateTo('/')}
             />
@@ -35,7 +35,7 @@ function TabLayoutInner() {
       )}
 
       <AppTabs
-        brandName="Zero To App"
+        brandName="NativeCtx UI"
         logoImage={
           <ThemedImage
             lightSource={require('../../assets/images/rocket_logo_black.png')}

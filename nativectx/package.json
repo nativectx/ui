@@ -1,0 +1,38 @@
+{
+  "name": "nativectx",
+  "version": "5.0.0",
+  "description": "CLI entry point for NativeCtx UI. Installs @nativectx/ui and forwards to its CLI.",
+  "license": "MIT",
+  "author": "Alex Amayo",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nativectx/ui.git"
+  },
+  "homepage": "https://nativectx.com",
+  "keywords": [
+    "nativectx",
+    "react-native",
+    "expo",
+    "cli",
+    "mcp"
+  ],
+  "type": "module",
+  "bin": {
+    "nativectx": "./bin.mjs"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "bin.mjs",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "prepack": "cp ../LICENSE ./LICENSE"
+  },
+  "dependencies": {
+    "@nativectx/ui": "workspace:^"
+  }
+}

@@ -21,13 +21,13 @@ Any one of these means the project is still on the old name:
 **Do not hand-edit these renames.** Run the codemod; it is deterministic and idempotent:
 
 ```bash
-npx @nativectx/ui migrate
+npx nativectx migrate
 ```
 
 Preview first if the working tree is dirty:
 
 ```bash
-npx @nativectx/ui migrate --dry-run
+npx nativectx migrate --dry-run
 ```
 
 It handles:
@@ -54,5 +54,5 @@ It prints a residual list on completion. Handle those manually — they are the 
 ## Compatibility notes
 
 - `ZeroToApp` is still exported from v5 as a deprecated alias for `NativeCtxProvider`, so a project that only bumps the dependency keeps compiling. It is removed in v6 — migrate rather than relying on it.
-- The CLI is invoked as `npx @nativectx/ui <command>`, not `npx nativectx`. npx resolves the package name, and the package is scoped.
+- The CLI is `npx nativectx <command>`. The `nativectx` package is a thin alias that forwards to `@nativectx/ui`, so `npx @nativectx/ui <command>` is equivalent. Install the library itself as `@nativectx/ui`.
 - Everything else — component names, props, theme tokens, `createBrand`, all hooks — is unchanged. This rename is not an API redesign; if a component appears to be missing, look it up with the MCP `get_component` tool rather than assuming it was removed.
