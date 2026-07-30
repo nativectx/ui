@@ -1,6 +1,6 @@
 {
   "name": "@nativectx/ui",
-  "version": "5.0.0",
+  "version": "0.1.0",
   "description": "React Native components for building cross-platform apps with Material Design.",
   "license": "MIT",
   "author": "Alex Amayo",

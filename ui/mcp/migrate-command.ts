@@ -26,7 +26,7 @@ function targetRange(): string {
     const { version } = JSON.parse(readFileSync(pkgPath, 'utf-8'));
     return `^${version}`;
   } catch {
-    return '^5.0.0';
+    return '^0.1.0';
   }
 }
 

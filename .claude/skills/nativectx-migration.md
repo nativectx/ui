@@ -4,7 +4,7 @@ description: Use when a project still depends on the old `zero-to-app` package a
 
 # Migrating zero-to-app → @nativectx/ui
 
-`zero-to-app` was renamed to `@nativectx/ui` in v5. The old package is deprecated on npm and receives no further updates.
+`zero-to-app` was renamed to `@nativectx/ui`, which restarts at 0.1.0 as a fresh package. The old package is deprecated on npm and receives no further updates.
 
 ## Detecting that a migration is needed
 
@@ -53,6 +53,6 @@ It prints a residual list on completion. Handle those manually — they are the 
 
 ## Compatibility notes
 
-- `ZeroToApp` is still exported from v5 as a deprecated alias for `NativeCtxProvider`, so a project that only bumps the dependency keeps compiling. It is removed in v6 — migrate rather than relying on it.
+- `ZeroToApp` is still exported as a deprecated alias for `NativeCtxProvider`, so a project that only swaps the dependency keeps compiling. It is removed in 0.2.0 — migrate rather than relying on it.
 - The CLI is `npx nativectx <command>`. The `nativectx` package is a thin alias that forwards to `@nativectx/ui`, so `npx @nativectx/ui <command>` is equivalent. Install the library itself as `@nativectx/ui`.
 - Everything else — component names, props, theme tokens, `createBrand`, all hooks — is unchanged. This rename is not an API redesign; if a component appears to be missing, look it up with the MCP `get_component` tool rather than assuming it was removed.

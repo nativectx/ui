@@ -12,7 +12,7 @@ import { generateNavigation } from './tools/generate-navigation.js';
 
 const server = new McpServer({
   name: 'nativectx',
-  version: '5.0.0',
+  version: '0.1.0',
 });
 
 // Resources: the 6 Claude skill files
