@@ -2,6 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { isContributorSkill } from '../skills-command.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // All files bundled into dist/mcp/server.mjs — skills are copied to dist/mcp/skills/ at build time
@@ -18,12 +19,21 @@ const skills: Array<{ name: string; uri: string; file: string; description: stri
   { name: 'Migration', uri: 'nativectx://migration', file: 'nativectx-migration.md', description: 'Upgrading a project from the old zero-to-app package to @nativectx/ui.' },
 ];
 
+// MCP resources are read on demand rather than copied into a project, so every
+// skill stays exposed here — including the contributor ones that `npx nativectx
+// skills` holds back. The description carries the audience so a client can tell
+// which skills are about developing the library rather than building an app.
 export function registerResources(server: McpServer): void {
   for (const skill of skills) {
+    const key = skill.name.toLowerCase();
+    const description = isContributorSkill(key)
+      ? `[Contributor — developing @nativectx/ui itself] ${skill.description}`
+      : skill.description;
+
     server.resource(
-      `nativectx-${skill.name.toLowerCase()}`,
+      `nativectx-${key}`,
       skill.uri,
-      { description: skill.description, mimeType: 'text/markdown' },
+      { description, mimeType: 'text/markdown' },
       async () => {
         try {
           const text = readFileSync(join(skillsDir, skill.file), 'utf-8');
