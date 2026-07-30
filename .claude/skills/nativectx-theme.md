@@ -6,6 +6,8 @@ description: Use when working with @nativectx/ui theming, design tokens, colors,
 
 **Context:** Assisting users with `@nativectx/ui` theming, tokens, and responsive hooks.
 
+> **This file is authoritative for token names.** Unlike `get_component`, the MCP `get_theme_tokens` tool is not generated from source — it is a hand-maintained string that has drifted from the shipped `ThemeValuesType`. It currently reports token names that do not exist (`input.focusedBorder`, `list.itemSubText`, `modal.overlay`, `appbar.iconColor`, and the removed `link` / `badge` groups). Where the two disagree, use the names below.
+
 ---
 
 ## Core Hooks
