@@ -27,6 +27,7 @@ const COMPONENT_META: Record<string, { category: string; description: string; pl
   Avatar: { category: 'display', description: 'Circular avatar with image, initials fallback, and size variants.' },
   // UI - Controls
   Button: { category: 'controls', description: 'M3 button with 5 variants: filled, elevated, tonal, outlined, text.' },
+  IconButton: { category: 'controls', description: 'Icon-only button with 4 variants and a 48dp touch target.' },
   Chip: { category: 'controls', description: 'Compact action or filter chip with optional icon and selection state.' },
   FAB: { category: 'controls', description: 'Floating action button with size and color variants.' },
   Switch: { category: 'controls', description: 'Toggle switch using native iOS/Android controls.', platforms: ['ios', 'android', 'web'] },
@@ -237,6 +238,48 @@ function toPropEntries(signatures: PropertySignature[]): PropEntry[] {
   return props;
 }
 
+// A call signature returning one of these is what makes an export renderable as
+// JSX, and therefore a component rather than a constant or a helper.
+const RENDERABLE_RETURN = /\b(ReactNode|ReactElement|JSX\.Element)\b/;
+
+/**
+ * Every component the package publicly exports, read off the components barrel.
+ *
+ * Derived rather than listed, for the same reason `isFirstParty` is: the barrel
+ * is the package's own statement of what it publishes, so it cannot drift from
+ * the thing it describes. `components/index.ts` is the right file to read
+ * because the module layout already draws the line — providers live in
+ * `context/`, icons in `icons/`, theming in `theme/`, and none of them are
+ * components in the sense the manifest documents.
+ *
+ * "Component-shaped" is decided structurally, with no list of names: the export
+ * must be a value whose type has a call signature returning something React can
+ * render, and it must be capitalised, since JSX only treats capitalised
+ * identifiers as components. Together those drop the `ButtonVariants`-style
+ * constant arrays (values, but not callable) and any lowercase helper such as
+ * `renderIcon` (callable, but never usable as an element).
+ */
+function exportedComponentNames(project: Project): string[] {
+  const barrel = project.addSourceFileAtPath(join(root, 'components/index.ts'));
+  const names: string[] = [];
+
+  for (const [name, declarations] of barrel.getExportedDeclarations()) {
+    if (!/^[A-Z]/.test(name)) continue;
+
+    const isComponent = declarations.some(decl => {
+      if (Node.isInterfaceDeclaration(decl) || Node.isTypeAliasDeclaration(decl)) return false;
+      return decl
+        .getType()
+        .getCallSignatures()
+        .some(sig => RENDERABLE_RETURN.test(sig.getReturnType().getText()));
+    });
+
+    if (isComponent) names.push(name);
+  }
+
+  return names;
+}
+
 /**
  * What the extractor saw while resolving a component's heritage. Not part of
  * the manifest — it only feeds the build-time guard.
@@ -310,7 +353,7 @@ function processFile(project: Project, filePath: string, componentName: string):
  * component that quietly loses its props ships as a component with no API.
  * Fail the build loudly instead.
  */
-function assertManifestComplete(processed: ProcessedComponent[]): void {
+function assertManifestComplete(processed: ProcessedComponent[], exportedComponents: string[]): void {
   const errors: string[] = [];
   const components = processed.map(p => p.entry);
 
@@ -321,6 +364,20 @@ function assertManifestComplete(processed: ProcessedComponent[]): void {
       `Declared in COMPONENT_META but absent from the manifest: ${missing.join(', ')}\n` +
         '  Every component in COMPONENT_META needs a matching entry in componentFiles,\n' +
         '  and that file path must still exist.',
+    );
+  }
+
+  // ...and the other direction: a component the package exports but the manifest
+  // never heard of is invisible to get_component and search_components.
+  const undocumented = exportedComponents.filter(name => !(name in COMPONENT_META));
+  if (undocumented.length) {
+    errors.push(
+      `Exported from components/index.ts but absent from COMPONENT_META: ${undocumented.join(', ')}\n` +
+        '  These are publicly exported components, so `get_component` and\n' +
+        '  `search_components` return nothing for them. Add a category and description\n' +
+        '  to COMPONENT_META and a file path to componentFiles.\n' +
+        '  If the export is not really a component, it should not be shaped like one —\n' +
+        '  fix the export rather than the check.',
     );
   }
 
@@ -365,6 +422,7 @@ async function main() {
   const componentFiles: Array<{ file: string; name: string }> = [
     // UI components
     { file: 'components/ui/button.tsx', name: 'Button' },
+    { file: 'components/ui/icon-button.tsx', name: 'IconButton' },
     { file: 'components/ui/typography.tsx', name: 'Typography' },
     { file: 'components/ui/avatar.tsx', name: 'Avatar' },
     { file: 'components/ui/chip.tsx', name: 'Chip' },
@@ -413,7 +471,7 @@ async function main() {
     if (result) processed.push(result);
   }
 
-  assertManifestComplete(processed);
+  assertManifestComplete(processed, exportedComponentNames(project));
 
   const components = processed.map(p => p.entry);
 
