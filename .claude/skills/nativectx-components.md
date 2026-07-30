@@ -24,11 +24,9 @@ Prop-level detail is not written down here on purpose — it drifts. Get it live
 | "What should I use for X?" when you don't know the name | `search_components("expandable section")` |
 | Full current inventory with descriptions and variants | `list_components()` / `list_components("controls")` |
 
-### Where the manifest is blind
+### What `get_component` covers
 
-`get_component` reads the `<Name>Props` interface declared in the component's own file, and only its **own** properties. Three consequences worth knowing, because a prop being absent from the tool output does not mean it doesn't exist:
-
-**1. Inherited props are never listed.** Most interactive components extend a shared base. These are always available even though `get_component` won't show them:
+`get_component` reports every prop a component accepts from this library, including ones inherited from the shared base interfaces:
 
 ```
 BaseComponentProps         testID, style
@@ -37,14 +35,9 @@ InteractiveComponentProps  + disabled, onPress,
 LoadableComponentProps     + loading
 ```
 
-So `Button` accepts `disabled` and `loading`; `Chip` and `ListItem` accept `onPress` and `disabled`; `Container` accepts everything `ThemedView` does. Components wrapping an RN primitive (`Typography`, `ThemedTextInput`, `ThemedImage`, `Collapsible`) also pass through that primitive's props.
+Inherited props are listed after the component's own, so the distinctive API reads first. All 29 exported components are covered, and the build fails if any is missing or loses its props.
 
-**2. Two components report zero props.**
-
-- `Sidebar` — props live in `sidebar.web.tsx` / `sidebar.native.tsx`; `sidebar.tsx` only re-exports. See **nativectx-navigation** for `anchor` and `avoidAppBar`.
-- `ThemedStack` — takes expo-router `Stack` props directly. See **nativectx-navigation**.
-
-**3. `IconButton` is missing entirely.** It is exported from the package but absent from the manifest — read the source if you need its props.
+**One boundary worth knowing:** props inherited from a React Native primitive are *not* listed, deliberately — expanding `ViewProps` or `ImageProps` would bury a component's real API under 100+ RN props. So `Typography`, `ThemedTextInput`, `ThemedImage` and `Collapsible` also pass through their underlying primitive's props even though the tool doesn't enumerate them. For those, check the RN docs for the wrapped primitive.
 
 ---
 

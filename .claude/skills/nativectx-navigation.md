@@ -6,7 +6,7 @@ description: Use when working with @nativectx/ui navigation — choosing an expo
 
 **Context:** Helping build navigation with `@nativectx/ui` (requires `expo-router`).
 
-This skill covers **which layout shape to build and why**. For exact props on a named component, call `get_component("AppTabs")` etc. Two exceptions where the MCP manifest is blind and this file is the only reference: **`Sidebar`** and **`ThemedStack`** both report zero props. Their sections below are authoritative.
+This skill covers **which layout shape to build and why**. For exact props on a named component, call `get_component("AppTabs")` etc — it now covers every component including `Sidebar` and `ThemedStack`. What it can't tell you is which shape fits your app, or how the pieces compose; that's what's below. `AppTabConfig` fields are also only documented here.
 
 ---
 
@@ -437,7 +437,7 @@ Note the icon names are **not** interchangeable: iOS takes SF Symbols (`chevron.
 
 ## Sidebar
 
-> `get_component("Sidebar")` returns zero props — `sidebar.tsx` only re-exports the platform implementations. This is the reference.
+> `get_component("Sidebar")` lists these props too. Kept here because `anchor` is web-only, which the prop list alone doesn't convey.
 
 ```tsx
 <Sidebar

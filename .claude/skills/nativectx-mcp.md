@@ -47,10 +47,10 @@ Full parameter schemas come from the server — this is the routing, not the sig
 | About to write JSX using a component | `get_component` — before writing, not after a type error |
 | User described a need but named no component | `search_components` — top 5 by use case |
 | Starting a screen and need the vocabulary | `list_components`, optionally by category |
-| Writing inline styles or picking a semantic colour | **nativectx-theme** first; `get_theme_tokens` has drifted (below) |
+| Writing inline styles or picking a semantic colour | `get_theme_tokens` — scoped to a component, or omit for the full tree |
 | User gave a brand colour and wants a palette | `generate_palette` |
 | New app / new brand from scratch | `generate_brand_config` → paste into `brand.ts` |
-| Need expo-router navigation boilerplate | `generate_navigation` — but see the caveat below |
+| Need expo-router navigation boilerplate | `generate_navigation` — then read **nativectx-navigation** for why that shape |
 
 Categories for `list_components`: `layout`, `display`, `controls`, `input`, `feedback`, `collections`, `navigation`.
 Presets for `generate_brand_config`: spacing `compact` / `default` / `comfortable`, radius `sharp` / `default` / `rounded`.
@@ -58,18 +58,16 @@ Patterns for `generate_navigation`: `flat-tabs`, `tabs-sidebar`, `tabs-stack`.
 
 ---
 
-## Where the tools are incomplete
+## What the tools do and don't cover
 
-The manifest is extracted from source by `build-manifest.ts`. It reads the `<Name>Props` interface declared in each component's own file, and only that interface's **own** properties. So:
+Both the component manifest and the token tree are derived from source, and the build fails if either drifts — so tool output is trustworthy for names, types and defaults.
 
-- **Inherited props never appear.** `Button` really does accept `disabled` and `loading`; `Chip` and `ListItem` accept `onPress` and `disabled`. See **nativectx-components** for the shared base interfaces.
-- **`Sidebar` and `ThemedStack` report zero props.** Their props live in a platform file or come from expo-router. **nativectx-navigation** is the reference for both.
+Two deliberate boundaries:
+
+- **React Native pass-through props are not enumerated.** `get_component` lists everything a component accepts from this library, including inherited base props, but stops at the RN boundary. `Typography`, `ThemedTextInput`, `ThemedImage` and `Collapsible` also accept their wrapped primitive's props; check the RN docs for those.
 - **`AppTabConfig` is not expanded.** `get_component("AppTabs")` shows `tabs: AppTabConfig[]` without the field list. It's in **nativectx-navigation**.
-- **`IconButton` is missing entirely** — exported from the package, absent from the manifest.
-- **`get_theme_tokens` is not generated from source.** It is a hand-maintained string and has drifted: it reports `input.focusedBorder`, `list.itemSubText`, `modal.overlay`, `appbar.iconColor` and `link` / `badge` groups that no longer exist in `ThemeValuesType`. **nativectx-theme** is authoritative for token names.
-- **`generate_navigation` output is boilerplate, not a reviewed pattern.** It has emitted `<SidebarItem href=...>` and `<ThemedStack.Screen>`, neither of which exists. Treat its output as a starting sketch and reconcile it against the scenarios in **nativectx-navigation**, which are the authoritative layouts.
 
-A prop being absent from tool output is not evidence the prop doesn't exist. Check the skill, then the source.
+Where the skills and the tools overlap, the tools win on *facts* — prop names, token names, defaults. The skills win on *judgement* — which component to reach for, which layout shape fits, what not to do.
 
 ---
 
