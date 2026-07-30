@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Typography, Screen, useTheme, NativeHeader, useSidebar } from 'zero-to-app';
+import { Typography, Screen, useTheme, NativeHeader, useSidebar } from '@nativectx/ui';
 import { DemoSection } from '../../components/demo-section';
 import { DocsPagination } from '../../components/docs-pagination';
 

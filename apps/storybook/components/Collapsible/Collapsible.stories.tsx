@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Collapsible, Typography } from 'zero-to-app';
+import { Collapsible, Typography } from '@nativectx/ui';
 
 /**
  * Collapsible

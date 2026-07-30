@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { Typography } from 'zero-to-app';
+import { Typography } from '@nativectx/ui';
 import { DocsPage } from '../../components/docs-page';
 import { DocsPagination } from '../../components/docs-pagination';
 import { CodeBlock } from '../../components/code-block';
@@ -8,12 +8,12 @@ export default function NavHooksPage() {
   return (
     <DocsPage
       title="Navigation Hooks"
-      description="Hooks for controlling the sidebar and checking active routes. Both are provided automatically by ZeroToApp."
+      description="Hooks for controlling the sidebar and checking active routes. Both are provided automatically by NativeCtxProvider."
     >
       <View style={{ gap: 8 }}>
         <Typography variant="titleLarge" weight="bold">useSidebar()</Typography>
         <Typography variant="bodyMedium" muted>
-          Controls the sidebar open/close state. The state is managed by ZeroToApp&apos;s SidebarProvider — call this hook from any component inside the provider tree.
+          Controls the sidebar open/close state. The state is managed by NativeCtxProvider&apos;s SidebarProvider — call this hook from any component inside the provider tree.
         </Typography>
         <CodeBlock
           variant="code"

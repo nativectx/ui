@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { FAB } from 'zero-to-app';
+import { FAB } from '@nativectx/ui';
 
 const mockOnPress = () => console.log('FAB pressed');
 

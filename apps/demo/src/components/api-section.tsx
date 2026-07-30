@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Typography, useTheme } from 'zero-to-app';
+import { Typography, useTheme } from '@nativectx/ui';
 import { PropsTable, type PropDefinition } from './props-table';
 
 interface ApiSectionProps {

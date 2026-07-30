@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Typography, ThemedView, useTheme } from 'zero-to-app';
+import { Typography, ThemedView, useTheme } from '@nativectx/ui';
 import { DemoSection } from '../../components/demo-section';
 import { DocsPagination } from '../../components/docs-pagination';
 import { PropsTable, type PropDefinition } from '../../components/props-table';
@@ -127,7 +127,7 @@ export default function SidebarPage() {
         code={`import {
   Sidebar, SidebarHeader, SidebarSection,
   SidebarItem, SidebarFooter, useRouteNavigation,
-} from 'zero-to-app';
+} from '@nativectx/ui';
 
 const { isActive, navigateTo } = useRouteNavigation();
 
@@ -181,7 +181,7 @@ const { isActive, navigateTo } = useRouteNavigation();
       <DemoSection
         title="Sidebar Context"
         description="Use useSidebar() to control the sidebar programmatically from anywhere in the tree."
-        code={`import { useSidebar } from 'zero-to-app';
+        code={`import { useSidebar } from '@nativectx/ui';
 
 const { open, close, toggle, isOpen } = useSidebar();
 
@@ -196,9 +196,9 @@ const { open, close, toggle, isOpen } = useSidebar();
 />`}
       >
         <ThemedView variant="surfaceContainer" style={{ padding: spacing.lg, borderRadius: spacing.sm, gap: spacing.xs }}>
-          <Typography variant="labelLarge" weight="medium">Provided by ZeroToApp</Typography>
+          <Typography variant="labelLarge" weight="medium">Provided by NativeCtxProvider</Typography>
           <Typography variant="bodySmall" muted>
-            The sidebar context is set up automatically by the ZeroToApp provider.
+            The sidebar context is set up automatically by the NativeCtxProvider provider.
             No extra setup needed — just call useSidebar() in any screen or component.
           </Typography>
         </ThemedView>

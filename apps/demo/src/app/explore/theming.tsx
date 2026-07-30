@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Linking, Pressable } from 'react-native';
-import { Typography, ThemedView, useTheme } from 'zero-to-app';
+import { Typography, ThemedView, useTheme } from '@nativectx/ui';
 import { DemoSection } from '../../components/demo-section';
 import { CodeBlock } from '../../components/code-block';
 import { DocsPagination } from '../../components/docs-pagination';
@@ -17,11 +17,11 @@ export default function ThemingPage() {
     >
       <DemoSection
         title="Brand config"
-        description="Pass a Brand object to ZeroToApp at the root of your app. Everything in the design system reads from it."
+        description="Pass a Brand object to NativeCtxProvider at the root of your app. Everything in the design system reads from it."
       >
         <CodeBlock
           variant="code"
-          code={"import { ZeroToApp, createBrand } from 'zero-to-app';\n\nconst brand = createBrand({ ... });\n\nexport default function RootLayout() {\n  return (\n    <ZeroToApp brand={brand}>\n      <Stack />\n    </ZeroToApp>\n  );\n}"}
+          code={"import { NativeCtxProvider, createBrand } from '@nativectx/ui';\n\nconst brand = createBrand({ ... });\n\nexport default function RootLayout() {\n  return (\n    <NativeCtxProvider brand={brand}>\n      <Stack />\n    </NativeCtxProvider>\n  );\n}"}
         />
       </DemoSection>
 
@@ -158,7 +158,7 @@ export default function ThemingPage() {
       >
         <CodeBlock
           variant="code"
-          code={"import { useThemeMode } from 'zero-to-app';\n\nconst { mode, toggleTheme } = useThemeMode();\n// mode: 'light' | 'dark'"}
+          code={"import { useThemeMode } from '@nativectx/ui';\n\nconst { mode, toggleTheme } = useThemeMode();\n// mode: 'light' | 'dark'"}
         />
       </DemoSection>
 
@@ -168,7 +168,7 @@ export default function ThemingPage() {
       >
         <CodeBlock
           variant="code"
-          code={"import { ZeroToApp, defaultBrand } from 'zero-to-app';\n\n<ZeroToApp brand={defaultBrand}>\n  <Stack />\n</ZeroToApp>"}
+          code={"import { NativeCtxProvider, defaultBrand } from '@nativectx/ui';\n\n<NativeCtxProvider brand={defaultBrand}>\n  <Stack />\n</NativeCtxProvider>"}
         />
       </DemoSection>
 

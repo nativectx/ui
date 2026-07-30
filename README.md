@@ -1,24 +1,24 @@
-# zero-to-app
+# NativeCtx UI
 
 The React Native UI library built for AI development.
 
 Material Design 3 components for Expo — with a built-in MCP server and Claude Skills that give AI the context to generate consistent, theme-aware code instead of generic boilerplate.
 
-🌐 **[Live Demo](https://demo-zero-to-app--lbqs9orlsl.expo.app)** &nbsp;·&nbsp; 📦 **[NPM](https://www.npmjs.com/package/zero-to-app)**
+🌐 **[Live Demo](https://demo-zero-to-app--lbqs9orlsl.expo.app)** &nbsp;·&nbsp; 📦 **[NPM](https://www.npmjs.com/package/@nativectx/ui)**
 
 ---
 
 ## MCP Server & Claude Skills
 
-zero-to-app ships a CLI with two AI tools: an MCP server that gives Claude live access to component props, tokens, and code generation, and a skills installer that drops context files into your project for Claude Code to pick up automatically.
+NativeCtx UI ships a CLI with two AI tools: an MCP server that gives Claude live access to component props, tokens, and code generation, and a skills installer that drops context files into your project for Claude Code to pick up automatically.
 
 ### Install Claude Skills
 
 ```bash
-npx zero-to-app skills
+npx @nativectx/ui skills
 ```
 
-Copies 7 skill files into `.claude/skills/` in your project. Claude Code reads these automatically — no further configuration needed. Re-run after upgrading zero-to-app to get updated skills.
+Copies 7 skill files into `.claude/skills/` in your project. Claude Code reads these automatically — no further configuration needed. Re-run after upgrading @nativectx/ui to get updated skills.
 
 ### MCP Server
 
@@ -27,22 +27,22 @@ Add to your Claude Code `.mcp.json` or Claude Desktop config:
 ```json
 {
   "mcpServers": {
-    "zero-to-app": {
+    "nativectx": {
       "command": "npx",
-      "args": ["zero-to-app", "mcp"]
+      "args": ["@nativectx/ui", "mcp"]
     }
   }
 }
 ```
 
-Or if zero-to-app is already installed locally:
+Or if @nativectx/ui is already installed locally:
 
 ```json
 {
   "mcpServers": {
-    "zero-to-app": {
+    "nativectx": {
       "command": "node",
-      "args": ["./node_modules/zero-to-app/dist/mcp/cli.mjs", "mcp"]
+      "args": ["./node_modules/@nativectx/ui/dist/mcp/cli.mjs", "mcp"]
     }
   }
 }
@@ -64,7 +64,7 @@ Skill docs (setup, components, theme, navigation) are also exposed as resources 
 
 ---
 
-## Why zero-to-app
+## Why NativeCtx UI
 
 LLMs produce better code when they understand your design system. Zero-to-app ships with an MCP server and Claude Skills — live tools and structured context that teach Claude your tokens, component API, and conventions. Generated code uses the right values from the first prompt.
 
@@ -78,7 +78,7 @@ LLMs produce better code when they understand your design system. Zero-to-app sh
 ## Installation
 
 ```bash
-npx expo install zero-to-app
+npx expo install @nativectx/ui
 
 # Required peer dependencies
 npx expo install react-native-reanimated react-native-gesture-handler react-native-safe-area-context react-native-screens expo-router @expo/vector-icons
@@ -92,7 +92,7 @@ npx expo install react-native-reanimated react-native-gesture-handler react-nati
 
 ```tsx
 // app/_layout.tsx
-import { ZeroToApp, createBrand } from 'zero-to-app';
+import { NativeCtxProvider, createBrand } from '@nativectx/ui';
 
 const brand = createBrand({
   name: 'My App',
@@ -102,14 +102,14 @@ const brand = createBrand({
 });
 
 export default function RootLayout() {
-  return <ZeroToApp brand={brand}>{/* Your app */}</ZeroToApp>;
+  return <NativeCtxProvider brand={brand}>{/* Your app */}</NativeCtxProvider>;
 }
 ```
 
 ### 2. Use Components
 
 ```tsx
-import { Button, Typography, ThemedView } from 'zero-to-app';
+import { Button, Typography, ThemedView } from '@nativectx/ui';
 
 function MyScreen() {
   return (
@@ -128,7 +128,7 @@ function MyScreen() {
 Claude Skills are context files that teach Claude your design system. Install them with:
 
 ```bash
-npx zero-to-app skills
+npx @nativectx/ui skills
 ```
 
 Skills cover components, theming, navigation patterns, and responsive layout — so Claude generates code that uses your actual tokens and follows your conventions from the first prompt. Run the command once after install, and again after any upgrade.
@@ -230,7 +230,7 @@ pnpm release              # Publish to npm
 ```
 
 **Structure:**
-- `zero-to-app/` — Component library (npm package)
+- `ui/` — Component library (npm package)
 - `apps/storybook/` — Isolated component development
 - `apps/demo/` — Integrated testing with expo-router
 
@@ -240,8 +240,8 @@ pnpm release              # Publish to npm
 
 - [Live Demo](https://demo-zero-to-app--lbqs9orlsl.expo.app)
 - [Material Design 3](https://m3.material.io)
-- [NPM Package](https://www.npmjs.com/package/zero-to-app)
-- [GitHub](https://github.com/Alex-Amayo/zero-to-app)
+- [NPM Package](https://www.npmjs.com/package/@nativectx/ui)
+- [GitHub](https://github.com/nativectx/ui)
 
 ---
 

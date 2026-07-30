@@ -6,7 +6,7 @@ import {
   SidebarItem,
   SidebarFooter,
   useTheme,
-} from 'zero-to-app';
+} from '@nativectx/ui';
 import { DocsPage } from '../../components/docs-page';
 import { DocsPagination } from '../../components/docs-pagination';
 import { CodeBlock } from '../../components/code-block';
@@ -66,19 +66,19 @@ export default function NavSidebarPage() {
   return (
     <DocsPage
       title="Sidebar"
-      description="Persistent panel on web desktop, slide-in drawer on web mobile, and a modal drawer on native. Controlled by useSidebar() which ZeroToApp provides automatically."
-      importLine="{ Sidebar, SidebarHeader, SidebarSection, SidebarItem, SidebarFooter, useSidebar } from 'zero-to-app'"
+      description="Persistent panel on web desktop, slide-in drawer on web mobile, and a modal drawer on native. Controlled by useSidebar() which NativeCtxProvider provides automatically."
+      importLine="{ Sidebar, SidebarHeader, SidebarSection, SidebarItem, SidebarFooter, useSidebar } from '@nativectx/ui'"
     >
       <View style={{ gap: 8 }}>
         <Typography variant="titleLarge" weight="bold">Wiring to AppTabs</Typography>
         <Typography variant="bodyMedium" muted>
-          useSidebar() must be called inside a component rendered under ZeroToApp. Create an inner component so the hook resolves the provider context.
+          useSidebar() must be called inside a component rendered under NativeCtxProvider. Create an inner component so the hook resolves the provider context.
         </Typography>
         <CodeBlock
           variant="code"
           filename="app/_layout.tsx"
-          code={`import { ZeroToApp, AppTabs, Sidebar, SidebarHeader, SidebarSection,
-  SidebarItem, useSidebar, useRouteNavigation } from 'zero-to-app';
+          code={`import { NativeCtxProvider, AppTabs, Sidebar, SidebarHeader, SidebarSection,
+  SidebarItem, useSidebar, useRouteNavigation } from '@nativectx/ui';
 import { Platform, View } from 'react-native';
 
 function AppLayout() {
@@ -105,9 +105,9 @@ function AppLayout() {
 
 export default function Layout() {
   return (
-    <ZeroToApp brand={brand}>
+    <NativeCtxProvider brand={brand}>
       <AppLayout />
-    </ZeroToApp>
+    </NativeCtxProvider>
   );
 }`}
         />

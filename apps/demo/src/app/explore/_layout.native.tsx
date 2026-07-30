@@ -7,7 +7,7 @@ import {
     SidebarSection,
     SidebarItem,
     useRouteNavigation,
-} from 'zero-to-app';
+} from '@nativectx/ui';
 import { NAV_SECTIONS } from '../../config/nav';
 
 export default function ExploreLayout() {

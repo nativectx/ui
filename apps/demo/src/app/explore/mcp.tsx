@@ -1,34 +1,34 @@
-import { Typography } from 'zero-to-app';
+import { Typography } from '@nativectx/ui';
 import { View } from 'react-native';
 import { CodeBlock } from '../../components/code-block';
 import { DocsPagination } from '../../components/docs-pagination';
 import { DocsPage } from '../../components/docs-page';
 
-const SKILLS_COMMAND = `npx zero-to-app skills`;
+const SKILLS_COMMAND = `npx @nativectx/ui skills`;
 
 const CLAUDE_CODE_CONFIG = `{
   "mcpServers": {
-    "zero-to-app": {
+    "nativectx": {
       "command": "npx",
-      "args": ["zero-to-app", "mcp"]
+      "args": ["@nativectx/ui", "mcp"]
     }
   }
 }`;
 
 const LOCAL_CONFIG = `{
   "mcpServers": {
-    "zero-to-app": {
+    "nativectx": {
       "command": "node",
-      "args": ["./node_modules/zero-to-app/dist/mcp/cli.mjs", "mcp"]
+      "args": ["./node_modules/@nativectx/ui/dist/mcp/cli.mjs", "mcp"]
     }
   }
 }`;
 
 const CLAUDE_DESKTOP_CONFIG = `{
   "mcpServers": {
-    "zero-to-app": {
+    "nativectx": {
       "command": "npx",
-      "args": ["zero-to-app", "mcp"]
+      "args": ["@nativectx/ui", "mcp"]
     }
   }
 }`;
@@ -48,7 +48,7 @@ export default function McpPage() {
         </Typography>
         <CodeBlock variant="shell" code={SKILLS_COMMAND} />
         <Typography variant="bodyMedium" muted>
-          Copies 7 skill files into <Typography variant="bodyMedium" style={{ fontFamily: 'monospace' }}>.claude/skills/</Typography> covering components, theming, navigation, and setup. Re-run after upgrading zero-to-app.
+          Copies 7 skill files into <Typography variant="bodyMedium" style={{ fontFamily: 'monospace' }}>.claude/skills/</Typography> covering components, theming, navigation, and setup. Re-run after upgrading @nativectx/ui.
         </Typography>
       </View>
 
@@ -70,7 +70,7 @@ export default function McpPage() {
         </Typography>
         <CodeBlock variant="code" filename=".mcp.json" language="json" code={CLAUDE_CODE_CONFIG} />
         <Typography variant="bodyMedium" muted>
-          Or if zero-to-app is already installed locally:
+          Or if @nativectx/ui is already installed locally:
         </Typography>
         <CodeBlock variant="code" filename=".mcp.json" language="json" code={LOCAL_CONFIG} />
       </View>

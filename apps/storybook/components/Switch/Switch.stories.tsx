@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Switch } from 'zero-to-app';
+import { Switch } from '@nativectx/ui';
 
 const meta = {
   title: 'Components/Switch',

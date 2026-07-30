@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { SegmentedControl } from 'zero-to-app';
+import { SegmentedControl } from '@nativectx/ui';
 
 const OPTIONS = [
   { value: 'preview', label: 'Preview' },

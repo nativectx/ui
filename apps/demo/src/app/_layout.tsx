@@ -1,6 +1,6 @@
 import React from 'react';
 import { Platform, View, StyleSheet } from 'react-native';
-import { ZeroToApp, AppTabs, defaultBrand, AppTabsExternalLink, Sidebar, SidebarHeader, SidebarSection, SidebarItem, useSidebar, ThemedImage, useRouteNavigation } from 'zero-to-app';
+import { NativeCtxProvider, AppTabs, defaultBrand, AppTabsExternalLink, Sidebar, SidebarHeader, SidebarSection, SidebarItem, useSidebar, ThemedImage, useRouteNavigation } from '@nativectx/ui';
 
 function TabLayoutInner() {
   const { isActive, navigateTo } = useRouteNavigation();
@@ -70,9 +70,9 @@ function TabLayoutInner() {
 
 export default function TabLayout() {
   return (
-    <ZeroToApp brand={defaultBrand} ssrWidth={1440} ssrHeight={900}>
+    <NativeCtxProvider brand={defaultBrand} ssrWidth={1440} ssrHeight={900}>
       <TabLayoutInner />
-    </ZeroToApp>
+    </NativeCtxProvider>
   );
 }
 

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Platform, View } from 'react-native';
-import { ThemeContext, BrandProvider, createLightTheme, createDarkTheme, type ThemeContextType, type ThemeMode } from 'zero-to-app';
+import { ThemeContext, BrandProvider, createLightTheme, createDarkTheme, type ThemeContextType, type ThemeMode } from '@nativectx/ui';
 import { storybookBrand } from './brand-config';
 
 // Wrapper component that manages theme based on Storybook globals
@@ -44,7 +44,7 @@ const ThemeWrapper = ({
   );
 };
 
-export const withZeroToApp = (Story: React.ComponentType, context: { globals?: Record<string, unknown> }) => {
+export const withNativeCtxProvider = (Story: React.ComponentType, context: { globals?: Record<string, unknown> }) => {
   // Get theme from Storybook globals, default to 'light'
   const theme = (context.globals?.theme as ThemeMode) || 'light';
 

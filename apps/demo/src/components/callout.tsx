@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Typography, renderIcon, useTheme } from 'zero-to-app';
+import { Typography, renderIcon, useTheme } from '@nativectx/ui';
 
 type CalloutType = 'warning' | 'info' | 'critical';
 

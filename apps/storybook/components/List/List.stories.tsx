@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { List, ListItem, Divider, Avatar, Typography } from 'zero-to-app';
-import { renderIcon } from 'zero-to-app/icons';
+import { List, ListItem, Divider, Avatar, Typography } from '@nativectx/ui';
+import { renderIcon } from '@nativectx/ui/icons';
 
 const meta = {
   title: 'Components/List',

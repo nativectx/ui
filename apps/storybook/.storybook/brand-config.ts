@@ -1,3 +1,3 @@
-import { defaultBrand } from 'zero-to-app';
+import { defaultBrand } from '@nativectx/ui';
 
 export const storybookBrand = defaultBrand;

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
 import React from 'react';
 import { View } from 'react-native';
-import { Divider, Typography } from 'zero-to-app';
+import { Divider, Typography } from '@nativectx/ui';
 
 const meta = {
   title: 'Components/Divider',

@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Chip } from 'zero-to-app';
-import { ChipVariants } from 'zero-to-app';
+import { Chip } from '@nativectx/ui';
+import { ChipVariants } from '@nativectx/ui';
 
 const meta = {
   title: 'Components/Chip',

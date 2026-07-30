@@ -1,9 +1,9 @@
 {
-  "name": "zero-to-app-monorepo",
+  "name": "nativectx-monorepo",
   "version": "1.0.1",
   "private": true,
   "workspaces": [
-    "zero-to-app",
+    "ui",
     "apps/*"
   ],
   "scripts": {
@@ -12,18 +12,18 @@
     "dev": "pnpm build && pnpm --filter demo web",
     "dev:ios": "pnpm build && pnpm --filter demo ios",
     "dev:android": "pnpm build && pnpm --filter demo android",
-    "dev:storybook": "pnpm build && pnpm --filter zero-to-app-storybook storybook:web",
-    "dev:storybook:native": "pnpm build && pnpm --filter zero-to-app-storybook storybook",
-    "build": "pnpm --filter zero-to-app run build",
-    "build:watch": "pnpm --filter zero-to-app exec tsc -p tsconfig.build.json --watch",
+    "dev:storybook": "pnpm build && pnpm --filter @nativectx/storybook storybook:web",
+    "dev:storybook:native": "pnpm build && pnpm --filter @nativectx/storybook storybook",
+    "build": "pnpm --filter @nativectx/ui run build",
+    "build:watch": "pnpm --filter @nativectx/ui exec tsc -p tsconfig.build.json --watch",
     "export:web": "pnpm build && pnpm --filter demo export:web",
     "deploy": "pnpm build && pnpm --filter demo publish",
     "deploy:preview": "pnpm build && pnpm --filter demo publish:preview",
-    "release": "pnpm build && pnpm --filter zero-to-app publish --access public --no-git-checks",
+    "release": "pnpm build && pnpm --filter @nativectx/ui publish --access public --no-git-checks",
     "typecheck": "pnpm -r exec tsc --noEmit",
     "lint": "pnpm --filter demo lint",
     "lint:fix": "pnpm --filter demo lint -- --fix",
-    "clean": "rm -rf zero-to-app/dist apps/*/dist apps/*/.expo"
+    "clean": "rm -rf ui/dist apps/*/dist apps/*/.expo"
   },
   "engines": {
     "node": ">=18.0.0"

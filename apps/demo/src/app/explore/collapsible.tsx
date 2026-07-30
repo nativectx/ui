@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { Typography, Collapsible, Button } from 'zero-to-app';
+import { Typography, Collapsible, Button } from '@nativectx/ui';
 import { DemoSection } from '../../components/demo-section';
 import { PropsTable, type PropDefinition } from '../../components/props-table';
 import { ApiSection } from '../../components/api-section';

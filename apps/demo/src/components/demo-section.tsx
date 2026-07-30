@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Typography, useTheme, renderIcon, SegmentedControl } from 'zero-to-app';
+import { Typography, useTheme, renderIcon, SegmentedControl } from '@nativectx/ui';
 import { Highlight, themes } from 'prism-react-renderer';
 import * as Clipboard from 'expo-clipboard';
 
