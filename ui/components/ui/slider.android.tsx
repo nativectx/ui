@@ -1,6 +1,6 @@
 // 1. IMPORTS
 import React from 'react';
-import { View, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Host, Slider as UISlider } from '@expo/ui/jetpack-compose';
 import { fillMaxWidth } from '@expo/ui/jetpack-compose/modifiers';
 import { useTheme } from '../../theme';

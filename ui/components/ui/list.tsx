@@ -1,7 +1,6 @@
 // 1. IMPORTS
 import React from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
-import { useTheme } from '../../theme';
 
 // 2. TYPES
 export interface ListProps {
@@ -17,7 +16,6 @@ export interface ListProps {
  * @category collections
  */
 const List = ({ children, style }: ListProps) => {
-  const theme = useTheme();
   return (
     <View
       style={style}

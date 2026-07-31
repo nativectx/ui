@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button } from '@nativectx/ui';
-import { ButtonVariants } from '@nativectx/ui';
+import { Button , ButtonVariants } from '@nativectx/ui';
 
 const mockOnPress = () => console.log('pressed');
 

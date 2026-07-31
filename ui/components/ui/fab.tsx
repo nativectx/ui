@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { Typography } from './typography';
 import { useTheme } from '../../theme';
-import { renderIcon, type IconLibrary } from '../../icons';
+import { renderIcon } from '../../icons';
 import type { InteractiveComponentProps } from '../shared/types';
 import { blurOnWeb, platformShadow } from '../shared/utils';
 import type { IconConfig } from './button';
@@ -98,12 +98,12 @@ const FAB = forwardRef<View, FABProps>(({
   useEffect(() => {
     let mounted = true;
     try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
+       
       const { AccessibilityInfo } = require('react-native');
       AccessibilityInfo?.isReduceMotionEnabled?.().then((enabled: boolean) => {
         if (mounted) setReduceMotionEnabled(!!enabled);
       });
-    } catch (e) {
+    } catch {
       // ignore if not available
     }
     return () => { mounted = false; };

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { List, ListItem, Divider, Avatar, Typography } from '@nativectx/ui';
+import { List, ListItem, Divider, Avatar } from '@nativectx/ui';
 import { renderIcon } from '@nativectx/ui/icons';
 
 const meta = {

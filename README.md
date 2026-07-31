@@ -246,14 +246,18 @@ theme.borderRadius.md
 ## Development
 
 ```bash
-pnpm install              # Install deps
+pnpm setup               # Install deps and build the library — start here
 pnpm dev:storybook       # Component development
 pnpm dev                 # Full app testing
-pnpm typecheck            # Type check
-pnpm test                 # Run tests
-pnpm build                # Build package
-pnpm release              # Publish to npm
+pnpm verify              # Everything CI runs: build, check, lint, typecheck, test (~15s)
+pnpm typecheck           # Type check
+pnpm test                # Run tests
+pnpm lint                # Lint the library, demo and storybook
+pnpm build               # Build package
 ```
+
+Publishing runs from the `Release` workflow on a `v*` tag — there is no local
+publish script, so a release always goes out from a green, committed tree.
 
 **Structure:**
 - `ui/` — Component library (`@nativectx/ui` on npm)

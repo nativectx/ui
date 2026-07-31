@@ -249,15 +249,6 @@ export function generateDarkColors(options: PaletteOptions): Colors {
 }
 
 /**
- * Pick white or black as the on-color for a given background, based on contrast.
- */
-function pickOnColor(background: string): string {
-  return contrastRatio('#FFFFFF', background) >= contrastRatio('#000000', background)
-    ? '#FFFFFF'
-    : '#000000';
-}
-
-/**
  * Compute WCAG 2.1 relative luminance for an ARGB integer.
  * https://www.w3.org/TR/WCAG21/#dfn-relative-luminance
  */
@@ -332,7 +323,7 @@ export function tonalPaletteToHexMap(palette: TonalPalette): Record<number, stri
   for (let t = 0; t <= 100; t += 10) {
     try {
       map[t] = hexFromArgb(palette.tone(t));
-    } catch (e) {
+    } catch {
       // if palette.tone is unavailable for some reason, fallback to white/black
       map[t] = t >= 50 ? '#FFFFFF' : '#000000';
     }

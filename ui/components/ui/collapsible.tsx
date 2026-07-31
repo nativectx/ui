@@ -136,7 +136,7 @@ const Collapsible = forwardRef<View, CollapsibleProps>(
     // Sync rotation whenever isOpen changes (handles both controlled and uncontrolled modes)
     useEffect(() => {
       rotation.value = withTiming(isOpen ? 90 : 0, { duration: 200 });
-    }, [isOpen]);
+    }, [isOpen, rotation]);
 
     const handlePress = () => {
       const newState = !isOpen;

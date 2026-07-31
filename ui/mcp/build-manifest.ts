@@ -356,7 +356,7 @@ function exportedComponents(project: Project): ExportedComponent[] {
  * statement rather than the declaration.
  */
 function componentJsDoc(sourceFile: SourceFile, name: string): JSDoc | undefined {
-  const owners: Array<{ getJsDocs(): JSDoc[] } | undefined> = [
+  const owners: ({ getJsDocs(): JSDoc[] } | undefined)[] = [
     sourceFile.getFunction(name),
     sourceFile.getClass(name),
     sourceFile.getVariableStatement(stmt => stmt.getDeclarations().some(d => d.getName() === name)),

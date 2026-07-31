@@ -1,6 +1,6 @@
 // 1. IMPORTS
 import React, { useRef } from 'react';
-import { View, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Host, Slider as UISlider } from '@expo/ui/swift-ui';
 import { disabled as disabledModifier } from '@expo/ui/swift-ui/modifiers';
 import type { BaseComponentProps } from '../shared/types';

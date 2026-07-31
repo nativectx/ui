@@ -5,8 +5,6 @@ import {
   Pressable,
   View,
   StyleSheet,
-  type StyleProp,
-  type ViewStyle,
 } from 'react-native';
 import { Typography } from './typography';
 import { useTheme } from '../../theme';

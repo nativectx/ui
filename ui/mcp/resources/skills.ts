@@ -8,7 +8,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 // All files bundled into dist/mcp/server.mjs — skills are copied to dist/mcp/skills/ at build time
 const skillsDir = join(__dirname, 'skills');
 
-const skills: Array<{ name: string; uri: string; file: string; description: string }> = [
+const skills: { name: string; uri: string; file: string; description: string }[] = [
   { name: 'Setup', uri: 'nativectx://setup', file: 'nativectx-setup.md', description: 'Installation, provider setup, and peer dependencies.' },
   { name: 'Components', uri: 'nativectx://components', file: 'nativectx-components.md', description: 'Component reference table with categories and props overview.' },
   { name: 'Theme', uri: 'nativectx://theme', file: 'nativectx-theme.md', description: 'Theme system, useTheme hook, semantic tokens, and responsive patterns.' },

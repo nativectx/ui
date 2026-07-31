@@ -3,7 +3,7 @@
  * Automated accessibility contrast validation
  */
 
-import { contrastRatio, hasContrastRatio } from '../brand/palette-generator';
+import { contrastRatio } from '../brand/palette-generator';
 import type { Colors } from '../brand/brand-types';
 
 export interface ContrastCheck {
@@ -43,7 +43,7 @@ export function checkThemeContrast(
   const checks: ContrastCheck[] = [];
 
   // Critical color pairs that must have good contrast
-  const pairs: Array<{ pair: string; fg: string; bg: string }> = [
+  const pairs: { pair: string; fg: string; bg: string }[] = [
     { pair: 'primary/onPrimary', fg: colors.onPrimary, bg: colors.primary },
     { pair: 'primaryContainer/onPrimaryContainer', fg: colors.onPrimaryContainer, bg: colors.primaryContainer },
     { pair: 'secondary/onSecondary', fg: colors.onSecondary, bg: colors.secondary },

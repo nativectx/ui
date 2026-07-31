@@ -6,6 +6,10 @@ apps/*/node_modules/
 dist/
 *.tsbuildinfo
 
+# Expo's per-machine scratch dir — devices.json and the prebuild package cache
+# are specific to whoever ran `expo start`, so they must not be shared.
+.expo/
+
 # Logs
 *.log
 npm-debug.log*

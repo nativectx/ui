@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { Typography, Button } from '@nativectx/ui';
+import { Button } from '@nativectx/ui';
 import { DemoSection } from '../../components/demo-section';
 import { DocsPagination } from '../../components/docs-pagination';
-import { PropsTable, type PropDefinition } from '../../components/props-table';
+import { type PropDefinition } from '../../components/props-table';
 import { ApiSection } from '../../components/api-section';
 import { DocsPage } from '../../components/docs-page';
 

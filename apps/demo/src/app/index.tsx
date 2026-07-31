@@ -10,7 +10,6 @@ import {
   Chip,
   Divider,
   Switch,
-  Slider,
   SegmentedControl,
   Avatar,
   ListItem,
@@ -48,12 +47,6 @@ function useNpmDownloads() {
       .catch(() => setDownloads(null));
   }, []);
   return downloads;
-}
-
-// ─── GitHub icon ──────────────────────────────────────────────────────────────
-
-function GitHubIcon({ size, color }: { size: number; color: string }) {
-  return <>{renderIcon({ name: 'github', library: 'Feather' }, 'Feather', size, color)}</>;
 }
 
 // ─── Platform badges ──────────────────────────────────────────────────────────
@@ -213,8 +206,6 @@ function HeroNarrow({
 }
 
 // ─── Hero — wide ──────────────────────────────────────────────────────────────
-
-const APPBAR_HEIGHT = 64;
 
 type HeroWideProps = {
   theme: ReturnType<typeof useTheme>;
