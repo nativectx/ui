@@ -50,11 +50,13 @@ export interface SliderProps extends BaseComponentProps {
 // 3. COMPONENT
 
 /**
- * Material Design 3 Slider component
- * https://m3.material.io/components/sliders
+ * Horizontal value slider using native platform controls.
  *
+ * https://m3.material.io/components/sliders
  * Wraps @react-native-community/slider with M3 theme colors.
  * Active track: primary. Inactive track: surfaceContainerHighest. Thumb: primary.
+ *
+ * @category controls
  */
 const Slider = ({
   value = 0,

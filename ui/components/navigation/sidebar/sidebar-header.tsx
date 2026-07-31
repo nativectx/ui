@@ -29,7 +29,11 @@ export interface SidebarHeaderProps {
 // 3. COMPONENT
 
 /**
- * Header component for sidebar with optional logo, title, and subtitle
+ * Header slot at the top of a Sidebar.
+ *
+ * Optional logo, title, and subtitle.
+ *
+ * @category navigation
  */
 export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   title,

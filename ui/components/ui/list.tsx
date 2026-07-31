@@ -10,6 +10,12 @@ export interface ListProps {
 }
 
 // 3. COMPONENT
+
+/**
+ * Scrollable list container with optional header and footer.
+ *
+ * @category collections
+ */
 const List = ({ children, style }: ListProps) => {
   const theme = useTheme();
   return (

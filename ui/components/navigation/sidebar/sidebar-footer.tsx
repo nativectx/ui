@@ -20,7 +20,11 @@ export interface SidebarFooterProps {
 // 3. COMPONENT
 
 /**
- * Footer component for sidebar with custom content
+ * Footer slot at the bottom of a Sidebar.
+ *
+ * Renders custom content.
+ *
+ * @category navigation
  */
 export const SidebarFooter: React.FC<SidebarFooterProps> = ({
   children,

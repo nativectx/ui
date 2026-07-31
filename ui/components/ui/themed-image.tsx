@@ -7,6 +7,11 @@ export interface ThemedImageProps extends Omit<ImageProps, 'source'> {
   darkSource: ImageSource;
 }
 
+/**
+ * Image component with themed placeholder and loading states.
+ *
+ * @category layout
+ */
 export function ThemedImage({ lightSource, darkSource, ...props }: ThemedImageProps) {
   const { mode } = useThemeMode();
   const source = mode === 'dark' ? darkSource : lightSource;

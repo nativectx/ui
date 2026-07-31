@@ -46,6 +46,12 @@ function getInitials(name: string): string {
 }
 
 // 3. COMPONENT
+
+/**
+ * Circular avatar with image, initials fallback, and size variants.
+ *
+ * @category display
+ */
 const Avatar = ({ name = '', src, size = 'md', color, textColor, style }: AvatarProps) => {
   const theme = useTheme();
   const [imageError, setImageError] = useState(false);

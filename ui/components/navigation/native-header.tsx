@@ -20,10 +20,13 @@ export interface NativeHeaderProps {
 }
 
 /**
- * Screen-level native header toolbar for iOS and Android.
+ * Platform-native header buttons (left/right) for expo-router stacks.
+ *
  * iOS: renders SF Symbol buttons via Stack.Toolbar.
  * Android: renders Feather icon buttons via Stack.Screen headerLeft/headerRight.
  * Use inside screen components, not layouts.
+ *
+ * @category navigation
  */
 export const NativeHeader = ({
   rightIcon,

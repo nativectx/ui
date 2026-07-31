@@ -95,13 +95,15 @@ const ICON_BUTTON_SIZE = 32;
 // 3. COMPONENT
 
 /**
- * Collapsible component for expandable/collapsible content sections.
+ * Animated expand/collapse container with header.
  *
  * Features:
  * - Animated expand/collapse with rotation and fade
  * - Controlled and uncontrolled modes
  * - Customizable header and content styling
  * - Accessible with proper press states
+ *
+ * @category feedback
  */
 const Collapsible = forwardRef<View, CollapsibleProps>(
   (

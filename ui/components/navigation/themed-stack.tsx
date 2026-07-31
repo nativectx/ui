@@ -28,11 +28,11 @@ export interface ThemedStackProps extends StackProps {
 }
 
 /**
- * A themed wrapper around Expo Router's Stack that automatically applies
- * the app's header styling from the design token system.
+ * expo-router Stack with auto-applied theme colors and header styling.
  *
- * Applies headerStyle, headerTintColor, and sensible back button defaults.
- * Any screenOptions passed as props are merged and will override the defaults.
+ * Applies headerStyle, headerTintColor, and sensible back button defaults from
+ * the design token system. Any screenOptions passed as props are merged and
+ * will override the defaults.
  *
  * @example
  * ```tsx
@@ -42,6 +42,8 @@ export interface ThemedStackProps extends StackProps {
  *   <Stack.Screen name="detail" options={{ title: 'Detail' }} />
  * </ThemedStack>
  * ```
+ *
+ * @category navigation
  */
 export function ThemedStack({ screenOptions, ...props }: ThemedStackProps) {
   const theme = useTheme();

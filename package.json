@@ -26,6 +26,10 @@
     "test": "pnpm --filter @nativectx/ui test",
     "lint": "pnpm --filter demo lint",
     "lint:fix": "pnpm --filter demo lint -- --fix",
+    "check": "pnpm run check:manifest && pnpm run check:skills && pnpm run check:examples",
+    "check:manifest": "pnpm --filter @nativectx/ui run build:manifest",
+    "check:skills": "pnpm --filter @nativectx/ui run check:skills",
+    "check:examples": "pnpm --filter @nativectx/ui run check:examples",
     "clean": "rm -rf ui/dist apps/*/dist apps/*/.expo"
   },
   "engines": {
@@ -54,6 +58,9 @@
     ],
     "*.{ts,tsx}": [
       "bash -c 'pnpm typecheck'"
+    ],
+    ".claude/skills/*.md": [
+      "bash -c 'pnpm check:manifest && pnpm check:skills'"
     ]
   },
   "dependencies": {

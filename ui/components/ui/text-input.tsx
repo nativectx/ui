@@ -36,6 +36,12 @@ export interface ThemedTextInputProps extends Omit<RNTextInputProps, 'style'> {
 }
 
 // 3. COMPONENT
+
+/**
+ * Text input with filled/outlined variants, label, helper text, and icon slots.
+ *
+ * @category input
+ */
 const ThemedTextInput = forwardRef<RNTextInput, ThemedTextInputProps>(({
   variant = 'outlined',
   label,

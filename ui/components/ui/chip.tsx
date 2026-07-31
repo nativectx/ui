@@ -93,13 +93,15 @@ export interface ChipProps extends InteractiveComponentProps {
 
 // 3. COMPONENT
 /**
- * Material Design 3 Chip component
- * https://m3.material.io/components/chips
+ * Compact action or filter chip with optional icon and selection state.
  *
+ * https://m3.material.io/components/chips
  * Height: 32dp visual / 48dp touch target via hitSlop
  * Shape: CornerSmall (8dp border radius)
  * Variants: filled, outlined
  * Behavioural props: selected (filter checkmark), icon + onIconPress (trailing action)
+ *
+ * @category controls
  */
 const Chip = ({
   label,

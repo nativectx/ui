@@ -1,1 +1,5 @@
+# Everything here runs through lint-staged, scoped by path (see "lint-staged"
+# in the root package.json). Keep it that way: a hook that runs the whole
+# check suite on every commit gets bypassed with --no-verify, and a bypassed
+# hook catches nothing. CI runs the full suite (`pnpm check`) on every PR.
 pnpm lint-staged

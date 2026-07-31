@@ -124,8 +124,11 @@ export interface TypographyProps extends Omit<RNTextProps, 'style'> {
 }
 
 /**
- * Typography component following Material Design 3 type system
+ * Text component covering all 15 M3 type scale variants.
+ *
  * https://m3.material.io/styles/typography/type-scale-tokens
+ *
+ * @category display
  */
 export const Typography = forwardRef<Text, TypographyProps>(
   (

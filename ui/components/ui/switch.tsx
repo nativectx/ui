@@ -27,6 +27,12 @@ export interface SwitchProps {
 }
 
 // 3. COMPONENT
+
+/**
+ * Toggle switch using native iOS/Android controls.
+ *
+ * @category controls
+ */
 const Switch = ({
   value,
   onValueChange,
