@@ -1,8 +1,9 @@
 # NativeCtx UI
 
-The React Native UI library built for AI development.
+### A React Native UI library optimized for LLMs.
 
-Includes a built-in MCP server and Claude Skills that give AI the context to generate consistent, theme-aware code instead of generic boilerplate.
+Generate consistent, accessible, and theme-aware components and pages for iOS, Android, and Web — with native components where users expect them.
+
 
 🌐 **[Live Demo](https://nativectx.com)** &nbsp;·&nbsp; 📦 **[NPM](https://www.npmjs.com/package/@nativectx/ui)**
 
