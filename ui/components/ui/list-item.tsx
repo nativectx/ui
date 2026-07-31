@@ -28,6 +28,12 @@ export interface ListItemProps extends Omit<InteractiveComponentProps, 'accessib
 }
 
 // 3. COMPONENT
+
+/**
+ * List row with leading/trailing slots, title, description, and press handling.
+ *
+ * @category collections
+ */
 const ListItem = forwardRef<View, ListItemProps>(({
   title,
   subtitle,

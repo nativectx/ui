@@ -26,6 +26,12 @@ const LINEAR_HEIGHT = 4;
 const TRACK_BORDER_RADIUS = 2;
 
 // 3. COMPONENT
+
+/**
+ * Linear or circular progress indicator.
+ *
+ * @category feedback
+ */
 const ProgressIndicator = ({
   variant = 'linear',
   value,

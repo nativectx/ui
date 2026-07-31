@@ -17,10 +17,15 @@ export interface PropEntry {
 
 export interface ComponentEntry {
   name: string;
+  /** The suffix-less entry file, repo-relative. */
   file: string;
+  /** Entry file plus every platform variant beside it, repo-relative. */
+  files: string[];
   category: string;
   description: string;
   platforms: string[];
+  /** External packages the component imports and a consumer must install. */
+  dependencies: string[];
   variants: string[];
   props: PropEntry[];
   examples: string[];

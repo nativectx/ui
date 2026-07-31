@@ -69,11 +69,13 @@ const SIZE_CONFIG: Record<FABSize, { dimension: number; iconSize: number; radius
 // 3. COMPONENT
 
 /**
- * Material Design 3 Floating Action Button (FAB)
- * https://m3.material.io/components/floating-action-button
+ * Floating action button with size and color variants.
  *
+ * https://m3.material.io/components/floating-action-button
  * Supports four color variants and three sizes.
  * When a `label` is provided, renders as an Extended FAB.
+ *
+ * @category controls
  */
 const FAB = forwardRef<View, FABProps>(({
   icon,

@@ -44,9 +44,13 @@ export interface SidebarProps {
 // 3. COMPONENT
 
 /**
- * Sidebar component for web platform
+ * Side navigation panel, adaptive for tablet/desktop.
+ *
+ * Web implementation:
  * - Desktop (≥1024px): Persistent sidebar on left (always visible, below AppBar)
  * - Mobile/Tablet (<1024px): Floating trigger icon + overlay Drawer
+ *
+ * @category navigation
  */
 export const Sidebar: React.FC<SidebarProps> = ({
   header,

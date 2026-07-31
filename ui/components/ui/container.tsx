@@ -9,10 +9,11 @@ export interface ContainerProps extends ThemedViewProps {
 }
 
 /**
- * Container component that constrains content width for better readability on large screens.
- * Centers content horizontally and applies consistent padding.
+ * Responsive layout container with optional column grid and gap support.
  *
- * Common for web layouts, marketing pages, and content-heavy screens.
+ * Constrains content width for readability on large screens, centers it
+ * horizontally, and applies consistent padding. Common for web layouts,
+ * marketing pages, and content-heavy screens.
  *
  * @example
  * ```tsx
@@ -30,6 +31,8 @@ export interface ContainerProps extends ThemedViewProps {
  *   <Typography>Narrower content</Typography>
  * </Container>
  * ```
+ *
+ * @category layout
  */
 export const Container: React.FC<ContainerProps> = ({
   children,

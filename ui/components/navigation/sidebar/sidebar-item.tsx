@@ -50,7 +50,9 @@ export interface SidebarItemProps extends Omit<InteractiveComponentProps, 'onPre
 // 3. COMPONENT
 
 /**
- * Sidebar menu item with icon, label, and active state
+ * Navigation item inside a Sidebar with icon, label, and active state.
+ *
+ * @category navigation
  */
 const SidebarItem = forwardRef<View, SidebarItemProps>(({
   label,

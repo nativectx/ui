@@ -97,9 +97,12 @@ function normalizeMd(
 // ─── Component ────────────────────────────────────────────────────────────────
 
 /**
- * Native platform tabs for mobile (iOS/Android).
- * Uses true native tabs via expo-router/unstable-native-tabs.
- * For the web variant see app-tabs.web.tsx.
+ * Tab bar using NativeTabs on iOS/Android, custom top bar on web.
+ *
+ * This file is the native implementation — true native tabs via
+ * expo-router/unstable-native-tabs. For the web variant see app-tabs.web.tsx.
+ *
+ * @category navigation
  */
 export default function AppTabs({ tabs, sidebarAdaptable, backgroundColor, blurEffect }: AppTabsProps) {
   const { values: theme } = useThemeContext();

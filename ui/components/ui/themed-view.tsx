@@ -46,6 +46,11 @@ export function elevationStyle(level: ElevationLevel, shadowColor: string): View
   };
 }
 
+/**
+ * Themed surface view with M3 elevation and variant support.
+ *
+ * @category layout
+ */
 export const ThemedView = ({ variant = 'surface', color, rounded = true, elevation, columns, gap, style, children, onLayout, ...rest }: ThemedViewProps) => {
   const theme = useTheme();
   const { width } = useDimensions();

@@ -87,6 +87,8 @@
     "clean": "rm -rf dist",
     "build": "pnpm run clean && pnpm exec tsc -p tsconfig.build.json && pnpm run build:mcp",
     "build:manifest": "tsx mcp/build-manifest.ts",
+    "check:skills": "tsx mcp/check-skills-sync.ts",
+    "check:examples": "tsx mcp/check-examples.ts",
     "build:mcp": "tsx mcp/build-manifest.ts && esbuild mcp/cli.ts --bundle --platform=node --format=esm --outfile=dist/mcp/cli.mjs --banner:js='#!/usr/bin/env node' && rm -rf dist/mcp/skills && cp -r ../.claude/skills dist/mcp/skills",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -102,10 +104,12 @@
     "@react-native-community/slider": "*",
     "expo-image": "*",
     "expo-router": "*",
+    "expo-symbols": "*",
     "react": ">=18.0.0",
     "react-native": ">=0.70.0",
     "react-native-reanimated": "*",
-    "react-native-safe-area-context": "*"
+    "react-native-safe-area-context": "*",
+    "sf-symbols-typescript": "*"
   },
   "peerDependenciesMeta": {
     "@expo/ui": {
@@ -121,6 +125,12 @@
       "optional": true
     },
     "expo-router": {
+      "optional": true
+    },
+    "expo-symbols": {
+      "optional": true
+    },
+    "sf-symbols-typescript": {
       "optional": true
     },
     "react-native-reanimated": {

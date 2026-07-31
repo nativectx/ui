@@ -38,7 +38,9 @@ export interface SidebarSectionProps {
 // 3. COMPONENT
 
 /**
- * Groups sidebar items with an optional section header
+ * Labelled section grouping inside a Sidebar.
+ *
+ * @category navigation
  */
 export const SidebarSection: React.FC<SidebarSectionProps> = ({
   title,

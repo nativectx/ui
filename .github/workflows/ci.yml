@@ -39,6 +39,18 @@ jobs:
       - name: Build package
         run: pnpm build
 
+      # The AI-facing surface of this package — the MCP component manifest, the
+      # .claude/skills docs, and the JSDoc @example blocks — describes the
+      # library but is not compiled by it, so nothing below would notice it
+      # going stale. `pnpm check` re-derives the manifest from source, asserts
+      # the skill docs still match it, and compile-checks every @example.
+      # Runs first of the checks: it costs seconds, and it is the only step
+      # here that can fail for reasons lint/typecheck/test are blind to.
+      # It runs after Build package because the checks read the manifest the
+      # build emits to ui/dist/mcp/.
+      - name: AI docs sync (MCP manifest, skills, @example blocks match the library)
+        run: pnpm check
+
       - name: Lint
         run: pnpm lint
 

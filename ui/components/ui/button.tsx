@@ -138,15 +138,16 @@ export interface ButtonProps extends Omit<InteractiveComponentProps, 'onPress'>,
 
 // 3. COMPONENT
 /**
- * Material Design 3 Button component
- * https://m3.material.io/components/buttons
+ * M3 button with 5 variants: filled, elevated, tonal, outlined, text.
  *
- * Supports five variants:
+ * https://m3.material.io/components/buttons
  * - filled: High-emphasis actions (default)
  * - elevated: Medium-emphasis actions with elevation
  * - tonal: Medium-emphasis with container color
  * - outlined: Medium-emphasis with border
  * - text: Low-emphasis actions
+ *
+ * @category controls
  */
 const Button = forwardRef<View, ButtonProps>(({
   title,

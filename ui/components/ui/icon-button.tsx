@@ -57,6 +57,11 @@ const TOUCH_TARGET = 48;
 
 // 4. COMPONENT
 
+/**
+ * Icon-only button with 4 variants and a 48dp touch target.
+ *
+ * @category controls
+ */
 const IconButton = forwardRef<View, IconButtonProps>(({
   icon,
   onPress,

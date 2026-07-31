@@ -29,10 +29,14 @@ export interface SegmentedControlProps {
 // 3. COMPONENT
 
 /**
+ * Segmented button group for mutually exclusive selections.
+ *
  * Material Design 3 Segmented Button — web / fallback implementation.
  * Pill-style segment track; active pill fills with primary colour.
  * Native platforms use SwiftUI Picker (iOS) and Compose
  * SingleChoiceSegmentedButtonRow (Android) via platform-specific files.
+ *
+ * @category controls
  */
 const SegmentedControl = ({
   options,

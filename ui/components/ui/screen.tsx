@@ -30,7 +30,7 @@ export interface ScreenProps {
 }
 
 /**
- * Screen component providing consistent layout with safe areas and optional scrolling.
+ * Full-screen wrapper with safe area insets and scroll support.
  *
  * @example
  * ```tsx
@@ -38,6 +38,8 @@ export interface ScreenProps {
  *   <Typography>Content</Typography>
  * </Screen>
  * ```
+ *
+ * @category layout
  */
 export const Screen: React.FC<ScreenProps> = ({
   children,

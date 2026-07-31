@@ -22,8 +22,11 @@ export interface DrawerProps {
 }
 
 /**
- * Reusable animated drawer component.
+ * Animated side drawer primitive.
+ *
  * Slides in from the left or right with a backdrop.
+ *
+ * @category navigation
  */
 export const Drawer: React.FC<DrawerProps> = ({
   isOpen,

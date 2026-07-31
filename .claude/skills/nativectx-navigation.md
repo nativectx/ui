@@ -386,7 +386,7 @@ The shape of each entry in `tabs`. **Not covered by `get_component`** — it onl
 
 ## ThemedStack
 
-> `get_component("ThemedStack")` returns nothing — it has no `ThemedStackProps` interface. This is the reference.
+> `get_component("ThemedStack")` reports `children` and `screenOptions`. Everything else expo-router's `Stack` accepts is forwarded untouched and is not enumerated there; the theming behaviour below is what this file adds.
 
 Wraps expo-router `Stack`, accepting all of its props, and applies token-based header styling by default: `headerStyle.backgroundColor` from `tokens.appbar.background`, `headerTintColor` from `theme.onSurface`, `headerBackVisible: true`, `headerBackButtonDisplayMode: 'minimal'`.
 

@@ -18,6 +18,12 @@ export interface DividerProps {
 }
 
 // 3. COMPONENT
+
+/**
+ * Horizontal divider line using M3 outline color.
+ *
+ * @category layout
+ */
 const Divider = ({ orientation = 'horizontal', inset = 'none', color, style }: DividerProps) => {
   const theme = useTheme();
   const dividerColor = color ?? theme.tokens.list.divider;

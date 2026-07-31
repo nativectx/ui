@@ -33,6 +33,12 @@ export interface ModalProps {
 }
 
 // 3. COMPONENT
+
+/**
+ * Bottom sheet modal with themed surface and close handling.
+ *
+ * @category feedback
+ */
 const Modal = ({
   visible,
   onDismiss,
