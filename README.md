@@ -5,7 +5,7 @@
 Generate iOS, Android, and web interfaces simultaneously with platform-specific navigation patterns and native components where users expect them.
 
 
-🌐 **[Live Demo](https://nativectx.com)** &nbsp;·&nbsp; 📦 **[NPM](https://www.npmjs.com/package/@nativectx/ui)**
+🌐 **Docs: [nativectx.com](https://nativectx.com)** &nbsp;·&nbsp; 📦 **[NPM](https://www.npmjs.com/package/@nativectx/ui)**
 
 ---
 
