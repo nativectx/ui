@@ -33,6 +33,10 @@ export function skillName(file: string): string | null {
 export interface SkillsCommandOptions {
   /** Also install the contributor skills (library development, not app building). */
   contributor?: boolean;
+  /** Report what would happen without copying or deleting anything. */
+  dryRun?: boolean;
+  /** Prefix every reported line, so `init` can indent this inside its own output. */
+  indent?: string;
 }
 
 export interface SkillPlan {
@@ -79,18 +83,25 @@ export function planSkills(
   return { install, prune, heldBack };
 }
 
-export function runSkillsCommand(options: SkillsCommandOptions = {}) {
+export function runSkillsCommand(options: SkillsCommandOptions = {}): SkillPlan {
   const source = skillsSource();
   const dest = join(process.cwd(), '.claude', 'skills');
+  const { dryRun = false, indent = '' } = options;
+  const log = (line: string) => console.log(line ? `${indent}${line}` : line);
 
   if (!existsSync(source)) {
     console.error('Error: skills directory not found in package. Try rebuilding with `pnpm build:mcp`.');
     process.exit(1);
   }
 
-  mkdirSync(dest, { recursive: true });
+  // A dry run must not create the directory either — the whole contract is that
+  // the filesystem is untouched, and an empty .claude/skills/ left behind is a
+  // side effect the user did not ask for.
+  if (!dryRun) mkdirSync(dest, { recursive: true });
 
-  const { install, prune, heldBack } = planSkills(readdirSync(source), readdirSync(dest), options);
+  const destFiles = existsSync(dest) ? readdirSync(dest) : [];
+  const plan = planSkills(readdirSync(source), destFiles, options);
+  const { install, prune, heldBack } = plan;
 
   if (install.length === 0) {
     console.error('Error: no @nativectx/ui skill files found.');
@@ -98,36 +109,43 @@ export function runSkillsCommand(options: SkillsCommandOptions = {}) {
   }
 
   for (const file of install) {
-    copyFileSync(join(source, file), join(dest, file));
+    if (!dryRun) copyFileSync(join(source, file), join(dest, file));
     const name = skillName(file);
-    console.log(`  ✓  ${file}${name && isContributorSkill(name) ? '  (contributor)' : ''}`);
+    log(`  ✓  ${file}${name && isContributorSkill(name) ? '  (contributor)' : ''}`);
   }
 
   for (const file of prune) {
-    rmSync(join(dest, file));
-    console.log(`  −  ${file}  (removed — contributor skill)`);
+    if (!dryRun) rmSync(join(dest, file));
+    log(`  −  ${file}  (removed — contributor skill)`);
   }
+
+  const verb = dryRun ? 'Would install' : 'Installed';
 
   if (options.contributor) {
     const contributorCount = install.filter((file) => {
       const name = skillName(file);
       return name !== null && isContributorSkill(name);
     }).length;
-    console.log(
-      `\nInstalled ${install.length} skills to .claude/skills/ ` +
-        `— ${install.length - contributorCount} for building apps, ${contributorCount} for developing @nativectx/ui itself.\n`,
+    log('');
+    log(
+      `${verb} ${install.length} skills to .claude/skills/ ` +
+        `— ${install.length - contributorCount} for building apps, ${contributorCount} for developing @nativectx/ui itself.`,
     );
+    log('');
   } else {
-    console.log(`\nInstalled ${install.length} app-building skills to .claude/skills/\n`);
+    log('');
+    log(`${verb} ${install.length} app-building skills to .claude/skills/`);
+    log('');
     if (prune.length > 0) {
-      console.log(`Removed ${prune.length} contributor skill(s) left by an earlier install.`);
+      log(`${dryRun ? 'Would remove' : 'Removed'} ${prune.length} contributor skill(s) left by an earlier install.`);
     }
-    console.log(
-      `${heldBack.length} contributor skill(s) about developing @nativectx/ui itself were not installed.`,
-    );
-    console.log('Run `npx nativectx skills --contributor` if you are working on the library.\n');
+    log(`${heldBack.length} contributor skill(s) about developing @nativectx/ui itself were not installed.`);
+    log('Run `npx nativectx skills --contributor` if you are working on the library.');
+    log('');
   }
 
-  console.log('Claude Code picks these up automatically — no further setup needed.');
-  console.log('To update skills after upgrading @nativectx/ui, run this command again.');
+  log('Claude Code picks these up automatically — no further setup needed.');
+  log('To update skills after upgrading @nativectx/ui, run this command again.');
+
+  return plan;
 }

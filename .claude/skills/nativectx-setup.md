@@ -12,6 +12,7 @@ description: Use when setting up @nativectx/ui in a new or existing React Native
 npx create-expo-app@latest my-app --template default@sdk-56
 cd my-app
 npx expo install @nativectx/ui @expo/vector-icons
+npx nativectx init
 ```
 
 That is the whole install on the current template: `@expo/ui`,
@@ -19,12 +20,24 @@ That is the whole install on the current template: `@expo/ui`,
 the peers the library needs — already ship with it. On an older or hand-rolled
 project, add whichever of those four are missing.
 
+`npx nativectx init` does the wiring that is left: installs the skills, adds the
+`nativectx` MCP server to `.mcp.json` (merging into whatever is already there),
+names any peer still missing, and finds the root layout so it can tell you where
+the provider goes. It writes nothing it cannot merge safely, `--dry-run` previews
+it, and re-running is a no-op — so it is also the fastest way to check an
+existing project is set up correctly.
+
 `@expo/vector-icons` is listed separately because most apps want icons, but it is
 a genuine optional peer: without it the library still bundles and renders, and
 `renderIcon` returns nothing plus a one-time console warning naming the install
-command. The remaining optional peers matter only per component —
-`@react-native-community/slider` (`Slider`), `expo-image` (`ThemedImage`),
-`expo-symbols` + `sf-symbols-typescript` (SF Symbols).
+command.
+
+The remaining optional peers matter only per component. On the current template
+`expo-image` (`ThemedImage`) and `expo-symbols` (SF Symbols) already ship, so in
+a fresh app the only two genuinely absent are
+`@react-native-community/slider` (`Slider`) and `sf-symbols-typescript` (SF
+Symbol name typings). `npx nativectx init` lists whichever are actually missing
+rather than guessing from the template.
 
 **You do not need a `babel.config.js`.** `babel-preset-expo` adds the
 `react-native-worklets/plugin` automatically whenever `react-native-worklets` is
@@ -43,7 +56,13 @@ one.
 ## Provider Setup
 
 The root layout is `src/app/_layout.tsx` on the current template; older projects
-put it at `app/_layout.tsx`. Check which one exists before editing.
+put it at `app/_layout.tsx`. Check which one exists before editing — or run
+`npx nativectx init`, which reports the one it found and whether the provider is
+already wired.
+
+Wrap whatever the layout already returns rather than replacing it. On the current
+template that tree is a `ThemeProvider` around an `AnimatedSplashOverlay` and an
+`AppTabs`, and all of it should stay.
 
 ```tsx
 // src/app/_layout.tsx

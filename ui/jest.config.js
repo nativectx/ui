@@ -19,6 +19,14 @@ module.exports = {
     ),
     ...expoPreset.transformIgnorePatterns.slice(1),
   ],
+  moduleNameMapper: {
+    ...expoPreset.moduleNameMapper,
+    // mcp/ is TS-ESM: siblings are imported with a `.js` extension that esbuild
+    // rewrites to the real `.ts` at bundle time. Jest's CJS resolver does not,
+    // so map the extension off. Safe because no relative `.js` import in ui/
+    // resolves to an actual .js file — they are all TypeScript siblings.
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
   // @testing-library/react-native v13 ships its matchers built in — no extend-expect needed.
   collectCoverageFrom: ['<rootDir>/ui/**/*.{ts,tsx}', '!**/*.d.ts', '!**/dist/**', '!**/*.test.{ts,tsx}'],
 };

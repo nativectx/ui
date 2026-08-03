@@ -8,6 +8,7 @@ NativeCtx UI ships two AI integrations from one CLI:
 
 | Command | What it does |
 |---|---|
+| `npx nativectx init` | Sets up both of the below in one pass — installs the skills, merges the server entry into `.mcp.json`, and reports missing peers and provider wiring. `--dry-run` previews |
 | `npx nativectx skills` | Copies 6 skill files into `.claude/skills/` — static, read automatically by Claude Code. Add `--contributor` for the 2 about developing the library itself |
 | `npx nativectx mcp` | Starts the MCP server — live tools that read a manifest generated from component source |
 
@@ -17,7 +18,7 @@ The skills stand alone. The MCP server is enrichment: it answers *lookups* (exac
 
 ## Wiring it up
 
-**Claude Code** — add to `.mcp.json` in the project root:
+**Claude Code** — `npx nativectx init` writes this for you, merging into an existing `.mcp.json` without disturbing the other servers. By hand, add to `.mcp.json` in the project root:
 
 ```json
 {

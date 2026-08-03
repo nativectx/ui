@@ -23,11 +23,14 @@ LLMs write better code when they can see your design system. NativeCtx UI ships 
 
 ```bash
 npx expo install @nativectx/ui @expo/vector-icons
+npx nativectx init
 ```
 
 On the current Expo template that's all you need — `@expo/ui`, `react-native-reanimated`, `react-native-safe-area-context` and `expo-router` already ship with it. On an older or hand-rolled project, add whichever of those four are missing.
 
-`@expo/vector-icons` is separate because most apps want icons; skip it and icons simply don't render, with a warning telling you how to add them. The remaining optional peers matter only for the components that use them: `@react-native-community/slider` (`Slider`), `expo-image` (`ThemedImage`), `expo-symbols` and `sf-symbols-typescript` (SF Symbols).
+`init` does the wiring: installs the skills, merges the `nativectx` MCP server into `.mcp.json`, names any peer still missing, and finds your root layout to tell you where the provider goes. It never overwrites a config it can't merge safely, `--dry-run` previews the whole thing, and re-running is a no-op.
+
+`@expo/vector-icons` is separate because most apps want icons; skip it and icons simply don't render, with a warning telling you how to add them. The remaining optional peers matter only for the components that use them: `@react-native-community/slider` (`Slider`), `expo-image` (`ThemedImage`), `expo-symbols` and `sf-symbols-typescript` (SF Symbols) — the current template already ships `expo-image` and `expo-symbols`, so `init` will only ask for what your project actually lacks.
 
 ---
 
@@ -68,6 +71,8 @@ Component reference, theme tokens, hooks, and live examples: **[nativectx.com](h
 
 ## AI Integration
 
+`npx nativectx init` sets up both of the following in one pass. The individual commands below are still there when you want just one of them.
+
 ### Claude Skills
 
 ```bash
@@ -86,14 +91,14 @@ Re-running without the flag prunes contributor skills a previous install left be
 
 ### MCP Server
 
-Add to your Claude Code `.mcp.json` or Claude Desktop config:
+`npx nativectx init` writes this entry for you, merging it into an existing `.mcp.json` without touching the other servers. To do it by hand, add to your Claude Code `.mcp.json` or Claude Desktop config:
 
 ```json
 {
   "mcpServers": {
     "nativectx": {
       "command": "npx",
-      "args": ["nativectx", "mcp"]
+      "args": ["-y", "nativectx", "mcp"]
     }
   }
 }
