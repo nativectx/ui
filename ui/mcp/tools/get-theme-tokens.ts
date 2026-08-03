@@ -147,7 +147,7 @@ function tokenGroupNames(): TokenGroupName[] {
   return Object.keys(theme.tokens) as TokenGroupName[];
 }
 
-function tokenEntries(group: TokenGroupName): Array<[string, unknown]> {
+function tokenEntries(group: TokenGroupName): [string, unknown][] {
   return Object.entries(theme.tokens[group] as Record<string, unknown>);
 }
 

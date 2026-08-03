@@ -4,135 +4,53 @@
 
 Generate iOS, Android, and web interfaces simultaneously with platform-specific navigation patterns and native components where users expect them.
 
-
-🌐 **Docs: [nativectx.com](https://nativectx.com)** &nbsp;·&nbsp; 📦 **[NPM](https://www.npmjs.com/package/@nativectx/ui)**
-
----
-
-## MCP Server & Claude Skills
-
-The MCP gives the AI live context on your components and props, so it reuses your existing accessible, theme-aware primitives instead of rebuilding them. 
-
-NativeCtx UI ships a CLI with two AI tools: an MCP server that gives Claude live access to component props, tokens, and code generation, and a skills installer that drops context files into your project for Claude Code to pick up automatically.
-
-
-### Install Claude Skills
-
-```bash
-npx nativectx skills
-```
-
-Copies the 6 app-building skill files (setup, components, theme, navigation, mcp, migration) into `.claude/skills/` in your project. Claude Code reads these automatically — no further configuration needed. Re-run after upgrading @nativectx/ui to get updated skills.
-
-Two further skills cover developing @nativectx/ui itself (repo structure, dev commands, and the checklist for adding a component). They are held back by default so they don't compete for context in your app, and install with:
-
-```bash
-npx nativectx skills --contributor
-```
-
-All 8 skills are also readable on demand through the MCP server, regardless of which set is installed.
-
-Re-running without the flag removes any contributor skills a previous install left behind, so an upgraded project doesn't keep stale files. Nothing else in `.claude/skills/` is touched.
-
-### MCP Server
-
-Add to your Claude Code `.mcp.json` or Claude Desktop config:
-
-```json
-{
-  "mcpServers": {
-    "nativectx": {
-      "command": "npx",
-      "args": ["nativectx", "mcp"]
-    }
-  }
-}
-```
-
-Or if @nativectx/ui is already installed locally:
-
-```json
-{
-  "mcpServers": {
-    "nativectx": {
-      "command": "node",
-      "args": ["./node_modules/@nativectx/ui/dist/mcp/cli.mjs", "mcp"]
-    }
-  }
-}
-```
-
-### Tools
-
-| Tool | What Claude can do |
-|------|--------------------|
-| `list_components` | Browse all components by category |
-| `get_component` | Get real props, variants, and examples for any component |
-| `search_components` | Find the right component by use case |
-| `get_theme_tokens` | Look up semantic token names for any component |
-| `generate_palette` | Generate a full M3 palette from a hex seed color |
-| `generate_brand_config` | Output a complete `createBrand()` snippet |
-| `generate_navigation` | Scaffold flat tabs, tabs + sidebar, or tabs + stack |
-
-Skill docs (setup, components, theme, navigation) are also exposed as resources Claude reads automatically.
+🌐 **[Docs & Live Demo](https://nativectx.com)** &nbsp;·&nbsp; 📦 **[NPM](https://www.npmjs.com/package/@nativectx/ui)**
 
 ---
 
-## Why NativeCtx UI
+## Why
 
-LLMs produce better code when they understand your design system. NativeCtx UI ships with an MCP server and Claude Skills — live tools and structured context that teach Claude your tokens, component API, and conventions. Generated code uses the right values from the first prompt.
+LLMs write better code when they can see your design system. NativeCtx UI ships an MCP server and a set of Claude Skills next to the components, so Claude reads your real props, tokens, and conventions instead of guessing at them — and reuses the accessible, theme-aware primitives you already have instead of rebuilding them.
 
-- **MCP Server** — Claude calls live tools for props, tokens, and code generation mid-conversation
-- **Claude Skills** — Structured context files for components, theming, and navigation patterns
-- **Material Design 3** — Semantic color tokens, type scale, and spacing across every component
+- **MCP server** — live tools for props, tokens, palette generation, and navigation scaffolding
+- **Claude Skills** — context files Claude Code picks up automatically, no configuration
+- **Material Design 3** — semantic color tokens, type scale, and spacing across 29 components
 - **Cross-platform** — iOS, Android, and web from a single component tree
 
 ---
 
-## Installation
+## Install
 
 ```bash
-npx expo install @nativectx/ui
-
-# Required peer dependencies
-npx expo install react-native-reanimated react-native-gesture-handler react-native-safe-area-context react-native-screens expo-router @expo/vector-icons
+npx expo install @nativectx/ui @expo/vector-icons
+npx nativectx init
 ```
 
-### Upgrading from `zero-to-app`
+On the current Expo template that's all you need — `@expo/ui`, `react-native-reanimated`, `react-native-safe-area-context` and `expo-router` already ship with it. On an older or hand-rolled project, add whichever of those four are missing.
 
-This library was formerly published as `zero-to-app`. To move an existing project over:
+`init` does the wiring: installs the skills, merges the `nativectx` MCP server into `.mcp.json`, names any peer still missing, and finds your root layout to tell you where the provider goes. It never overwrites a config it can't merge safely, `--dry-run` previews the whole thing, and re-running is a no-op.
 
-```bash
-npx nativectx migrate
-```
-
-That rewrites the dependency, import specifiers, the renamed `ZeroToApp` → `NativeCtxProvider` provider, your `.mcp.json` server entry, and replaces the stale `zero-to-app-*.md` skill files. Pass `--dry-run` to preview. Anything it can't safely automate is printed as a review list at the end.
-
-`ZeroToApp` still works as a deprecated alias, so a dependency bump alone won't break your build — but it is removed in 0.2.0.
+`@expo/vector-icons` is separate because most apps want icons; skip it and icons simply don't render, with a warning telling you how to add them. The remaining optional peers matter only for the components that use them: `@react-native-community/slider` (`Slider`), `expo-image` (`ThemedImage`), `expo-symbols` and `sf-symbols-typescript` (SF Symbols) — the current template already ships `expo-image` and `expo-symbols`, so `init` will only ask for what your project actually lacks.
 
 ---
 
 ## Quick Start
 
-### 1. Setup Provider
-
 ```tsx
-// app/_layout.tsx
+// src/app/_layout.tsx  (or app/_layout.tsx, depending on your template)
 import { NativeCtxProvider, createBrand } from '@nativectx/ui';
 
 const brand = createBrand({
   name: 'My App',
-  colors: { colorSeed: { primary: '#6750A4' } }, // Auto-generates M3 palette
+  colors: { colorSeed: { primary: '#6750A4' } }, // Auto-generates the M3 palette
   spacing: { xs: 4, sm: 8, md: 12, lg: 16, xl: 20, xxl: 24, xxxl: 40 },
-  borderRadius: 8,
+  borderRadius: { xs: 4, sm: 8, md: 12, lg: 16, xl: 28, full: 9999 },
 });
 
 export default function RootLayout() {
   return <NativeCtxProvider brand={brand}>{/* Your app */}</NativeCtxProvider>;
 }
 ```
-
-### 2. Use Components
 
 ```tsx
 import { Button, Typography, ThemedView } from '@nativectx/ui';
@@ -147,131 +65,99 @@ function MyScreen() {
 }
 ```
 
+Component reference, theme tokens, hooks, and live examples: **[nativectx.com](https://nativectx.com)**.
+
 ---
 
-## Claude Skills
+## AI Integration
 
-Claude Skills are context files that teach Claude your design system. Install them with:
+`npx nativectx init` sets up both of the following in one pass. The individual commands below are still there when you want just one of them.
+
+### Claude Skills
 
 ```bash
 npx nativectx skills
 ```
 
-Skills cover components, theming, navigation patterns, and responsive layout — so Claude generates code that uses your actual tokens and follows your conventions from the first prompt. Run the command once after install, and again after any upgrade.
+Copies the six app-building skills — setup, components, theme, navigation, mcp, migration — into `.claude/skills/`. Claude Code reads them automatically. Re-run after upgrading to refresh them.
 
-Contributing to @nativectx/ui rather than building with it? Add `--contributor` to also install the library-development skills.
+Two further skills cover developing @nativectx/ui itself. They are held back by default so they don't compete for context in your app:
+
+```bash
+npx nativectx skills --contributor
+```
+
+Re-running without the flag prunes contributor skills a previous install left behind. Nothing else in `.claude/skills/` is touched.
+
+### MCP Server
+
+`npx nativectx init` writes this entry for you, merging it into an existing `.mcp.json` without touching the other servers. To do it by hand, add to your Claude Code `.mcp.json` or Claude Desktop config:
+
+```json
+{
+  "mcpServers": {
+    "nativectx": {
+      "command": "npx",
+      "args": ["-y", "nativectx", "mcp"]
+    }
+  }
+}
+```
+
+Already installed locally? Point at the bundled CLI instead: `node ./node_modules/@nativectx/ui/dist/mcp/cli.mjs mcp`.
+
+| Tool | What Claude can do |
+|------|--------------------|
+| `list_components` | Browse all components by category |
+| `get_component` | Get real props, variants, and examples for any component |
+| `search_components` | Find the right component by use case |
+| `get_theme_tokens` | Look up semantic token names for any component |
+| `generate_palette` | Generate a full M3 palette from a hex seed color |
+| `generate_brand_config` | Output a complete `createBrand()` snippet |
+| `generate_navigation` | Scaffold flat tabs, tabs + sidebar, or tabs + stack |
+
+All eight skills are also readable on demand as MCP resources, whichever set you installed.
 
 ---
 
-## Components
+## Upgrading from `zero-to-app`
 
-### Button
-```tsx
-<Button title="Primary" variant="filled" onPress={handlePress} />
-<Button title="Save" icon={{ library: 'Feather', name: 'save' }} />
-```
-**Variants:** `filled` · `tonal` · `outlined` · `text` · `elevated`
+This library was formerly published as `zero-to-app`:
 
-### Typography
-```tsx
-<Typography variant="headlineMedium" weight="bold">Title</Typography>
-<Typography variant="bodyMedium" muted>Description</Typography>
-```
-**Variants:** `display{Large|Medium|Small}` · `headline{...}` · `title{...}` · `body{...}` · `label{...}`
-
-### ThemedView
-```tsx
-<ThemedView variant="card" columns={2} gap={16}>{content}</ThemedView>
-```
-**Variants:** `background` · `surface` · `surfaceContainer` · `card` · `appbar` · `primary`
-
-### Screen
-```tsx
-<Screen variant="background" scrollable>{content}</Screen>
+```bash
+npx nativectx migrate
 ```
 
-### Container
-```tsx
-<Container maxWidth={800}>{content}</Container>
-```
+Rewrites the dependency, import specifiers, the renamed `ZeroToApp` → `NativeCtxProvider` provider, your `.mcp.json` entry, and the stale `zero-to-app-*.md` skill files. `--dry-run` previews; anything it can't safely automate is printed as a review list.
 
-### AppTabs
-```tsx
-<AppTabs
-  brandName="My App"
-  tabs={[{ name: 'index', href: '/', label: 'Home', materialIcon: 'home' }]}
-/>
-```
-
-### Sidebar
-```tsx
-const { open } = useSidebar();
-<Sidebar header={<SidebarHeader title="App" />}>
-  <SidebarItem label="Home" onPress={() => {}} />
-</Sidebar>
-```
-
----
-
-## Hooks
-
-```tsx
-const theme = useTheme();                     // Colors, spacing, tokens
-const { mode, toggleTheme } = useThemeMode(); // Light/dark control
-const { width } = useDimensions();            // Responsive layout
-const isLarge = useBreakpoint('large');        // Breakpoint helper
-const { isOpen, open, toggle } = useSidebar();
-```
-
-**Breakpoints:** `small` (<768px) · `medium` (≥768px) · `large` (≥1024px) · `xlarge` (≥1280px)
-
----
-
-## Theme Tokens
-
-```tsx
-const theme = useTheme();
-
-theme.primary          // Palette tokens
-theme.surface
-theme.onSurfaceVariant
-
-theme.tokens.button.filledBg   // Semantic tokens
-theme.tokens.card.background
-theme.tokens.input.border
-
-theme.spacing.lg       // Layout
-theme.borderRadius.md
-```
+`ZeroToApp` still works as a deprecated alias, so a dependency bump alone won't break your build — but it is removed in 0.2.0.
 
 ---
 
 ## Development
 
 ```bash
-pnpm install              # Install deps
-pnpm dev:storybook       # Component development
-pnpm dev                 # Full app testing
-pnpm typecheck            # Type check
-pnpm test                 # Run tests
-pnpm build                # Build package
-pnpm release              # Publish to npm
+pnpm setup           # Install deps and build the library — start here
+pnpm dev:storybook   # Component development
+pnpm dev             # Demo app, full navigation
+pnpm verify          # Everything CI runs: build, check, lint, typecheck, test
 ```
 
-**Structure:**
-- `ui/` — Component library (`@nativectx/ui` on npm)
-- `nativectx/` — Thin CLI alias package (`nativectx` on npm)
-- `apps/storybook/` — Isolated component development
-- `apps/demo/` — Integrated testing with expo-router
+- `ui/` — component library (`@nativectx/ui` on npm)
+- `nativectx/` — thin CLI alias package (`nativectx` on npm)
+- `apps/storybook/` — isolated component development
+- `apps/demo/` — the docs site, built with expo-router
+
+Publishing runs from the `Release` workflow on a `v*` tag; there is no local publish script, so a release always goes out from a green, committed tree.
 
 ---
 
 ## Resources
 
-- [Live Demo](https://nativectx.com)
-- [Material Design 3](https://m3.material.io)
+- [Docs & Live Demo](https://nativectx.com)
 - [NPM Package](https://www.npmjs.com/package/@nativectx/ui)
 - [GitHub](https://github.com/nativectx/ui)
+- [Material Design 3](https://m3.material.io)
 
 ---
 

@@ -178,12 +178,12 @@ const Button = forwardRef<View, ButtonProps>(({
     let mounted = true;
     try {
       // dynamically require to avoid bundler differences across platforms
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
+       
       const { AccessibilityInfo } = require('react-native');
       AccessibilityInfo?.isReduceMotionEnabled?.().then((enabled: boolean) => {
         if (mounted) setReduceMotionEnabled(!!enabled);
       });
-    } catch (e) {
+    } catch {
       // ignore if not available
     }
     return () => { mounted = false; };

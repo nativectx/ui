@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from '../../theme';
+import type { BaseComponentProps } from '../shared/types';
 
 let RNSlider: React.ComponentType<any> | null = null;
 try {
@@ -9,7 +10,6 @@ try {
 } catch {
   // optional peer dependency not installed
 }
-import type { BaseComponentProps } from '../shared/types';
 
 // 2. TYPES
 

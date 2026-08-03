@@ -1,9 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Typography, Screen, Container, ThemedView, useTheme } from '@nativectx/ui';
+import { Typography, Container, ThemedView, useTheme } from '@nativectx/ui';
 import { DemoSection } from '../../components/demo-section';
 import { DocsPagination } from '../../components/docs-pagination';
-import { PropsTable, type PropDefinition } from '../../components/props-table';
+import { type PropDefinition } from '../../components/props-table';
 import { ApiSection } from '../../components/api-section';
 import { DocsPage } from '../../components/docs-page';
 
@@ -57,8 +57,6 @@ function Placeholder({ label, height = 48 }: { label: string; height?: number })
 }
 
 export default function ContainerPage() {
-  const { shape } = useTheme();
-
   return (
     <DocsPage
       title="Container"

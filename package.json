@@ -10,30 +10,34 @@
   "scripts": {
     "preinstall": "npx -y only-allow pnpm",
     "prepare": "husky",
+    "setup": "pnpm install && pnpm build",
+    "verify": "pnpm build && pnpm run check && pnpm run lint && pnpm run typecheck:packages && pnpm run test",
     "dev": "pnpm build && pnpm --filter demo web",
     "dev:ios": "pnpm build && pnpm --filter demo ios",
     "dev:android": "pnpm build && pnpm --filter demo android",
     "dev:storybook": "pnpm build && pnpm --filter @nativectx/storybook storybook:web",
     "dev:storybook:native": "pnpm build && pnpm --filter @nativectx/storybook storybook",
     "build": "pnpm --filter @nativectx/ui run build",
-    "build:watch": "pnpm --filter @nativectx/ui exec tsc -p tsconfig.build.json --watch",
+    "build:watch:types": "pnpm --filter @nativectx/ui exec tsc -p tsconfig.build.json --watch",
     "export:web": "pnpm build && pnpm --filter demo export:web",
     "deploy:web": "pnpm run export:web && pnpm --filter demo run deploy:web",
     "deploy:web:preview": "pnpm run export:web && pnpm --filter demo run deploy:web:preview",
-    "release": "pnpm build && pnpm --filter @nativectx/ui publish --access public --no-git-checks",
-    "release:cli": "pnpm --filter nativectx publish --access public --no-git-checks",
-    "typecheck": "pnpm -r exec tsc --noEmit",
+    "typecheck": "pnpm build && pnpm run typecheck:packages",
+    "typecheck:packages": "pnpm -r exec tsc --noEmit",
     "test": "pnpm --filter @nativectx/ui test",
-    "lint": "pnpm --filter demo lint",
-    "lint:fix": "pnpm --filter demo lint -- --fix",
+    "test:watch": "pnpm --filter @nativectx/ui test:watch",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix",
     "check": "pnpm run check:manifest && pnpm run check:skills && pnpm run check:examples",
     "check:manifest": "pnpm --filter @nativectx/ui run build:manifest",
     "check:skills": "pnpm --filter @nativectx/ui run check:skills",
     "check:examples": "pnpm --filter @nativectx/ui run check:examples",
-    "clean": "rm -rf ui/dist apps/*/dist apps/*/.expo"
+    "clean": "rm -rf ui/dist apps/*/dist apps/*/.expo .expo ui/mcp/.examples-check",
+    "clean:deps": "pnpm run clean && rm -rf node_modules ui/node_modules nativectx/node_modules apps/*/node_modules"
   },
+  "packageManager": "pnpm@10.33.0",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "pnpm": {
     "overrides": {
@@ -49,14 +53,14 @@
     }
   },
   "devDependencies": {
+    "eslint": "^9.25.0",
+    "eslint-config-expo": "~56.0.4",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7"
   },
   "lint-staged": {
-    "apps/demo/**/*.{ts,tsx}": [
-      "eslint --fix --config apps/demo/eslint.config.js"
-    ],
     "*.{ts,tsx}": [
+      "eslint --fix --max-warnings 0",
       "bash -c 'pnpm typecheck'"
     ],
     ".claude/skills/*.md": [

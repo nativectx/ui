@@ -653,7 +653,7 @@ function checkPlatformClaims(skill: Skill, components: ManifestComponent[]): voi
   });
   if (restricted.length === 0) return;
 
-  const platformPatterns: Array<{ platform: string; re: RegExp }> = [
+  const platformPatterns: { platform: string; re: RegExp }[] = [
     { platform: 'ios', re: /\b(iOS|iPadOS)\b/ },
     { platform: 'android', re: /\bAndroid\b/ },
     { platform: 'web', re: /\bweb\b/i },

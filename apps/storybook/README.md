@@ -1,57 +1,31 @@
-![picture of storybook](https://github.com/user-attachments/assets/cf98766d-8b90-44ab-b718-94ab16e63205)
+# @nativectx/ui Storybook
 
-# getting started
+Isolated component development for **@nativectx/ui** — the fastest loop for work
+on a single component. For navigation, expo-router layouts, or native-platform
+behaviour, use `apps/demo` instead.
 
-```sh
-npx create-expo-app --template expo-template-storybook AwesomeStorybook
+## Running
+
+```bash
+# From the monorepo root — each builds @nativectx/ui first
+pnpm dev:storybook          # Storybook on web, the usual loop
+pnpm dev:storybook:native   # Storybook inside the Expo native shell
 ```
 
-or
+Storybook consumes `@nativectx/ui` from its compiled `dist/`, not from source, so
+run `pnpm build` after changing the library if you start Expo directly from this
+directory.
 
-```sh
-yarn create expo-app --template expo-template-storybook AwesomeStorybook
+## Adding a story
+
+Stories live at `components/<Name>/<Name>.stories.tsx`. On native the story list
+is generated rather than globbed, so regenerate it after adding a file:
+
+```bash
+pnpm --filter @nativectx/storybook storybook-generate
 ```
 
-# app
-
-```sh
-yarn start
-```
-
-# RN Storybook (ondevice)
-
-In this template you can now run `yarn storybook` to start ondevice storybook or `yarn start` to start your expo app.
-This works via env variables and expo constants.
-
-```sh
-# either
-yarn storybook
-
-# ios
-yarn storybook:ios
-
-# android
-yarn storybook:android
-```
-
-If you add new stories on the native (ondevice version) you either need to have the watcher running or run the stories loader
-
-To update the stories one time
-
-```sh
-yarn storybook-generate
-```
-
-# Web
-
-Start react native web storybook:
-
-```
-yarn storybook:web
-```
-
-build react native web storybook:
-
-```sh
-yarn build-storybook
-```
+Stories are wrapped by the `withNativeCtxProvider` decorator in
+`.storybook/decorators.tsx`, which supplies `BrandProvider` and the theme
+context. A component that renders unthemed here is usually missing from that
+decorator rather than broken.

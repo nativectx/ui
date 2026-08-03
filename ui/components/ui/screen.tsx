@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet, type StyleProp, type ViewStyle, Platform } from 'react-native';
-import { SafeAreaView, type Edge, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
 import { ThemedView, type ThemedViewVariant } from './themed-view';
 import { useTheme } from '../../theme';
 
@@ -52,7 +52,6 @@ export const Screen: React.FC<ScreenProps> = ({
   showsVerticalScrollIndicator = true,
   padded = true,
 }) => {
-  const insets = useSafeAreaInsets();
   const theme = useTheme();
 
   // Strip 'bottom' from SafeAreaView edges — we manage bottom padding directly.

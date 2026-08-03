@@ -19,14 +19,14 @@ export function formatComponentBlock(comp: {
   description: string;
   platforms: string[];
   variants: string[];
-  props: Array<{
+  props: {
     name: string;
     type: string;
     required: boolean;
     description: string;
     default: string | null;
     platform: string | null;
-  }>;
+  }[];
   examples: string[];
 }): string {
   const lines: string[] = [];

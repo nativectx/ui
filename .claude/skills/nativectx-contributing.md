@@ -24,7 +24,7 @@ For a component named `Chip` (adjust names throughout):
 - [ ] 8. Nav config → `apps/demo/src/config/nav.ts`
 - [ ] 9. Native stack screen → `apps/demo/src/app/explore/_layout.native.tsx`
 - [ ] 10. Skill docs → `.claude/skills/nativectx-components.md` (and `-navigation` / `-theme` if relevant)
-- [ ] 11. Verify → `pnpm build && pnpm check && pnpm typecheck && pnpm test && pnpm lint`
+- [ ] 11. Verify → `pnpm verify`
 
 > `ui/index.ts` does `export * from './components'`, and `ui/components/index.ts` does `export * from './ui'` and `export * from './navigation'`. So step 4 is the only barrel edit — never add the component to `ui/index.ts` by hand.
 
@@ -435,15 +435,25 @@ Adding, renaming, or removing a skill file also means updating the `PACKAGE_SKIL
 
 ## Step 11 — Verify before opening a PR
 
-Run all of these from the repo root, in this order:
+From the repo root:
+
+```bash
+pnpm verify
+```
+
+That is exactly what CI runs, in CI's order, and takes under 20 seconds:
 
 ```bash
 pnpm build        # compile @nativectx/ui to dist/ — required first: apps and the checks read dist/
 pnpm check        # AI-facing sync suite: manifest → skills → @example blocks
+pnpm lint         # ESLint over ui/, apps/demo and apps/storybook at --max-warnings 0
 pnpm typecheck    # tsc --noEmit across every workspace (includes ui/mcp)
 pnpm test         # Jest: theme, MCP tool drift guards, skills CLI planning
-pnpm lint         # ESLint over apps/demo
 ```
+
+Run one of those directly to rerun just the step that failed. Note `pnpm typecheck`
+builds first; `pnpm typecheck:packages` is the bare tsc pass for when `dist/` is
+already current, and is what `verify` calls so the build only happens once.
 
 `pnpm check` runs three checks in order; each is separately callable, so rerun only the one that failed:
 
@@ -453,7 +463,7 @@ pnpm check:skills     # assert .claude/skills/*.md agree with the manifest
 pnpm check:examples   # compile every JSDoc @example block
 ```
 
-CI (`.github/workflows/ci.yml`) runs `pnpm check` on every PR, right after the package build and before lint/typecheck/test, so drift fails fast and with an obvious step name. A commit that touches `.claude/skills/*.md` also runs `check:manifest && check:skills` in the pre-commit hook.
+CI (`.github/workflows/ci.yml`) runs `pnpm check` on every PR, right after the package build and before lint/typecheck/test, so drift fails fast and with an obvious step name. The pre-commit hook is scoped by path through lint-staged: a commit touching `*.{ts,tsx}` runs `eslint --fix --max-warnings 0` then `pnpm typecheck`, and one touching `.claude/skills/*.md` runs `check:manifest && check:skills`.
 
 `pnpm build` is not optional before the rest: `apps/demo`, `apps/storybook`, and the `nativectx` CLI wrapper all resolve `@nativectx/ui` through the compiled `dist/`, and the manifest the checks read is emitted into `ui/dist/mcp/`.
 

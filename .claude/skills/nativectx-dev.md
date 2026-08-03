@@ -13,6 +13,10 @@ description: Use when developing, building, testing, or checking the @nativectx/
 Run every command from the repo root.
 
 ```bash
+# Start here
+pnpm setup               # Install deps, then build the library
+pnpm verify              # Everything CI runs, in CI's order (under 20s) — build, check, lint, typecheck, test
+
 # Develop
 pnpm dev                 # Demo app on web — expo-router, navigation, docs pages
 pnpm dev:storybook       # Storybook on web — isolated component work, fastest loop
@@ -20,21 +24,29 @@ pnpm dev:ios             # Demo on an iOS simulator
 pnpm dev:android         # Demo on an Android emulator
 pnpm dev:storybook:native  # Storybook in the Expo native shell
 
-# Check (all of these run in CI on every PR)
+# Check (all of these run in CI on every PR — `pnpm verify` runs the lot)
 pnpm check               # AI-docs sync suite: manifest → skills → @example blocks
-pnpm typecheck           # tsc --noEmit across every workspace (ui, nativectx, apps/*)
+pnpm typecheck           # Build, then tsc --noEmit across every workspace (ui, nativectx, apps/*)
+pnpm typecheck:packages  # …without the build first, when dist/ is already current
 pnpm test                # Jest suite for the library
-pnpm lint                # ESLint over apps/demo
+pnpm test:watch          # …in watch mode
+pnpm lint                # ESLint over the whole workspace, warnings are errors
 pnpm lint:fix            # …with --fix
 
 # Build & ship
 pnpm build               # Compile @nativectx/ui to dist/ (includes the MCP bundle + manifest)
-pnpm build:watch         # tsc --watch on the library
+pnpm build:watch:types   # tsc --watch on the library — types and JS only, see below
 pnpm export:web          # Build, then export the demo as a static web bundle
 pnpm deploy:web          # Export the docs site and deploy it to EAS Hosting
 pnpm deploy:web:preview  # …to a preview URL
-pnpm clean               # rm -rf ui/dist apps/*/dist apps/*/.expo
+pnpm clean               # Remove build output and Expo scratch dirs
+pnpm clean:deps          # …and every node_modules, for a from-scratch reinstall
 ```
+
+`build:watch:types` is `tsc --watch` against `tsconfig.build.json` only. It does
+**not** rebuild the MCP manifest, bundle the CLI, or re-copy the skills into
+`dist/mcp/` — the name says `:types` so that gap is visible at the call site. Run
+a full `pnpm build` after touching anything under `ui/mcp/` or `.claude/skills/`.
 
 `pnpm dev` and `pnpm dev:storybook` both run `pnpm build` first, so the library
 is always current. If you run `expo` directly from `apps/demo` instead, build
@@ -46,7 +58,15 @@ silently old components.
 - Storybook → isolated UI work (Button, Typography, inputs, display components)
 - Demo → navigation, expo-router layouts, native-platform behaviour
 
-Publishing is handled by the release workflow on a `v*` tag, not by hand.
+Publishing is handled by the release workflow on a `v*` tag, not by hand — there
+is deliberately no local `release` script.
+
+Lint config lives in a single root `eslint.config.js` covering `ui/`, `apps/demo`
+and `apps/storybook`. `pnpm lint` runs at `--max-warnings 0`, so a new warning
+fails CI. The config carries a few documented rule exceptions (the RN
+`useRef(new Animated.Value()).current` idiom, Storybook CSF `render:` functions,
+guarded `require()` of optional peers, same-binding re-exports in the barrels) —
+read the comments there before adding another.
 
 ---
 
@@ -77,8 +97,9 @@ pnpm check:examples   # compile-check every JSDoc @example block
 
 CI (`.github/workflows/ci.yml`) runs `pnpm check` on every PR immediately after
 the package build, ahead of lint/typecheck/test. The pre-commit hook stays
-deliberately light: it runs `check:manifest && check:skills` only when the commit
-touches `.claude/skills/*.md`.
+scoped by path through lint-staged rather than running the whole suite: a commit
+touching `*.{ts,tsx}` gets `eslint --fix --max-warnings 0` then `pnpm typecheck`,
+and one touching `.claude/skills/*.md` gets `check:manifest && check:skills`.
 
 ---
 
@@ -110,7 +131,7 @@ pnpm --filter @nativectx/ui run build:mcp  # manifest + esbuild the CLI + copy s
 ## Repository Structure
 
 ```
-zero-to-app/                        # repo root — pnpm workspace
+nativectx/ui/                       # repo root — pnpm workspace
 ├── ui/                             # the @nativectx/ui npm package
 │   ├── components/index.ts             # public component barrel (the manifest reads this)
 │   ├── components/ui/                  # UI components (platform splits: .ios.tsx, .android.tsx, .tsx)
@@ -130,6 +151,7 @@ zero-to-app/                        # repo root — pnpm workspace
 │   │   └── resources/skills.ts             # skills served over MCP
 │   └── index.ts                        # Public barrel export
 ├── nativectx/                      # unscoped CLI alias package that forwards to @nativectx/ui
+├── eslint.config.js                # one flat config for every package — see the rule-exception comments
 ├── .claude/skills/                 # the shipped skill docs (copied into dist/mcp/skills on build)
 ├── apps/storybook/                 # Component stories
 │   └── components/<Name>/<Name>.stories.tsx
@@ -158,6 +180,7 @@ that produces the published `dist/`.
 | Skill install/prune logic | `ui/mcp/skills-command.ts` |
 | Demo nav config | `apps/demo/src/config/nav.ts` |
 | Native stack layout | `apps/demo/src/app/explore/_layout.native.tsx` |
+| Lint config (whole workspace) | `eslint.config.js` |
 | CI workflow | `.github/workflows/ci.yml` |
 
 ---
@@ -166,7 +189,7 @@ that produces the published `dist/`.
 
 | Error | Fix |
 |-------|-----|
-| `Cannot find module '@nativectx/ui'` | Run `pnpm build` — demo and storybook consume from `dist/`, not source |
+| `Cannot find module '@nativectx/ui'` | Run `pnpm build` — demo, storybook and the typecheck consume from `dist/`, not source. Only `typecheck:packages` and a bare `expo start` skip that build |
 | `Property 'tokens' does not exist` | Token added to the type but missing from `createLightTheme`, `createDarkTheme`, or `high-contrast-theme.ts` |
 | `Component manifest is incomplete: …` | A component is exported but unregistered, or lost its props — see the error body, then `pnpm check:manifest` |
 | `check:skills` flags a skill doc | The doc names a component or prop the manifest does not have — fix the doc, not the check |

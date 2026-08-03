@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render, renderHook } from '@testing-library/react-native';
 import { Text, View } from 'react-native';
-import { NativeCtxProvider, useThemeContext, useTheme, useThemeMode, useTokens } from './theme';
+import { NativeCtxProvider, useThemeContext, useTheme, useTokens } from './theme';
 import { defaultBrand } from '../brand/default-brand';
 import { createLightTheme, createDarkTheme } from './theme-config';
 
@@ -40,30 +40,6 @@ const TokensTestComponent = () => {
       <Text testID="tokenTypographyHeadlineLarge">{String(theme.typography.headlineLarge)}</Text>
       <Text testID="tokenElevationLevel3">{String(tokens.elevation.level3)}</Text>
       <Text testID="tokenFocusRingWidth">{String(tokens.focusRing.width)}</Text>
-    </View>
-  );
-};
-
-// Test component for useTheme hook
-const ThemeValuesTestComponent = () => {
-  const theme = useTheme();
-
-  return (
-    <View>
-      <Text testID="themePrimary">{theme.primary}</Text>
-      <Text testID="themeIsDark">{String(theme.isDark)}</Text>
-    </View>
-  );
-};
-
-// Test component for useThemeMode hook
-const ThemeModeTestComponent = () => {
-  const { mode, toggleTheme } = useThemeMode();
-
-  return (
-    <View>
-      <Text testID="modeMode">{mode}</Text>
-      <Text onPress={toggleTheme} testID="modeToggle">Toggle</Text>
     </View>
   );
 };

@@ -1,4 +1,4 @@
-import type { ViewStyle, TextStyle, ImageStyle, StyleProp, AccessibilityRole } from 'react-native';
+import type { ViewStyle, StyleProp, AccessibilityRole } from 'react-native';
 
 /**
  * Base props shared by all components.

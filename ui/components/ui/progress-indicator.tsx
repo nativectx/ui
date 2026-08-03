@@ -51,12 +51,12 @@ const ProgressIndicator = ({
   useEffect(() => {
     let mounted = true;
     try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
+       
       const { AccessibilityInfo } = require('react-native');
       AccessibilityInfo?.isReduceMotionEnabled?.().then((enabled: boolean) => {
         if (mounted) setReduceMotion(!!enabled);
       });
-    } catch (e) { /* ignore */ }
+    } catch { /* ignore */ }
     return () => { mounted = false; };
   }, []);
 
