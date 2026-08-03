@@ -2,7 +2,7 @@
 
 ### A React Native UI library optimized for LLMs.
 
-Generate consistent, accessible, and theme-aware components and pages for iOS, Android, and Web — with native components where users expect them.
+Generate iOS, Android, and web interfaces simultaneously with platform-specific navigation patterns and native components where users expect them.
 
 
 🌐 **[Live Demo](https://nativectx.com)** &nbsp;·&nbsp; 📦 **[NPM](https://www.npmjs.com/package/@nativectx/ui)**
