@@ -94,10 +94,10 @@ function HeroNarrow({
         <Image source={logoSource} style={styles.logo} resizeMode="contain" />
         <View style={[styles.centered, { gap: spacing.md }]}>
           <Typography variant="displaySmall" weight="bold" align="center">
-            The React Native UI library{'\n'}built for the AI era
+            A React Native UI library{'\n'}optimized for LLMs.
           </Typography>
           <Typography variant="bodyLarge" align="center" color={theme.onSurfaceVariant}>
-            Native components on iOS and Android. M3 everywhere. MCP server + Claude Skills.
+            Generate iOS, Android, and web interfaces simultaneously with platform-specific navigation patterns and native components where users expect them.
           </Typography>
         </View>
         <PlatformBadges theme={theme} />
@@ -240,10 +240,10 @@ function HeroWide({
           <View style={{ gap: spacing.xl, maxWidth: 420 }}>
             <View style={{ gap: spacing.md }}>
               <Typography variant="displaySmall" weight="bold">
-                The React Native UI library{'\n'}built for the AI era
+                A React Native UI library{'\n'}optimized for LLMs.
               </Typography>
               <Typography variant="bodyLarge" color={theme.onSurfaceVariant}>
-                Native components on iOS and Android. M3 everywhere. MCP server + Claude Skills — so AI generates code that fits from the first prompt.
+                Generate iOS, Android, and web interfaces simultaneously with platform-specific navigation patterns and native components where users expect them.
               </Typography>
             </View>
             <PlatformBadges theme={theme} />
@@ -438,7 +438,7 @@ function HeroWide({
             <View style={[styles.statTile, { gap: spacing.xs, alignItems: 'center' }]}>
               <View style={[styles.row, { alignItems: 'center', gap: spacing.sm }]}>
                 {renderIcon({ name: 'box', library: 'Feather' }, 'Feather', 24, theme.onSurface)}
-                <Typography variant="headlineMedium" weight="bold">28</Typography>
+                <Typography variant="headlineMedium" weight="bold">29</Typography>
               </View>
               <Typography variant="bodySmall" color={theme.onSurfaceVariant}>Components</Typography>
             </View>
