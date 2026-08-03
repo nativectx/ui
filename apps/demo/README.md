@@ -1,6 +1,6 @@
 # @nativectx/ui Demo App
 
-This is the demo Expo app for testing **@nativectx/ui** components that require expo-router or complex native dependencies.
+The Expo app behind **[nativectx.com](https://nativectx.com)** — it is both the published docs site and where components needing expo-router or real native dependencies get exercised.
 
 ## Purpose
 
@@ -15,11 +15,11 @@ For isolated UI components (Button, Typography, Cards), use **Storybook** instea
 ## Running the Demo
 
 ```bash
-# From monorepo root
-pnpm dev:demo              # Start Expo dev server
-pnpm dev:demo:ios          # Run on iOS simulator
-pnpm dev:demo:android      # Run on Android emulator
-pnpm dev:demo:web          # Run in web browser
+# From the monorepo root — each builds @nativectx/ui first
+pnpm dev                   # Web browser
+pnpm dev:ios               # iOS simulator
+pnpm dev:android           # Android emulator
+pnpm export:web            # Static web bundle, as deployed to nativectx.com
 ```
 
 ## Usage Reference

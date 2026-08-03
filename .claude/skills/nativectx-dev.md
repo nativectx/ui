@@ -15,7 +15,7 @@ Run every command from the repo root.
 ```bash
 # Start here
 pnpm setup               # Install deps, then build the library
-pnpm verify              # Everything CI runs, in CI's order (~15s) — build, check, lint, typecheck, test
+pnpm verify              # Everything CI runs, in CI's order (under 20s) — build, check, lint, typecheck, test
 
 # Develop
 pnpm dev                 # Demo app on web — expo-router, navigation, docs pages
@@ -97,8 +97,9 @@ pnpm check:examples   # compile-check every JSDoc @example block
 
 CI (`.github/workflows/ci.yml`) runs `pnpm check` on every PR immediately after
 the package build, ahead of lint/typecheck/test. The pre-commit hook stays
-deliberately light: it runs `check:manifest && check:skills` only when the commit
-touches `.claude/skills/*.md`.
+scoped by path through lint-staged rather than running the whole suite: a commit
+touching `*.{ts,tsx}` gets `eslint --fix --max-warnings 0` then `pnpm typecheck`,
+and one touching `.claude/skills/*.md` gets `check:manifest && check:skills`.
 
 ---
 
@@ -130,7 +131,7 @@ pnpm --filter @nativectx/ui run build:mcp  # manifest + esbuild the CLI + copy s
 ## Repository Structure
 
 ```
-zero-to-app/                        # repo root — pnpm workspace
+nativectx/ui/                       # repo root — pnpm workspace
 ├── ui/                             # the @nativectx/ui npm package
 │   ├── components/index.ts             # public component barrel (the manifest reads this)
 │   ├── components/ui/                  # UI components (platform splits: .ios.tsx, .android.tsx, .tsx)
@@ -150,6 +151,7 @@ zero-to-app/                        # repo root — pnpm workspace
 │   │   └── resources/skills.ts             # skills served over MCP
 │   └── index.ts                        # Public barrel export
 ├── nativectx/                      # unscoped CLI alias package that forwards to @nativectx/ui
+├── eslint.config.js                # one flat config for every package — see the rule-exception comments
 ├── .claude/skills/                 # the shipped skill docs (copied into dist/mcp/skills on build)
 ├── apps/storybook/                 # Component stories
 │   └── components/<Name>/<Name>.stories.tsx
@@ -178,6 +180,7 @@ that produces the published `dist/`.
 | Skill install/prune logic | `ui/mcp/skills-command.ts` |
 | Demo nav config | `apps/demo/src/config/nav.ts` |
 | Native stack layout | `apps/demo/src/app/explore/_layout.native.tsx` |
+| Lint config (whole workspace) | `eslint.config.js` |
 | CI workflow | `.github/workflows/ci.yml` |
 
 ---
