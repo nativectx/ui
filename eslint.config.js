@@ -59,7 +59,11 @@ module.exports = defineConfig([
     // to stub the native module.
     files: [
       'ui/components/**/*.tsx',
+      'ui/icons/icon-utils.tsx',
       'apps/storybook/.storybook/mocks/**',
+      // Tests that assert on that loading behaviour need `require()` too:
+      // jest.isolateModules re-evaluates a module, which a static import cannot.
+      'ui/**/*.test.{ts,tsx}',
     ],
     rules: {
       '@typescript-eslint/no-require-imports': 'off',

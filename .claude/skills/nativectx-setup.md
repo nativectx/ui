@@ -9,30 +9,44 @@ description: Use when setting up @nativectx/ui in a new or existing React Native
 ## Scaffolding a New Expo App
 
 ```bash
-npx create-expo-app@latest --template default@sdk-56
+npx create-expo-app@latest my-app --template default@sdk-56
+cd my-app
+npx expo install @nativectx/ui @expo/vector-icons
 ```
 
-After scaffolding, add a `babel.config.js` at the project root — **required** for `react-native-worklets` (used by @nativectx/ui animations) on native:
+That is the whole install on the current template: `@expo/ui`,
+`react-native-reanimated`, `react-native-safe-area-context` and `expo-router` —
+the peers the library needs — already ship with it. On an older or hand-rolled
+project, add whichever of those four are missing.
 
-```js
-// babel.config.js
-module.exports = function (api) {
-  api.cache(true);
-  return {
-    presets: ['babel-preset-expo'],
-    plugins: ['react-native-worklets/plugin'],
-  };
-};
-```
+`@expo/vector-icons` is listed separately because most apps want icons, but it is
+a genuine optional peer: without it the library still bundles and renders, and
+`renderIcon` returns nothing plus a one-time console warning naming the install
+command. The remaining optional peers matter only per component —
+`@react-native-community/slider` (`Slider`), `expo-image` (`ThemedImage`),
+`expo-symbols` + `sf-symbols-typescript` (SF Symbols).
 
-> Without this, iOS/Android will throw **"react-native-worklets has not been initialized"** at runtime.
-> After adding/changing `babel.config.js`, restart Metro with `--clear`: `npm start -- --clear`
+**You do not need a `babel.config.js`.** `babel-preset-expo` adds the
+`react-native-worklets/plugin` automatically whenever `react-native-worklets` is
+installed, which the template does — see "Automatically add worklets or
+reanimated plugin when package is installed" in
+`babel-preset-expo/build/configs/expo.js`. Add a `babel.config.js` only if you
+need other plugins; `apps/demo` in this repo ships to iOS and Android without
+one.
+
+> If you do hit **"react-native-worklets has not been initialized"** on native,
+> restart Metro with `--clear` before adding any babel config — a stale
+> transform cache is the more common cause.
 
 ---
 
 ## Provider Setup
 
+The root layout is `src/app/_layout.tsx` on the current template; older projects
+put it at `app/_layout.tsx`. Check which one exists before editing.
+
 ```tsx
+// src/app/_layout.tsx
 import { NativeCtxProvider, createBrand } from '@nativectx/ui';
 
 const brand = createBrand({
@@ -89,7 +103,8 @@ To override individual palette roles manually, pass `colors` as a flat object wi
 | `useBrandConfig must be used within <NativeCtxProvider>` | Wrap app root with `<NativeCtxProvider brand={brand}>` |
 | `Module not found: expo-router` | `npx expo install expo-router @expo/vector-icons` |
 | `[@nativectx/ui] <Slider> requires @react-native-community/slider` | `npx expo install @react-native-community/slider` |
-| `react-native-worklets has not been initialized` | Add `babel.config.js` with `plugins: ['react-native-worklets/plugin']` and restart with `--clear` |
+| `react-native-worklets has not been initialized` | Restart Metro with `--clear`. `babel-preset-expo` adds the plugin on its own when `react-native-worklets` is installed, so a hand-written `babel.config.js` is not the fix |
 | `useCompositionOption must be used within a RouterCompositionOptionsProvider` | `NativeHeader` requires a Stack context — don't use it directly inside NativeTabs tab screens |
 | Icons show as boxes | Check icon library name (case-sensitive: `'Feather'`, not `'feather'`) |
+| Icons render as nothing, console warns about `@expo/vector-icons` | `npx expo install @expo/vector-icons` — it is an optional peer, so everything else works without it |
 | Theme not updating | Use `useTheme()` inside component, not at module level |

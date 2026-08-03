@@ -1,8 +1,33 @@
 import React from 'react';
-import * as Icons from '@expo/vector-icons';
+import type * as IconsModule from '@expo/vector-icons';
 import { PlatformIcon, IconLibrary } from '../brand/brand-types';
 
-type IconLibraryType = keyof typeof Icons;
+type IconLibraryType = keyof typeof IconsModule;
+
+// @expo/vector-icons is an optional peer, so it has to be loaded through a
+// guarded require. `ui/index.ts` re-exports this module, so a static import
+// would put it in the graph of *every* consumer — an app that renders a Button
+// and no icons at all would fail to bundle with "Unable to resolve module
+// @expo/vector-icons". The type import above is erased and costs nothing.
+let Icons: typeof IconsModule | null = null;
+try {
+  Icons = require('@expo/vector-icons');
+} catch {
+  // optional peer dependency not installed — renderIcon warns and renders nothing
+}
+
+let warnedMissing = false;
+
+function warnIconsMissing(): void {
+  if (warnedMissing) return;
+  warnedMissing = true;
+  if (typeof __DEV__ !== 'undefined' && __DEV__) {
+    console.warn(
+      '[@nativectx/ui] Icons require @expo/vector-icons, which is not installed. ' +
+        'Run `npx expo install @expo/vector-icons` to render them.'
+    );
+  }
+}
 
 /**
  * Normalizes icon configuration to PlatformIcon format
@@ -38,6 +63,11 @@ export function renderIcon(
 ): React.ReactElement | null {
   const normalized = normalizeIcon(icon, defaultLibrary);
   if (!normalized) return null;
+
+  if (!Icons) {
+    warnIconsMissing();
+    return null;
+  }
 
   const { library, name } = normalized;
   const IconComponent = Icons[library];

@@ -22,19 +22,19 @@ LLMs write better code when they can see your design system. NativeCtx UI ships 
 ## Install
 
 ```bash
-npx expo install @nativectx/ui @expo/ui react-native-reanimated react-native-safe-area-context
+npx expo install @nativectx/ui @expo/vector-icons
 ```
 
-Native builds also need `react-native-worklets/plugin` in `babel.config.js` — see [Installation](https://nativectx.com/explore/).
+On the current Expo template that's all you need — `@expo/ui`, `react-native-reanimated`, `react-native-safe-area-context` and `expo-router` already ship with it. On an older or hand-rolled project, add whichever of those four are missing.
 
-Optional peers, only needed for the components that use them: `expo-router` (navigation), `@expo/vector-icons` (icons), `@react-native-community/slider` (`Slider`), `expo-image` (`ThemedImage`), `expo-symbols` and `sf-symbols-typescript` (SF Symbols).
+`@expo/vector-icons` is separate because most apps want icons; skip it and icons simply don't render, with a warning telling you how to add them. The remaining optional peers matter only for the components that use them: `@react-native-community/slider` (`Slider`), `expo-image` (`ThemedImage`), `expo-symbols` and `sf-symbols-typescript` (SF Symbols).
 
 ---
 
 ## Quick Start
 
 ```tsx
-// app/_layout.tsx
+// src/app/_layout.tsx  (or app/_layout.tsx, depending on your template)
 import { NativeCtxProvider, createBrand } from '@nativectx/ui';
 
 const brand = createBrand({
