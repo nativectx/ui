@@ -10,7 +10,7 @@ Generate iOS, Android, and web interfaces simultaneously with platform-specific 
 
 ## Why
 
-LLMs write better code when they can see your design system. NativeCtx UI ships an MCP server and a set of Claude Skills next to the components, so Claude reads your real props, tokens, and conventions instead of guessing at them.
+LLMs write better code when they can see your design system. NativeCtx UI ships an MCP server and a set of Claude Skills next to the components, so Claude reads your real props, tokens, and conventions instead of guessing at them — and reuses the accessible, theme-aware primitives you already have instead of rebuilding them.
 
 - **MCP server** — live tools for props, tokens, palette generation, and navigation scaffolding
 - **Claude Skills** — context files Claude Code picks up automatically, no configuration
