@@ -2,4 +2,10 @@
 # in the root package.json). Keep it that way: a hook that runs the whole
 # check suite on every commit gets bypassed with --no-verify, and a bypassed
 # hook catches nothing. CI runs the full suite (`pnpm check`) on every PR.
-pnpm lint-staged
+#
+# --concurrent false because the tasks are not independent: the `*.{ts,tsx}`
+# task runs `pnpm typecheck`, which builds, which starts by `rm -rf dist` —
+# deleting the component manifest that the `.claude/skills/*.md` task is
+# reading at that moment. Run in parallel they race and the commit fails with
+# "Component manifest not found"; run in sequence either order is fine.
+pnpm lint-staged --concurrent false
