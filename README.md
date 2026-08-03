@@ -11,7 +11,10 @@ Generate iOS, Android, and web interfaces simultaneously with platform-specific 
 
 ## MCP Server & Claude Skills
 
+The MCP gives the AI live context on your components and props, so it reuses your existing accessible, theme-aware primitives instead of rebuilding them. 
+
 NativeCtx UI ships a CLI with two AI tools: an MCP server that gives Claude live access to component props, tokens, and code generation, and a skills installer that drops context files into your project for Claude Code to pick up automatically.
+
 
 ### Install Claude Skills
 
