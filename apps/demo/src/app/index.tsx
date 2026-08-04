@@ -19,6 +19,11 @@ import { router } from 'expo-router';
 import { Image, Linking, Platform, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
+import { CodeBlock } from '../components/code-block';
+
+// ─── Install ──────────────────────────────────────────────────────────────────
+
+const INSTALL_SNIPPET = 'npx expo install @nativectx/ui\nnpx nativectx init';
 
 // ─── Stats ────────────────────────────────────────────────────────────────────
 
@@ -93,17 +98,25 @@ function HeroNarrow({
       <View style={[styles.hero, { paddingHorizontal: spacing.xl, gap: spacing.xl }]}>
         <Image source={logoSource} style={styles.logo} resizeMode="contain" />
         <View style={[styles.centered, { gap: spacing.md }]}>
-          <Typography variant="displaySmall" weight="bold" align="center">
-            A React Native UI library{'\n'}optimized for LLMs.
-          </Typography>
+          <View style={[styles.centered, { gap: spacing.xs }]}>
+            <Typography variant="displaySmall" weight="bold" align="center">
+              NativeCtx UI
+            </Typography>
+            <Typography variant="headlineSmall" weight="medium" align="center">
+              A React Native UI library{'\n'}optimized for LLMs.
+            </Typography>
+          </View>
           <Typography variant="bodyLarge" align="center" color={theme.onSurfaceVariant}>
-            Generate iOS, Android, and web interfaces simultaneously with platform-specific navigation patterns and native components where users expect them.
+            29 Material Design 3 components for iOS, Android, and web — shipped with an MCP server and Claude Skills, so Claude writes against your real props and tokens instead of guessing.
           </Typography>
         </View>
         <PlatformBadges theme={theme} />
         <View style={[styles.ctaRow, { gap: spacing.md }]}>
           <Button title="Get Started" variant="filled" icon={{ name: 'arrow-right' }} onPress={() => router.push('/explore')} />
           <Button title={isDark ? 'Light mode' : 'Dark mode'} variant="outlined" icon={{ name: isDark ? 'sun' : 'moon' }} onPress={toggleTheme} />
+        </View>
+        <View style={{ width: '100%', maxWidth: 520 }}>
+          <CodeBlock variant="shell" code={INSTALL_SNIPPET} />
         </View>
       </View>
 
@@ -239,11 +252,16 @@ function HeroWide({
         <View style={[styles.heroLeft, { paddingLeft: containerLeftInset, paddingRight: 64, paddingVertical: spacing.xxxl }]}>
           <View style={{ gap: spacing.xl, maxWidth: 420 }}>
             <View style={{ gap: spacing.md }}>
-              <Typography variant="displaySmall" weight="bold">
-                A React Native UI library{'\n'}optimized for LLMs.
-              </Typography>
+              <View style={{ gap: spacing.xs }}>
+                <Typography variant="displayMedium" weight="bold">
+                  NativeCtx UI
+                </Typography>
+                <Typography variant="headlineSmall" weight="medium">
+                  A React Native UI library{'\n'}optimized for LLMs.
+                </Typography>
+              </View>
               <Typography variant="bodyLarge" color={theme.onSurfaceVariant}>
-                Generate iOS, Android, and web interfaces simultaneously with platform-specific navigation patterns and native components where users expect them.
+                29 Material Design 3 components for iOS, Android, and web — shipped with an MCP server and Claude Skills, so Claude writes against your real props and tokens instead of guessing.
               </Typography>
             </View>
             <PlatformBadges theme={theme} />
@@ -261,6 +279,7 @@ function HeroWide({
                 onPress={toggleTheme}
               />
             </View>
+            <CodeBlock variant="shell" code={INSTALL_SNIPPET} />
           </View>
         </View>
 
@@ -453,31 +472,31 @@ function HeroWide({
 
 const FEATURES = [
   {
-    title: 'MCP Server',
+    title: 'MCP server + Claude Skills',
     icon: { name: 'zap', library: 'Feather' as const },
     description:
-      'Claude calls live tools for component props, theme tokens, and code generation mid-conversation. No docs tab — just accurate code from the first prompt.',
+      'Claude calls live tools for props, tokens, and palettes mid-conversation — accurate code from the first prompt.',
     iconAccent: true,
   },
   {
     title: 'Native-first',
     icon: { name: 'cpu', library: 'Feather' as const },
     description:
-      'Key components render in SwiftUI on iOS and Jetpack Compose on Android via Expo UI. Platform-native feel and performance — not JavaScript approximations.',
+      'Key components render as real SwiftUI and Jetpack Compose via Expo UI, not JavaScript approximations.',
     iconAccent: false,
   },
   {
     title: 'Material Design 3',
     icon: { name: 'layers', library: 'Feather' as const },
     description:
-      'Semantic color tokens, type scale, elevation, and shape across every component. One seed color generates your entire M3 palette.',
+      'One seed color generates the whole palette — semantic tokens, type scale, elevation, and shape across all 29 components.',
     iconAccent: false,
   },
   {
     title: 'Accessible by default',
     icon: { name: 'eye', library: 'Feather' as const },
     description:
-      'Every interactive component ships with ARIA roles, states, and labels. Focus management, reduced-motion handling, and screen reader support — built in.',
+      'ARIA roles, focus management, reduced motion, and screen reader labels on every interactive component.',
     iconAccent: false,
   },
 ];
@@ -535,12 +554,7 @@ export default function HomeScreen() {
       <Container style={{ paddingVertical: SECTION_PAD }}>
         <View style={{ gap: spacing.xxl }}>
           <View style={{ gap: spacing.xl }}>
-            <View style={{ gap: spacing.sm }}>
-              <Typography variant="headlineMedium" weight="bold">What&apos;s inside</Typography>
-              <Typography variant="bodyMedium" color={theme.onSurfaceVariant}>
-                Everything you need to build production-quality cross-platform apps.
-              </Typography>
-            </View>
+            <Typography variant="headlineMedium" weight="bold">What&apos;s inside</Typography>
             <ThemedView columns={2} gap={spacing.lg}>
               {FEATURES.map((feature, index) => (
                 <ThemedView

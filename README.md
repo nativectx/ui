@@ -2,15 +2,18 @@
 
 ### A React Native UI library optimized for LLMs.
 
-Generate iOS, Android, and web interfaces simultaneously with platform-specific navigation patterns and native components where users expect them.
+[![npm](https://img.shields.io/npm/v/@nativectx/ui?color=cb3837&logo=npm)](https://www.npmjs.com/package/@nativectx/ui)
+[![downloads](https://img.shields.io/npm/dw/@nativectx/ui?color=cb3837)](https://www.npmjs.com/package/@nativectx/ui)
+[![license](https://img.shields.io/npm/l/@nativectx/ui?color=blue)](./LICENSE)
+[![docs](https://img.shields.io/badge/docs-nativectx.com-6750A4)](https://nativectx.com)
 
-🌐 **[Docs & Live Demo](https://nativectx.com)** &nbsp;·&nbsp; 📦 **[NPM](https://www.npmjs.com/package/@nativectx/ui)**
+29 Material Design 3 components for iOS, Android, and web — shipped with an MCP server and Claude Skills, so Claude writes against your real props and tokens instead of guessing.
 
 ---
 
 ## Why
 
-LLMs write better code when they can see your design system. NativeCtx UI ships an MCP server and a set of Claude Skills next to the components, so Claude reads your real props, tokens, and conventions instead of guessing at them — and reuses the accessible, theme-aware primitives you already have instead of rebuilding them.
+LLMs write better code when they can see your design system. NativeCtx UI ships an MCP server and Claude Skills next to the components, so Claude reads your real props and tokens instead of guessing at them — and reuses your accessible, theme-aware primitives instead of rebuilding them.
 
 - **MCP server** — live tools for props, tokens, palette generation, and navigation scaffolding
 - **Claude Skills** — context files Claude Code picks up automatically, no configuration
@@ -26,11 +29,20 @@ npx expo install @nativectx/ui @expo/vector-icons
 npx nativectx init
 ```
 
+`init` installs the Claude Skills, merges the `nativectx` MCP server into `.mcp.json`, and finds your root layout to tell you where the provider goes. `--dry-run` previews the whole thing; re-running is a no-op.
+
+<details>
+<summary><b>Peer dependencies</b></summary>
+
+<br>
+
 On the current Expo template that's all you need — `@expo/ui`, `react-native-reanimated`, `react-native-safe-area-context` and `expo-router` already ship with it. On an older or hand-rolled project, add whichever of those four are missing.
 
-`init` does the wiring: installs the skills, merges the `nativectx` MCP server into `.mcp.json`, names any peer still missing, and finds your root layout to tell you where the provider goes. It never overwrites a config it can't merge safely, `--dry-run` previews the whole thing, and re-running is a no-op.
+`init` never overwrites a config it can't merge safely, and it names any peer still missing.
 
 `@expo/vector-icons` is separate because most apps want icons; skip it and icons simply don't render, with a warning telling you how to add them. The remaining optional peers matter only for the components that use them: `@react-native-community/slider` (`Slider`), `expo-image` (`ThemedImage`), `expo-symbols` and `sf-symbols-typescript` (SF Symbols) — the current template already ships `expo-image` and `expo-symbols`, so `init` will only ask for what your project actually lacks.
+
+</details>
 
 ---
 
@@ -71,7 +83,7 @@ Component reference, theme tokens, hooks, and live examples: **[nativectx.com](h
 
 ## AI Integration
 
-`npx nativectx init` sets up both of the following in one pass. The individual commands below are still there when you want just one of them.
+[`npx nativectx init`](#install) sets up both of the following in one pass. The individual commands below are there when you want just one of them.
 
 ### Claude Skills
 
@@ -91,7 +103,7 @@ Re-running without the flag prunes contributor skills a previous install left be
 
 ### MCP Server
 
-`npx nativectx init` writes this entry for you, merging it into an existing `.mcp.json` without touching the other servers. To do it by hand, add to your Claude Code `.mcp.json` or Claude Desktop config:
+To wire it up by hand instead, add this to your Claude Code `.mcp.json` or Claude Desktop config:
 
 ```json
 {
