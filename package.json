@@ -47,6 +47,7 @@
       "react-native": "0.85.3",
       "react-native-reanimated": "4.3.1",
       "react-native-safe-area-context": "5.7.0",
+      "@expo/ui": "~56.0.24",
       "@babel/core": "^7.29.6",
       "@babel/plugin-transform-modules-systemjs": "^7.29.4",
       "@hono/node-server": "^2.0.5",
@@ -98,8 +99,8 @@
     ]
   },
   "dependencies": {
-    "@expo/metro-runtime": "~56.0.13",
-    "expo": "~56.0.8",
+    "@expo/metro-runtime": "~56.0.18",
+    "expo": "~56.0.18",
     "react": "19.2.3",
     "react-native": "0.85.3"
   }
