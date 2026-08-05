@@ -16,7 +16,7 @@ import {
   renderIcon,
 } from '@nativectx/ui';
 import { router } from 'expo-router';
-import { Image, Linking, Platform, StyleSheet, View } from 'react-native';
+import { Image, Linking, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
 import { CodeBlock } from '../components/code-block';
@@ -24,6 +24,14 @@ import { CodeBlock } from '../components/code-block';
 // ─── Install ──────────────────────────────────────────────────────────────────
 
 const INSTALL_SNIPPET = 'npx expo install @nativectx/ui\nnpx nativectx init';
+
+// ─── Hero copy ────────────────────────────────────────────────────────────────
+// Shared by both hero variants so the two never drift apart.
+
+const HERO_SUBTITLE = 'A React Native UI library\noptimized for LLMs.';
+
+const HERO_BODY =
+  'Generate iOS, Android, and web interfaces simultaneously with platform-specific navigation patterns and native components where users expect them.';
 
 // ─── Stats ────────────────────────────────────────────────────────────────────
 
@@ -41,17 +49,6 @@ function useGithubStars() {
       .catch(() => setStars(null));
   }, []);
   return stars;
-}
-
-function useNpmDownloads() {
-  const [downloads, setDownloads] = useState<string | null>(null);
-  useEffect(() => {
-    fetch('https://api.npmjs.org/downloads/point/last-week/@nativectx/ui')
-      .then((r) => r.json())
-      .then((d) => setDownloads(formatStat(d.downloads)))
-      .catch(() => setDownloads(null));
-  }, []);
-  return downloads;
 }
 
 // ─── Platform badges ──────────────────────────────────────────────────────────
@@ -103,11 +100,11 @@ function HeroNarrow({
               NativeCtx UI
             </Typography>
             <Typography variant="headlineSmall" weight="medium" align="center">
-              A React Native UI library{'\n'}optimized for LLMs.
+              {HERO_SUBTITLE}
             </Typography>
           </View>
           <Typography variant="bodyLarge" align="center" color={theme.onSurfaceVariant}>
-            29 Material Design 3 components for iOS, Android, and web — shipped with an MCP server and Claude Skills, so Claude writes against your real props and tokens instead of guessing.
+            {HERO_BODY}
           </Typography>
         </View>
         <PlatformBadges theme={theme} />
@@ -224,7 +221,6 @@ type HeroWideProps = {
   theme: ReturnType<typeof useTheme>;
   isDark: boolean;
   stars: string | null;
-  downloads: string | null;
   viewportWidth: number;
   viewportHeight: number;
   containerLeftInset: number;
@@ -235,7 +231,6 @@ function HeroWide({
   theme,
   isDark,
   stars,
-  downloads,
   viewportWidth,
   viewportHeight,
   containerLeftInset,
@@ -257,11 +252,11 @@ function HeroWide({
                   NativeCtx UI
                 </Typography>
                 <Typography variant="headlineSmall" weight="medium">
-                  A React Native UI library{'\n'}optimized for LLMs.
+                  {HERO_SUBTITLE}
                 </Typography>
               </View>
               <Typography variant="bodyLarge" color={theme.onSurfaceVariant}>
-                29 Material Design 3 components for iOS, Android, and web — shipped with an MCP server and Claude Skills, so Claude writes against your real props and tokens instead of guessing.
+                {HERO_BODY}
               </Typography>
             </View>
             <PlatformBadges theme={theme} />
@@ -444,18 +439,6 @@ function HeroWide({
             <View style={[styles.statDivider, { backgroundColor: theme.outlineVariant }]} />
             <View style={[styles.statTile, { gap: spacing.xs, alignItems: 'center' }]}>
               <View style={[styles.row, { alignItems: 'center', gap: spacing.sm }]}>
-                {Platform.OS === 'web' ? (
-                  <Image source={{ uri: 'https://svgl.app/library/npm.svg' }} style={{ width: 26, height: 26 }} />
-                ) : (
-                  renderIcon({ name: 'package', library: 'Feather' }, 'Feather', 24, theme.onSurface)
-                )}
-                <Typography variant="headlineMedium" weight="bold">{downloads ?? '—'}</Typography>
-              </View>
-              <Typography variant="bodySmall" color={theme.onSurfaceVariant}>Downloads / wk</Typography>
-            </View>
-            <View style={[styles.statDivider, { backgroundColor: theme.outlineVariant }]} />
-            <View style={[styles.statTile, { gap: spacing.xs, alignItems: 'center' }]}>
-              <View style={[styles.row, { alignItems: 'center', gap: spacing.sm }]}>
                 {renderIcon({ name: 'box', library: 'Feather' }, 'Feather', 24, theme.onSurface)}
                 <Typography variant="headlineMedium" weight="bold">29</Typography>
               </View>
@@ -472,31 +455,31 @@ function HeroWide({
 
 const FEATURES = [
   {
-    title: 'MCP server + Claude Skills',
+    title: 'Claude writes it right the first time',
     icon: { name: 'zap', library: 'Feather' as const },
     description:
-      'Claude calls live tools for props, tokens, and palettes mid-conversation — accurate code from the first prompt.',
+      'An MCP server and six Claude Skills install with the package. Claude calls live tools for props, tokens, and palettes mid-conversation instead of guessing at an API it half-remembers.',
     iconAccent: true,
   },
   {
-    title: 'Native-first',
+    title: 'One tree, three platforms',
+    icon: { name: 'smartphone', library: 'Feather' as const },
+    description:
+      'The same component code runs on iOS, Android, and web — no platform forks, no Platform.select scattered through your screens.',
+    iconAccent: false,
+  },
+  {
+    title: 'Native where users expect native',
     icon: { name: 'cpu', library: 'Feather' as const },
     description:
-      'Key components render as real SwiftUI and Jetpack Compose via Expo UI, not JavaScript approximations.',
+      'Switch, Slider, SegmentedControl, and ProgressIndicator render as real SwiftUI and Jetpack Compose via Expo UI. Tabs and headers use the platform’s own, not JavaScript lookalikes.',
     iconAccent: false,
   },
   {
-    title: 'Material Design 3',
+    title: 'Material 3 design system',
     icon: { name: 'layers', library: 'Feather' as const },
     description:
-      'One seed color generates the whole palette — semantic tokens, type scale, elevation, and shape across all 29 components.',
-    iconAccent: false,
-  },
-  {
-    title: 'Accessible by default',
-    icon: { name: 'eye', library: 'Feather' as const },
-    description:
-      'ARIA roles, focus management, reduced motion, and screen reader labels on every interactive component.',
+      'One seed color generates the whole palette — semantic tokens, type scale, elevation, and shape across all 29 components. Accessible roles, focus management, and reduced motion come with them.',
     iconAccent: false,
   },
 ];
@@ -515,7 +498,6 @@ export default function HomeScreen() {
   const { width: viewportWidth, height: viewportHeight } = useDimensions();
   const isDark = mode === 'dark';
   const stars = useGithubStars();
-  const downloads = useNpmDownloads();
   const isWide = viewportWidth >= HERO_BREAKPOINT;
 
   const containerLeftInset = isWide && viewportWidth > CONTAINER_MAX_WIDTH + spacing.xl * 2
@@ -533,7 +515,6 @@ export default function HomeScreen() {
           theme={theme}
           isDark={isDark}
           stars={stars}
-          downloads={downloads}
           viewportWidth={viewportWidth}
           viewportHeight={viewportHeight}
           containerLeftInset={containerLeftInset}
@@ -554,7 +535,7 @@ export default function HomeScreen() {
       <Container style={{ paddingVertical: SECTION_PAD }}>
         <View style={{ gap: spacing.xxl }}>
           <View style={{ gap: spacing.xl }}>
-            <Typography variant="headlineMedium" weight="bold">What&apos;s inside</Typography>
+            <Typography variant="headlineMedium" weight="bold">Why NativeCtx UI</Typography>
             <ThemedView columns={2} gap={spacing.lg}>
               {FEATURES.map((feature, index) => (
                 <ThemedView

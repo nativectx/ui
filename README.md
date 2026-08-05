@@ -3,22 +3,19 @@
 ### A React Native UI library optimized for LLMs.
 
 [![npm](https://img.shields.io/npm/v/@nativectx/ui?color=cb3837&logo=npm)](https://www.npmjs.com/package/@nativectx/ui)
-[![downloads](https://img.shields.io/npm/dw/@nativectx/ui?color=cb3837)](https://www.npmjs.com/package/@nativectx/ui)
 [![license](https://img.shields.io/npm/l/@nativectx/ui?color=blue)](./LICENSE)
 [![docs](https://img.shields.io/badge/docs-nativectx.com-6750A4)](https://nativectx.com)
 
-29 Material Design 3 components for iOS, Android, and web — shipped with an MCP server and Claude Skills, so Claude writes against your real props and tokens instead of guessing.
+Generate iOS, Android, and web interfaces simultaneously with platform-specific navigation patterns and native components where users expect them.
 
 ---
 
 ## Why
 
-LLMs write better code when they can see your design system. NativeCtx UI ships an MCP server and Claude Skills next to the components, so Claude reads your real props and tokens instead of guessing at them — and reuses your accessible, theme-aware primitives instead of rebuilding them.
-
-- **MCP server** — live tools for props, tokens, palette generation, and navigation scaffolding
-- **Claude Skills** — context files Claude Code picks up automatically, no configuration
-- **Material Design 3** — semantic color tokens, type scale, and spacing across 29 components
-- **Cross-platform** — iOS, Android, and web from a single component tree
+- **Claude writes it right the first time** — an MCP server and six Claude Skills install with the package. Claude calls live tools for props, tokens, and palettes mid-conversation instead of guessing at an API it half-remembers.
+- **One tree, three platforms** — the same component code runs on iOS, Android, and web. No platform forks, no `Platform.select` scattered through your screens.
+- **Native where users expect native** — Switch, Slider, SegmentedControl, and ProgressIndicator render as real SwiftUI and Jetpack Compose via Expo UI. Tabs and headers use the platform's own, not JavaScript lookalikes.
+- **Material 3 design system** — one seed color generates the whole palette: semantic tokens, type scale, elevation, and shape flow through all 29 components. Accessible roles, focus management, and reduced motion come with them.
 
 ---
 

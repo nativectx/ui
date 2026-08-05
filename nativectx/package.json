@@ -1,7 +1,7 @@
 {
   "name": "nativectx",
   "version": "0.1.0",
-  "description": "CLI entry point for NativeCtx UI. Installs @nativectx/ui and forwards to its CLI.",
+  "description": "CLI for NativeCtx UI — installs Claude Skills and runs the MCP server for @nativectx/ui.",
   "license": "MIT",
   "author": "Alex Amayo",
   "repository": {
@@ -14,7 +14,10 @@
     "react-native",
     "expo",
     "cli",
-    "mcp"
+    "mcp",
+    "claude",
+    "claude-skills",
+    "llm"
   ],
   "type": "module",
   "bin": {

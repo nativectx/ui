@@ -1,7 +1,7 @@
 {
   "name": "@nativectx/ui",
   "version": "0.1.0",
-  "description": "React Native components for building cross-platform apps with Material Design.",
+  "description": "React Native UI components optimized for LLMs — one design system for iOS, Android, and web, with an MCP server and Claude Skills.",
   "license": "MIT",
   "author": "Alex Amayo",
   "repository": {
@@ -19,7 +19,12 @@
     "android",
     "web",
     "theming",
-    "components"
+    "components",
+    "mcp",
+    "claude",
+    "claude-skills",
+    "llm",
+    "ai"
   ],
   "bin": {
     "nativectx": "./dist/mcp/cli.mjs"
