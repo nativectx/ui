@@ -46,7 +46,38 @@
       "react": "19.2.3",
       "react-native": "0.85.3",
       "react-native-reanimated": "4.3.1",
-      "react-native-safe-area-context": "5.7.0"
+      "react-native-safe-area-context": "5.7.0",
+      "@expo/ui": "~56.0.24",
+      "@babel/core": "^7.29.6",
+      "@babel/plugin-transform-modules-systemjs": "^7.29.4",
+      "@hono/node-server": "^2.0.5",
+      "@xmldom/xmldom": "^0.8.13",
+      "ajv@6": "^6.15.0",
+      "body-parser@2": "^2.3.0",
+      "brace-expansion@1": "^1.1.18",
+      "brace-expansion@2": "^2.1.4",
+      "brace-expansion@5": "^5.0.9",
+      "esbuild@0.27": "^0.28.1",
+      "esbuild@0.28": "^0.28.1",
+      "fast-uri": "^3.1.4",
+      "flatted": "^3.4.2",
+      "hono": "^4.12.27",
+      "ip-address": "^10.2.2",
+      "js-yaml@3": "^3.15.0",
+      "js-yaml@4": "^4.3.0",
+      "minimatch@3": "^3.1.4",
+      "minimatch@9": "^9.0.7",
+      "node-forge": "^1.4.0",
+      "picomatch@2": "^2.3.2",
+      "picomatch@4": "^4.0.4",
+      "postcss": "^8.5.18",
+      "rollup": "^4.59.0",
+      "shell-quote": "^1.9.0",
+      "storybook": "10.2.10",
+      "vite@7": "^7.3.5",
+      "ws@7": "^7.5.11",
+      "ws@8": "^8.21.0",
+      "yaml@2": "^2.8.3"
     },
     "patchedDependencies": {
       "@expo/dom-webview@0.2.8": "patches/@expo__dom-webview@0.2.8.patch"
@@ -68,8 +99,8 @@
     ]
   },
   "dependencies": {
-    "@expo/metro-runtime": "~56.0.13",
-    "expo": "~56.0.8",
+    "@expo/metro-runtime": "~56.0.18",
+    "expo": "~56.0.18",
     "react": "19.2.3",
     "react-native": "0.85.3"
   }
