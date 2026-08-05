@@ -15,8 +15,8 @@ const meta = {
     color: { control: 'color' },
     textColor: { control: 'color' },
   },
-  decorators: [(Story: any) => <View style={{ padding: 24, alignItems: 'center' }}><Story /></View>],
-} as unknown as Meta<typeof Avatar>;
+  decorators: [(Story) => <View style={{ padding: 24, alignItems: 'center' }}><Story /></View>],
+} satisfies Meta<typeof Avatar>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

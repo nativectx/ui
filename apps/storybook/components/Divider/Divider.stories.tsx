@@ -15,8 +15,8 @@ const meta = {
     inset: { control: 'select', options: ['none', 'start', 'middle'] },
     color: { control: 'color' },
   },
-  decorators: [(Story: any) => <View style={{ padding: 24, width: '100%' }}><Story /></View>],
-} as unknown as Meta<typeof Divider>;
+  decorators: [(Story) => <View style={{ padding: 24, width: '100%' }}><Story /></View>],
+} satisfies Meta<typeof Divider>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

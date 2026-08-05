@@ -15,8 +15,8 @@ const meta = {
     variant: { control: 'select', options: ['filled', 'outlined'] },
     disabled: { control: 'boolean' },
   },
-  decorators: [(Story: any) => <View style={{ padding: 24, gap: 16 }}><Story /></View>],
-} as unknown as Meta<typeof ThemedTextInput>;
+  decorators: [(Story) => <View style={{ padding: 24, gap: 16 }}><Story /></View>],
+} satisfies Meta<typeof ThemedTextInput>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

@@ -14,7 +14,12 @@ const OPTIONS_THREE = [
   { value: 'month', label: 'Month' },
 ];
 
-const meta = {
+type SegmentedControlStoryArgs = React.ComponentProps<typeof SegmentedControl>;
+
+// Explicit args generic rather than `typeof meta`: these stories drive the
+// component from inside `render` instead of through args, so inferring
+// required args from meta would demand args the stories never use.
+const meta: Meta<SegmentedControlStoryArgs> = {
   title: 'Components/SegmentedControl',
   component: SegmentedControl,
   args: {
@@ -26,11 +31,11 @@ const meta = {
     disabled: { control: 'boolean' },
     onChange: { action: 'changed' },
   },
-  decorators: [(Story: any) => <View style={styles.container}><Story /></View>],
-} as unknown as Meta<typeof SegmentedControl>;
+  decorators: [(Story) => <View style={styles.container}><Story /></View>],
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<SegmentedControlStoryArgs>;
 
 export const Playground: Story = {};
 

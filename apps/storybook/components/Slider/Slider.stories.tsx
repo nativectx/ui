@@ -22,8 +22,8 @@ const meta = {
     onValueChange: { action: 'value changed' },
     onSlidingComplete: { action: 'sliding complete' },
   },
-  decorators: [(Story: any) => <View style={styles.container}><Story /></View>],
-} as unknown as Meta<typeof Slider>;
+  decorators: [(Story) => <View style={styles.container}><Story /></View>],
+} satisfies Meta<typeof Slider>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

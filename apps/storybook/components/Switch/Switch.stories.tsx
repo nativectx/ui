@@ -17,8 +17,8 @@ const meta = {
     label: { control: 'text' },
     onValueChange: { action: 'changed' },
   },
-  decorators: [(Story: any) => <View style={styles.container}><Story /></View>],
-} as unknown as Meta<typeof Switch>;
+  decorators: [(Story) => <View style={styles.container}><Story /></View>],
+} satisfies Meta<typeof Switch>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

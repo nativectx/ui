@@ -23,8 +23,8 @@ const meta = {
     onPress: { action: 'pressed' },
     onIconPress: { action: 'icon pressed' },
   },
-  decorators: [(Story: any) => <View style={styles.container}><Story /></View>],
-} as unknown as Meta<typeof Chip>;
+  decorators: [(Story) => <View style={styles.container}><Story /></View>],
+} satisfies Meta<typeof Chip>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
