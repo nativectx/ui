@@ -154,11 +154,11 @@ export default function ThemingPage() {
 
       <DemoSection
         title="Dark mode"
-        description="Dark theme is generated automatically from the same seed. Toggle at runtime using useThemeMode()."
+        description="Dark theme is generated automatically from the same seed. The provider follows the OS setting by default; useThemeMode() overrides it at runtime."
       >
         <CodeBlock
           variant="code"
-          code={"import { useThemeMode } from '@nativectx/ui';\n\nconst { mode, toggleTheme } = useThemeMode();\n// mode: 'light' | 'dark'"}
+          code={"import { useThemeMode } from '@nativectx/ui';\n\nconst { mode, setMode, toggleTheme, isFollowingSystem } = useThemeMode();\n// mode: 'light' | 'dark' — resolved, never 'system'\n\nsetMode('dark');    // sticky override, survives system changes\nsetMode('system');  // back to following the OS"}
         />
       </DemoSection>
 

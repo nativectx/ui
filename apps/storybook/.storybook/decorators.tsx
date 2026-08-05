@@ -25,8 +25,11 @@ const ThemeWrapper = ({
   const themeContextValue = useMemo<ThemeContextType>(() => ({
     values: themeValues,
     mode,
-    setMode,
+    // Storybook drives the mode from its own toolbar global, so 'system' is
+    // treated as a no-op here rather than deferring to the OS.
+    setMode: (m) => { if (m !== 'system') setMode(m); },
     toggleTheme: () => setMode((m) => (m === 'light' ? 'dark' : 'light')),
+    isFollowingSystem: false,
   }), [themeValues, mode]);
 
   return (

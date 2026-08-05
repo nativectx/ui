@@ -77,8 +77,30 @@ input.background, input.border, input.focusBorder, input.errorColor
 ### useThemeMode()
 
 ```tsx
-const { mode, toggleTheme } = useThemeMode();
-// mode: 'light' | 'dark'
+const { mode, setMode, toggleTheme, isFollowingSystem } = useThemeMode();
+// mode: 'light' | 'dark' — always the resolved mode, never 'system'
+// isFollowingSystem: true while mode tracks the OS setting
+```
+
+`NativeCtxProvider` follows the OS light/dark setting out of the box and re-renders
+when the user flips it. `setMode('light' | 'dark')` and `toggleTheme()` are sticky
+user overrides that survive later system changes; `setMode('system')` clears the
+override and resumes following. `toggleTheme()` flips relative to the mode on screen,
+so the first toggle on a dark device goes to light.
+
+Pass `defaultMode` to start pinned instead of following (`'system'` is the default):
+
+```tsx
+<NativeCtxProvider brand={brand} defaultMode="light">
+  <Stack />
+</NativeCtxProvider>
+```
+
+For a three-way Light/Dark/System setting, derive the selection from both fields:
+
+```tsx
+const { mode, setMode, isFollowingSystem } = useThemeMode();
+const selected = isFollowingSystem ? 'system' : mode;
 ```
 
 ---

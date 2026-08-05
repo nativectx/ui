@@ -1,4 +1,5 @@
 import React, { createContext, useState, useMemo, useContext } from 'react';
+import { useColorScheme } from 'react-native';
 import { createDarkTheme, createLightTheme, ThemeValuesType, type ThemeTokens } from './theme-config';
 import { Brand } from '../brand';
 import { BrandProvider } from '../brand/brand-context';
@@ -10,9 +11,13 @@ export type ThemeMode = 'light' | 'dark';
 
 export type ThemeContextType = {
   values: ThemeValuesType;
+  /** The resolved mode actually being rendered — never `'system'`. */
   mode: ThemeMode;
-  setMode: (m: ThemeMode) => void;
+  /** Pass `'system'` to clear a user override and resume following the OS. */
+  setMode: (m: ThemeMode | 'system') => void;
   toggleTheme: () => void;
+  /** True while the mode tracks the OS setting; false once the user overrides it. */
+  isFollowingSystem: boolean;
 };
 
 // Sentinel value to detect missing provider
@@ -38,26 +43,44 @@ type NativeCtxProviderProps = {
    * @default 0
    */
   ssrHeight?: number;
+  /**
+   * Theme mode the app starts in.
+   * `'system'` follows the OS light/dark setting and keeps following it until
+   * `setMode` or `toggleTheme` is called; `'light'` or `'dark'` pins the theme
+   * and ignores the OS. Call `setMode('system')` to resume following.
+   * @default 'system'
+   */
+  defaultMode?: ThemeMode | 'system';
 };
 //Initialize NativeCtxProvider with a toggle function
-const NativeCtxProvider = ({ brand, children, ssrWidth, ssrHeight }: NativeCtxProviderProps) => {
+const NativeCtxProvider = ({ brand, children, ssrWidth, ssrHeight, defaultMode = 'system' }: NativeCtxProviderProps) => {
   const lightTheme = useMemo(() => createLightTheme(brand), [brand]);
   // Use brand.darkColors if available, otherwise generate from brand.colors
   const darkTheme = useMemo(() => createDarkTheme(brand), [brand]);
-  const [mode, setModeState] = useState<ThemeMode>('light');
+  // null = follow the OS. An explicit setMode/toggleTheme call parks a mode here
+  // and it wins over the system from then on, until setMode('system') clears it.
+  const [override, setOverride] = useState<ThemeMode | null>(defaultMode === 'system' ? null : defaultMode);
+  // null when the OS preference is unknown (SSR, or web before hydration) —
+  // treat that as light so server output stays deterministic.
+  const systemMode: ThemeMode = useColorScheme() === 'dark' ? 'dark' : 'light';
+  // Derived during render, not synced in an effect: a system change re-renders
+  // with the new theme immediately instead of one frame late.
+  const mode = override ?? systemMode;
   const values = mode === 'light' ? lightTheme : darkTheme;
 
-  const setMode = (m: ThemeMode) => {
-    setModeState(m);
+  const setMode = (m: ThemeMode | 'system') => {
+    setOverride(m === 'system' ? null : m);
   };
 
   const toggleTheme = () => {
-    setModeState((prev) => (prev === 'light' ? 'dark' : 'light'));
+    // Flips relative to the resolved mode, so the first toggle on a dark device
+    // goes to light rather than back to the theme already on screen.
+    setOverride(mode === 'light' ? 'dark' : 'light');
   };
 
   return (
     <BrandProvider brand={brand}>
-      <ThemeContext.Provider value={{ values, mode, setMode, toggleTheme }}>
+      <ThemeContext.Provider value={{ values, mode, setMode, toggleTheme, isFollowingSystem: override === null }}>
         <LayoutProvider ssrWidth={ssrWidth} ssrHeight={ssrHeight}>
           <SidebarProvider>
               {children}
@@ -99,7 +122,11 @@ export const useTheme = (): ThemeValuesType => {
  * Hook to access the current theme mode and controllers.
  * Must be used within a `<NativeCtxProvider>` provider.
  *
- * @returns The theme mode context containing mode, setMode, and toggleTheme
+ * `mode` is always the resolved `'light' | 'dark'`. By default it follows the OS
+ * setting; `setMode('light' | 'dark')` and `toggleTheme()` override that until
+ * `setMode('system')` resumes following. `isFollowingSystem` says which is in effect.
+ *
+ * @returns The theme mode context containing mode, setMode, toggleTheme, and isFollowingSystem
  * @throws Error if used outside of a NativeCtxProvider
  *
  * @example
@@ -109,10 +136,26 @@ export const useTheme = (): ThemeValuesType => {
  *   return <Button title={`Switch to ${mode === 'light' ? 'dark' : 'light'}`} onPress={toggleTheme} />;
  * }
  * ```
+ *
+ * @example
+ * ```tsx
+ * function ThemeSetting() {
+ *   const { mode, setMode, isFollowingSystem } = useThemeMode();
+ *   const selected = isFollowingSystem ? 'system' : mode;
+ *
+ *   return (
+ *     <>
+ *       <Button title="Light" variant={selected === 'light' ? 'filled' : 'outlined'} onPress={() => setMode('light')} />
+ *       <Button title="Dark" variant={selected === 'dark' ? 'filled' : 'outlined'} onPress={() => setMode('dark')} />
+ *       <Button title="System" variant={selected === 'system' ? 'filled' : 'outlined'} onPress={() => setMode('system')} />
+ *     </>
+ *   );
+ * }
+ * ```
  */
 export const useThemeMode = () => {
-  const { mode, setMode, toggleTheme } = useThemeContext();
-  return { mode, setMode, toggleTheme };
+  const { mode, setMode, toggleTheme, isFollowingSystem } = useThemeContext();
+  return { mode, setMode, toggleTheme, isFollowingSystem };
 };
 
 export const useThemeContext = (): ThemeContextType => {
