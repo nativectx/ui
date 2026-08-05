@@ -1,18 +1,56 @@
 import React from 'react';
-import { fireEvent, render, renderHook } from '@testing-library/react-native';
+import { act, fireEvent, render, renderHook } from '@testing-library/react-native';
 import { Text, View } from 'react-native';
 import { NativeCtxProvider, useThemeContext, useTheme, useTokens } from './theme';
 import { defaultBrand } from '../brand/default-brand';
 import { createLightTheme, createDarkTheme } from './theme-config';
 
+// `useColorScheme` reads the OS setting through this module, and the native
+// Appearance module it wraps is absent under jest, so the real hook would always
+// report null. Replace it with the same shape — a subscribable store — so that
+// flipping the system theme re-renders subscribers exactly as the device does.
+jest.mock('react-native/Libraries/Utilities/useColorScheme', () => {
+  const { useSyncExternalStore } = require('react');
+  const listeners = new Set<() => void>();
+  let scheme: 'light' | 'dark' | null = 'light';
+
+  const useColorSchemeMock = () =>
+    useSyncExternalStore(
+      (onChange: () => void) => {
+        listeners.add(onChange);
+        return () => listeners.delete(onChange);
+      },
+      () => scheme,
+    );
+  useColorSchemeMock.set = (next: 'light' | 'dark' | null) => {
+    scheme = next;
+    listeners.forEach((notify) => notify());
+  };
+
+  return { __esModule: true, default: useColorSchemeMock };
+});
+
+const colorSchemeStore = jest.requireMock('react-native/Libraries/Utilities/useColorScheme')
+  .default as { set: (next: 'light' | 'dark' | null) => void };
+
+/** Flip the OS setting; mounted providers re-render on their own from here. */
+const setSystemColorScheme = (scheme: 'light' | 'dark' | null) => {
+  act(() => colorSchemeStore.set(scheme));
+};
+
+beforeEach(() => {
+  colorSchemeStore.set('light');
+});
+
 // Test component that exposes theme values for assertions
 const ThemeTestComponent = () => {
-  const { values, mode, toggleTheme, setMode } = useThemeContext();
+  const { values, mode, toggleTheme, setMode, isFollowingSystem } = useThemeContext();
 
   return (
     <View>
       <Text testID="isDark">{String(values.isDark)}</Text>
       <Text testID="mode">{mode}</Text>
+      <Text testID="isFollowingSystem">{String(isFollowingSystem)}</Text>
       <Text testID="primary">{values.primary}</Text>
       <Text testID="surface">{values.surface}</Text>
       <Text testID="onSurface">{values.onSurface}</Text>
@@ -23,6 +61,7 @@ const ThemeTestComponent = () => {
       <Text onPress={toggleTheme} testID="toggleTheme">Toggle</Text>
       <Text onPress={() => setMode('dark')} testID="setDark">Set Dark</Text>
       <Text onPress={() => setMode('light')} testID="setLight">Set Light</Text>
+      <Text onPress={() => setMode('system')} testID="setSystem">Follow System</Text>
     </View>
   );
 };
@@ -105,6 +144,119 @@ describe('NativeCtxProvider Provider', () => {
 
       // Set back to light directly
       fireEvent.press(getByTestId('setLight'));
+      expect(getByTestId('mode').props.children).toBe('light');
+    });
+  });
+
+  describe('System Theme', () => {
+    it('seeds the mode from a system set to dark', () => {
+      colorSchemeStore.set('dark');
+
+      const { getByTestId } = render(
+        <NativeCtxProvider brand={defaultBrand}>
+          <ThemeTestComponent />
+        </NativeCtxProvider>
+      );
+
+      expect(getByTestId('mode').props.children).toBe('dark');
+      expect(getByTestId('isDark').props.children).toBe('true');
+      expect(getByTestId('isFollowingSystem').props.children).toBe('true');
+    });
+
+    it('treats an unknown system color scheme as light', () => {
+      colorSchemeStore.set(null);
+
+      const { getByTestId } = render(
+        <NativeCtxProvider brand={defaultBrand}>
+          <ThemeTestComponent />
+        </NativeCtxProvider>
+      );
+
+      expect(getByTestId('mode').props.children).toBe('light');
+      expect(getByTestId('isFollowingSystem').props.children).toBe('true');
+    });
+
+    it('follows a system theme change with no user action', () => {
+      const { getByTestId } = render(
+        <NativeCtxProvider brand={defaultBrand}>
+          <ThemeTestComponent />
+        </NativeCtxProvider>
+      );
+
+      expect(getByTestId('mode').props.children).toBe('light');
+
+      setSystemColorScheme('dark');
+
+      expect(getByTestId('mode').props.children).toBe('dark');
+      expect(getByTestId('isDark').props.children).toBe('true');
+    });
+
+    it('keeps a setMode override when the system theme changes', () => {
+      const { getByTestId } = render(
+        <NativeCtxProvider brand={defaultBrand}>
+          <ThemeTestComponent />
+        </NativeCtxProvider>
+      );
+
+      fireEvent.press(getByTestId('setLight'));
+      expect(getByTestId('isFollowingSystem').props.children).toBe('false');
+
+      setSystemColorScheme('dark');
+
+      // The user's choice wins over the OS.
+      expect(getByTestId('mode').props.children).toBe('light');
+      expect(getByTestId('isFollowingSystem').props.children).toBe('false');
+    });
+
+    it('resumes following the system after setMode("system")', () => {
+      colorSchemeStore.set('dark');
+
+      const { getByTestId } = render(
+        <NativeCtxProvider brand={defaultBrand}>
+          <ThemeTestComponent />
+        </NativeCtxProvider>
+      );
+
+      fireEvent.press(getByTestId('setLight'));
+      expect(getByTestId('mode').props.children).toBe('light');
+
+      fireEvent.press(getByTestId('setSystem'));
+      expect(getByTestId('mode').props.children).toBe('dark');
+      expect(getByTestId('isFollowingSystem').props.children).toBe('true');
+
+      setSystemColorScheme('light');
+      expect(getByTestId('mode').props.children).toBe('light');
+    });
+
+    it('toggles to light from a system default of dark', () => {
+      colorSchemeStore.set('dark');
+
+      const { getByTestId } = render(
+        <NativeCtxProvider brand={defaultBrand}>
+          <ThemeTestComponent />
+        </NativeCtxProvider>
+      );
+
+      fireEvent.press(getByTestId('toggleTheme'));
+
+      expect(getByTestId('mode').props.children).toBe('light');
+      expect(getByTestId('isFollowingSystem').props.children).toBe('false');
+    });
+
+    it('pins the mode and ignores the system when defaultMode is set', () => {
+      colorSchemeStore.set('dark');
+
+      const { getByTestId } = render(
+        <NativeCtxProvider brand={defaultBrand} defaultMode="light">
+          <ThemeTestComponent />
+        </NativeCtxProvider>
+      );
+
+      expect(getByTestId('mode').props.children).toBe('light');
+      expect(getByTestId('isFollowingSystem').props.children).toBe('false');
+
+      setSystemColorScheme('light');
+      setSystemColorScheme('dark');
       expect(getByTestId('mode').props.children).toBe('light');
     });
   });
@@ -199,6 +351,7 @@ describe('useThemeContext hook', () => {
     expect(result.current).toHaveProperty('mode');
     expect(result.current).toHaveProperty('setMode');
     expect(result.current).toHaveProperty('toggleTheme');
+    expect(result.current).toHaveProperty('isFollowingSystem');
   });
 
   it('throws error when used outside provider', () => {
