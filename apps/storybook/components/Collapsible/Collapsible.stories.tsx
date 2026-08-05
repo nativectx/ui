@@ -16,7 +16,12 @@ import { Collapsible, Typography } from '@nativectx/ui';
  * `contentVariant`, `iconLibrary`, `iconName`.
  */
 
-const meta = {
+type CollapsibleStoryArgs = React.ComponentProps<typeof Collapsible>;
+
+// Explicit args generic rather than `typeof meta`: these stories drive the
+// component from inside `render` instead of through args, so inferring
+// required args from meta would demand args the stories never use.
+const meta: Meta<CollapsibleStoryArgs> = {
   title: 'Components/Collapsible',
   component: Collapsible,
   args: {
@@ -51,12 +56,12 @@ const meta = {
       },
     },
   },
-  decorators: [(Story: any) => <View style={styles.container}><Story /></View>],
-} as unknown as Meta<typeof Collapsible>;
+  decorators: [(Story) => <View style={styles.container}><Story /></View>],
+};
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<CollapsibleStoryArgs>;
 
 export const Playground: Story = {
   render: (args) => (

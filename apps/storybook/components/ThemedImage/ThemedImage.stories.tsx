@@ -18,8 +18,8 @@ const meta = {
       options: ['contain', 'cover', 'fill', 'none', 'scale-down'],
     },
   },
-  decorators: [(Story: any) => <View style={styles.container}><Story /></View>],
-} as unknown as Meta<typeof ThemedImage>;
+  decorators: [(Story) => <View style={styles.container}><Story /></View>],
+} satisfies Meta<typeof ThemedImage>;
 
 export default meta;
 

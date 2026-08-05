@@ -15,8 +15,8 @@ const meta = {
     selected: { control: 'boolean' },
     disabled: { control: 'boolean' },
   },
-  decorators: [(Story: any) => <View style={{ padding: 0, width: '100%' }}><Story /></View>],
-} as unknown as Meta<typeof ListItem>;
+  decorators: [(Story) => <View style={{ padding: 0, width: '100%' }}><Story /></View>],
+} satisfies Meta<typeof ListItem>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

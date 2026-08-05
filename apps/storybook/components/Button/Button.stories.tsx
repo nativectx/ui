@@ -19,7 +19,22 @@ const mockOnPress = () => console.log('pressed');
  * `iconPosition`, `color`, `backgroundColor`, and `onPress`.
  */
 
-const meta = {
+/**
+ * `iconName`, `iconLibrary` and `iconSize` are story-only controls rather than
+ * Button props — three flat fields drive the panel better than the nested
+ * `icon` object, and RenderTemplate below reassembles them (leaving `icon`
+ * undefined when no name is given, which is what keeps the default story
+ * icon-free).
+ */
+type ButtonIcon = NonNullable<React.ComponentProps<typeof Button>['icon']>;
+
+type ButtonStoryArgs = React.ComponentProps<typeof Button> & {
+  iconName?: string;
+  iconLibrary?: ButtonIcon['library'];
+  iconSize?: ButtonIcon['size'];
+};
+
+const meta: Meta<ButtonStoryArgs> = {
   title: 'Components/Button',
   component: Button,
   args: {
@@ -58,14 +73,14 @@ const meta = {
       },
     },
   },
-  decorators: [(Story: any) => <View style={styles.container}><Story /></View>],
-} as unknown as Meta<typeof Button>;
+  decorators: [(Story) => <View style={styles.container}><Story /></View>],
+};
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<ButtonStoryArgs>;
 
-const RenderTemplate = (args: any) => {
+const RenderTemplate = (args: ButtonStoryArgs) => {
   const { iconName, iconLibrary, iconSize, ...rest } = args;
 
   const icon = iconName ? { name: iconName, library: iconLibrary || 'Feather', size: iconSize || 18 } : undefined;

@@ -16,8 +16,8 @@ const meta = {
     color: { control: 'color' },
     trackColor: { control: 'color' },
   },
-  decorators: [(Story: any) => <View style={{ padding: 24, gap: 16 }}><Story /></View>],
-} as unknown as Meta<typeof ProgressIndicator>;
+  decorators: [(Story) => <View style={{ padding: 24, gap: 16 }}><Story /></View>],
+} satisfies Meta<typeof ProgressIndicator>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

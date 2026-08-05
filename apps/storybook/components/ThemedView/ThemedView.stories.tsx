@@ -23,8 +23,8 @@ const meta = {
       description: 'M3 elevation level (0–5). Card variant defaults to 1.',
     },
   },
-  decorators: [(Story: any) => <View style={styles.container}><Story /></View>],
-} as unknown as Meta<typeof ThemedView>;
+  decorators: [(Story) => <View style={styles.container}><Story /></View>],
+} satisfies Meta<typeof ThemedView>;
 
 export default meta;
 

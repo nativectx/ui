@@ -13,7 +13,22 @@ const mockOnPress = () => console.log('FAB pressed');
  * Extended: pass a `label` prop for an extended FAB with icon + text
  */
 
-const meta = {
+/**
+ * `iconName` and `iconLibrary` are story-only controls rather than FAB props:
+ * two flat text fields are far easier to drive from the Storybook panel than
+ * the nested `icon` object, so RenderTemplate below reassembles them. Declaring
+ * them here is what keeps that honest — the `as unknown as Meta<typeof FAB>`
+ * cast this replaces silenced the mismatch, and as a side effect stopped
+ * Storybook's indexer from being able to read the file at all.
+ */
+type FABStoryArgs = React.ComponentProps<typeof FAB> & {
+  iconName?: string;
+  // Derived from the prop rather than widened to `string`, so the control only
+  // offers library names the icon renderer actually knows.
+  iconLibrary?: NonNullable<React.ComponentProps<typeof FAB>['icon']>['library'];
+};
+
+const meta: Meta<FABStoryArgs> = {
   title: 'Components/FAB',
   component: FAB,
   args: {
@@ -41,14 +56,14 @@ const meta = {
     label: { control: 'text', description: 'Label for extended FAB' },
     onPress: { action: 'pressed' },
   },
-  decorators: [(Story: any) => <View style={styles.container}><Story /></View>],
-} as unknown as Meta<typeof FAB>;
+  decorators: [(Story) => <View style={styles.container}><Story /></View>],
+};
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<FABStoryArgs>;
 
-const RenderTemplate = (args: any) => {
+const RenderTemplate = (args: FABStoryArgs) => {
   const { iconName, iconLibrary, label, ...rest } = args;
   const icon = { name: iconName || 'plus', library: iconLibrary || 'Feather' };
   return <FAB {...rest} icon={icon} label={label || undefined} onPress={mockOnPress} />;

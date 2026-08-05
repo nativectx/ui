@@ -5,7 +5,17 @@ import { IconButton, IconButtonVariants } from '@nativectx/ui';
 
 const mockOnPress = () => console.log('pressed');
 
-const meta = {
+/**
+ * `iconName` and `iconLibrary` are story-only controls rather than IconButton
+ * props — a flat text field drives the panel better than the nested `icon`
+ * object, and RenderTemplate below reassembles them.
+ */
+type IconButtonStoryArgs = React.ComponentProps<typeof IconButton> & {
+  iconName?: string;
+  iconLibrary?: NonNullable<React.ComponentProps<typeof IconButton>['icon']>['library'];
+};
+
+const meta: Meta<IconButtonStoryArgs> = {
   title: 'Components/IconButton',
   component: IconButton,
   args: {
@@ -29,19 +39,19 @@ const meta = {
     iconLibrary: { control: 'text' },
     onPress: { action: 'pressed' },
   },
-  decorators: [(Story: any) => <View style={styles.container}><Story /></View>],
-} as unknown as Meta<typeof IconButton>;
+  decorators: [(Story) => <View style={styles.container}><Story /></View>],
+};
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<IconButtonStoryArgs>;
 
-const RenderTemplate = (args: any) => {
+const RenderTemplate = (args: IconButtonStoryArgs) => {
   const { iconName, iconLibrary, ...rest } = args;
   return (
     <IconButton
       {...rest}
-      icon={{ name: iconName, library: iconLibrary || 'Feather' }}
+      icon={{ name: iconName || 'heart', library: iconLibrary || 'Feather' }}
       onPress={mockOnPress}
     />
   );

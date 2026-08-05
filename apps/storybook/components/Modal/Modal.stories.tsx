@@ -3,7 +3,12 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Modal, Button, Typography } from '@nativectx/ui';
 
-const meta = {
+type ModalStoryArgs = React.ComponentProps<typeof Modal>;
+
+// Explicit args generic rather than `typeof meta`: these stories drive the
+// component from inside `render` instead of through args, so inferring
+// required args from meta would demand args the stories never use.
+const meta: Meta<ModalStoryArgs> = {
   title: 'Components/Modal',
   component: Modal,
   args: {
@@ -13,11 +18,11 @@ const meta = {
   argTypes: {
     dismissable: { control: 'boolean' },
   },
-  decorators: [(Story: any) => <View style={{ padding: 24, alignItems: 'center' }}><Story /></View>],
-} as unknown as Meta<typeof Modal>;
+  decorators: [(Story) => <View style={{ padding: 24, alignItems: 'center' }}><Story /></View>],
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<ModalStoryArgs>;
 
 export const Playground: Story = {
   render: (args) => {
