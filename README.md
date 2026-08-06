@@ -19,6 +19,25 @@ Generate iOS, Android, and web interfaces simultaneously with platform-specific 
 
 ---
 
+## One codebase, three platforms
+
+[nativectx.com](https://nativectx.com) is itself a NativeCtx UI app. These are the same screen, built once, running as a website, a real iOS app, and a real Android app.
+
+<img src="https://raw.githubusercontent.com/nativectx/ui/master/apps/demo/assets/images/platform-web.png" alt="NativeCtx UI running on the web" width="100%">
+
+<table>
+<tr>
+<td width="50%"><img src="https://raw.githubusercontent.com/nativectx/ui/master/apps/demo/assets/images/platform-ios.png" alt="NativeCtx UI running on iOS" width="100%"></td>
+<td width="50%"><img src="https://raw.githubusercontent.com/nativectx/ui/master/apps/demo/assets/images/platform-android.png" alt="NativeCtx UI running on Android" width="100%"></td>
+</tr>
+<tr>
+<td align="center"><b>iOS</b> — SwiftUI controls, native tab bar</td>
+<td align="center"><b>Android</b> — Jetpack Compose controls, Material tab bar</td>
+</tr>
+</table>
+
+---
+
 ## Install
 
 ```bash
