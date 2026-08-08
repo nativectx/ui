@@ -158,7 +158,7 @@ npx nativectx migrate
 
 Rewrites the dependency, import specifiers, the renamed `ZeroToApp` → `NativeCtxProvider` provider, your `.mcp.json` entry, and the stale `zero-to-app-*.md` skill files. `--dry-run` previews; anything it can't safely automate is printed as a review list.
 
-`ZeroToApp` still works as a deprecated alias, so a dependency bump alone won't break your build — but it is removed in 0.2.0.
+`ZeroToApp` still works as a deprecated alias, so a dependency bump alone won't break your build — but it is removed in 0.3.0.
 
 ---
 

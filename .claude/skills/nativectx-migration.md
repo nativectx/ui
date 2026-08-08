@@ -53,6 +53,6 @@ It prints a residual list on completion. Handle those manually — they are the 
 
 ## Compatibility notes
 
-- `ZeroToApp` is still exported as a deprecated alias for `NativeCtxProvider`, so a project that only swaps the dependency keeps compiling. It is removed in 0.2.0 — migrate rather than relying on it.
+- `ZeroToApp` is still exported as a deprecated alias for `NativeCtxProvider`, so a project that only swaps the dependency keeps compiling. It is still present in 0.2.x and will be removed in 0.3.0 — migrate rather than relying on it.
 - The CLI is `npx nativectx <command>`. The `nativectx` package is a thin alias that forwards to `@nativectx/ui`, so `npx @nativectx/ui <command>` is equivalent. Install the library itself as `@nativectx/ui`.
 - Everything else — component names, props, theme tokens, `createBrand`, all hooks — is unchanged. This rename is not an API redesign; if a component appears to be missing, look it up with the MCP `get_component` tool rather than assuming it was removed.
