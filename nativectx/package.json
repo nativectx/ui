@@ -1,6 +1,6 @@
 {
   "name": "nativectx",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "CLI for NativeCtx UI — installs Claude Skills and runs the MCP server for @nativectx/ui.",
   "license": "MIT",
   "author": "Alex Amayo",

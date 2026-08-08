@@ -42,12 +42,12 @@
   "pnpm": {
     "overrides": {
       "react-docgen-typescript": "2.2.2",
-      "@types/react": "19.2.14",
+      "@types/react": "19.2.18",
       "react": "19.2.3",
       "react-native": "0.85.3",
       "react-native-reanimated": "4.3.1",
       "react-native-safe-area-context": "5.7.0",
-      "@expo/ui": "~56.0.24",
+      "@expo/ui": "~56.0.25",
       "@babel/core": "^7.29.6",
       "@babel/plugin-transform-modules-systemjs": "^7.29.4",
       "@hono/node-server": "^2.0.5",
@@ -67,13 +67,14 @@
       "js-yaml@4": "^4.3.0",
       "minimatch@3": "^3.1.4",
       "minimatch@9": "^9.0.7",
+      "nanoid@3": "^3.3.17",
       "node-forge": "^1.4.0",
       "picomatch@2": "^2.3.2",
       "picomatch@4": "^4.0.4",
       "postcss": "^8.5.18",
       "rollup": "^4.59.0",
       "shell-quote": "^1.9.0",
-      "storybook": "10.2.10",
+      "storybook": "10.5.7",
       "vite@7": "^7.3.5",
       "ws@7": "^7.5.11",
       "ws@8": "^8.21.0",
@@ -99,8 +100,8 @@
     ]
   },
   "dependencies": {
-    "@expo/metro-runtime": "~56.0.18",
-    "expo": "~56.0.18",
+    "@expo/metro-runtime": "~56.0.19",
+    "expo": "~56.0.19",
     "react": "19.2.3",
     "react-native": "0.85.3"
   }

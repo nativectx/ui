@@ -1,6 +1,7 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
+import { version } from '../package.json';
 import { registerResources } from './resources/skills.js';
 import { listComponents } from './tools/list-components.js';
 import { getComponent } from './tools/get-component.js';
@@ -12,7 +13,7 @@ import { generateNavigation } from './tools/generate-navigation.js';
 
 const server = new McpServer({
   name: 'nativectx',
-  version: '0.1.0',
+  version,
 });
 
 // Resources: the 8 Claude skill files
