@@ -16,7 +16,7 @@ import {
   renderIcon,
 } from '@nativectx/ui';
 import { router } from 'expo-router';
-import { Image, Linking, StyleSheet, View } from 'react-native';
+import { Image, Linking, Platform, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
 import { CodeBlock } from '../components/code-block';
@@ -610,46 +610,50 @@ export default function HomeScreen() {
       {/* ─────────────────────────────────────────────────────────────────── */}
       <View style={{ height: 1, backgroundColor: theme.outlineVariant }} />
 
-      {/* ── Platforms ── */}
-      <Container style={{ paddingVertical: SECTION_PAD }}>
-        <View style={{ gap: spacing.xxl }}>
-          <View style={{ gap: spacing.sm, maxWidth: 640 }}>
-            <Typography variant="headlineMedium" weight="bold">The same site, on every platform</Typography>
-            <Typography variant="bodyLarge" color={theme.onSurfaceVariant}>
-              This site is a NativeCtx UI app. The screens below are the page you&apos;re reading now, built once and running as a real iOS app, a real Android app, and this website — no separate codebases, no rewrites.
-            </Typography>
-          </View>
+      {Platform.OS === 'web' && (
+        <>
+          {/* ── Platforms ── */}
+          <Container style={{ paddingVertical: SECTION_PAD }}>
+            <View style={{ gap: spacing.xxl }}>
+              <View style={{ gap: spacing.sm, maxWidth: 640 }}>
+                <Typography variant="headlineMedium" weight="bold">The same site, on every platform</Typography>
+                <Typography variant="bodyLarge" color={theme.onSurfaceVariant}>
+                  This site is a NativeCtx UI app. The screens below are the page you&apos;re reading now, built once and running as a real iOS app, a real Android app, and this website — no separate codebases, no rewrites.
+                </Typography>
+              </View>
 
-          <View style={{ gap: spacing.lg }}>
-            <PlatformShot
-              theme={theme}
-              source={require('../../assets/images/platform-web.png')}
-              label="Web"
-              caption="Responsive layout, sidebar navigation"
-              aspectRatio={1996 / 1588}
-            />
-            <ThemedView columns={2} gap={spacing.lg}>
-              <PlatformShot
-                theme={theme}
-                source={require('../../assets/images/platform-ios.png')}
-                label="iOS"
-                caption="SwiftUI controls, native tab bar"
-                aspectRatio={632 / 1148}
-              />
-              <PlatformShot
-                theme={theme}
-                source={require('../../assets/images/platform-android.png')}
-                label="Android"
-                caption="Jetpack Compose controls, Material tab bar"
-                aspectRatio={692 / 1196}
-              />
-            </ThemedView>
-          </View>
-        </View>
-      </Container>
+              <View style={{ gap: spacing.lg }}>
+                <PlatformShot
+                  theme={theme}
+                  source={require('../../assets/images/platform-web.png')}
+                  label="Web"
+                  caption="Responsive layout, sidebar navigation"
+                  aspectRatio={1996 / 1588}
+                />
+                <ThemedView columns={2} gap={spacing.lg}>
+                  <PlatformShot
+                    theme={theme}
+                    source={require('../../assets/images/platform-ios.png')}
+                    label="iOS"
+                    caption="SwiftUI controls, native tab bar"
+                    aspectRatio={632 / 1148}
+                  />
+                  <PlatformShot
+                    theme={theme}
+                    source={require('../../assets/images/platform-android.png')}
+                    label="Android"
+                    caption="Jetpack Compose controls, Material tab bar"
+                    aspectRatio={692 / 1196}
+                  />
+                </ThemedView>
+              </View>
+            </View>
+          </Container>
 
-      {/* ─────────────────────────────────────────────────────────────────── */}
-      <View style={{ height: 1, backgroundColor: theme.outlineVariant }} />
+          {/* ─────────────────────────────────────────────────────────────────── */}
+          <View style={{ height: 1, backgroundColor: theme.outlineVariant }} />
+        </>
+      )}
 
       {/* ── Footer ── */}
       <Container>
