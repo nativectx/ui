@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { Platform } from 'react-native';
 import type { SFSymbol } from 'sf-symbols-typescript';
 import type { AndroidSymbol } from 'expo-symbols';
 import { useThemeContext } from '../../../theme';
@@ -113,8 +114,11 @@ export default function AppTabs({ tabs, sidebarAdaptable, backgroundColor, blurE
 
   return (
     <NativeTabs
-      tintColor={theme.primary}
-      iconColor={theme.onSurfaceVariant}
+      tintColor={Platform.OS === 'android' ? undefined : theme.primary}
+      indicatorColor={Platform.OS === 'android' ? theme.primary : undefined}
+      iconColor={Platform.OS === 'android'
+        ? { default: theme.onSurfaceVariant, selected: theme.onPrimary }
+        : theme.onSurfaceVariant}
       sidebarAdaptable={sidebarAdaptable}
       backgroundColor={backgroundColor}
       blurEffect={blurEffect}
