@@ -1,5 +1,5 @@
-import React, { createContext, useState, useMemo, useContext } from 'react';
-import { useColorScheme } from 'react-native';
+import React, { createContext, useState, useMemo, useContext, useEffect } from 'react';
+import { Appearance, Platform, useColorScheme } from 'react-native';
 import { createDarkTheme, createLightTheme, ThemeValuesType, type ThemeTokens } from './theme-config';
 import { Brand } from '../brand';
 import { BrandProvider } from '../brand/brand-context';
@@ -48,6 +48,8 @@ type NativeCtxProviderProps = {
    * `'system'` follows the OS light/dark setting and keeps following it until
    * `setMode` or `toggleTheme` is called; `'light'` or `'dark'` pins the theme
    * and ignores the OS. Call `setMode('system')` to resume following.
+   * On native platforms this also synchronizes app-wide native appearance,
+   * including SwiftUI hosts and system controls. Use one root provider.
    * @default 'system'
    */
   defaultMode?: ThemeMode | 'system';
@@ -67,6 +69,20 @@ const NativeCtxProvider = ({ brand, children, ssrWidth, ssrHeight, defaultMode =
   // with the new theme immediately instead of one frame late.
   const mode = override ?? systemMode;
   const values = mode === 'light' ? lightTheme : darkTheme;
+
+  // Sync the user override, not the resolved mode: pinning the resolved system
+  // mode would stop native controls from following subsequent OS changes.
+  useEffect(() => {
+    if (Platform.OS !== 'web') {
+      Appearance.setColorScheme(override ?? 'unspecified');
+    }
+  }, [override]);
+
+  useEffect(() => () => {
+    if (Platform.OS !== 'web') {
+      Appearance.setColorScheme('unspecified');
+    }
+  }, []);
 
   const setMode = (m: ThemeMode | 'system') => {
     setOverride(m === 'system' ? null : m);

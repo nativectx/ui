@@ -1,6 +1,6 @@
 import React from 'react';
 import { act, fireEvent, render, renderHook } from '@testing-library/react-native';
-import { Text, View } from 'react-native';
+import { Appearance, Text, View } from 'react-native';
 import { NativeCtxProvider, useThemeContext, useTheme, useTokens } from './theme';
 import { defaultBrand } from '../brand/default-brand';
 import { createLightTheme, createDarkTheme } from './theme-config';
@@ -89,6 +89,35 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 describe('NativeCtxProvider Provider', () => {
+  describe('Native appearance', () => {
+    it('syncs initial mode, explicit changes, toggles, and returning to system', () => {
+      const spy = jest.spyOn(Appearance, 'setColorScheme').mockImplementation(() => {});
+      try {
+        const { getByTestId, unmount } = render(
+          <NativeCtxProvider brand={defaultBrand} defaultMode="dark">
+            <ThemeTestComponent />
+          </NativeCtxProvider>
+        );
+        expect(spy).toHaveBeenLastCalledWith('dark');
+        fireEvent.press(getByTestId('setLight'));
+        expect(spy).toHaveBeenLastCalledWith('light');
+        fireEvent.press(getByTestId('toggleTheme'));
+        expect(spy).toHaveBeenLastCalledWith('dark');
+        fireEvent.press(getByTestId('setSystem'));
+        expect(spy).toHaveBeenLastCalledWith('unspecified');
+        spy.mockClear();
+        setSystemColorScheme('dark');
+        expect(getByTestId('mode').props.children).toBe('dark');
+        expect(spy).not.toHaveBeenCalled();
+        fireEvent.press(getByTestId('setLight'));
+        unmount();
+        expect(spy).toHaveBeenLastCalledWith('unspecified');
+      } finally {
+        spy.mockRestore();
+      }
+    });
+  });
+
   describe('Theme Mode', () => {
     it('starts in light mode by default', () => {
       const { getByTestId } = render(

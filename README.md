@@ -93,6 +93,14 @@ function MyScreen() {
 }
 ```
 
+Use one root `NativeCtxProvider` to own app appearance. On iOS and Android,
+`defaultMode`, `setMode`, and `toggleTheme` also synchronize native appearance,
+so native controls and SwiftUI hosts inherit the app's light/dark choice.
+`setMode('system')` clears the native override and resumes following the device;
+unmounting the provider also clears it. Web continues to use the theme context.
+This controls native appearance; custom fonts and brand colors still need their
+own styling.
+
 Component reference, theme tokens, hooks, and live examples: **[nativectx.com](https://nativectx.com)**.
 
 ---
