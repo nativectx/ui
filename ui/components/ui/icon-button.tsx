@@ -14,6 +14,7 @@ import { renderIcon } from '../../icons';
 import type { IconConfig } from './button';
 import type { InteractiveComponentProps } from '../shared/types';
 import { blurOnWeb } from '../shared/utils';
+import { WebStateLayer } from '../shared/web-state-layer';
 
 // 2. TYPES
 
@@ -83,6 +84,12 @@ const IconButton = forwardRef<View, IconButtonProps>(({
   const touchSize = Math.max(TOUCH_TARGET, visualSize);
   const iconSize = icon.size ?? (iconSizeMap[size] ?? iconSizeMap.medium);
   const borderRadius = visualSize / 2;
+  // Layout overrides belong to the touch target; shape overrides also belong
+  // to the visible container so its state layer follows the same corners.
+  const customRadii = Object.fromEntries(
+    Object.entries(StyleSheet.flatten(style) ?? {}).filter(([key]) =>
+      /^border.*Radius$/.test(key)),
+  );
 
   const getBgColor = (): string => {
     if (disabled) {
@@ -113,6 +120,7 @@ const IconButton = forwardRef<View, IconButtonProps>(({
       width: visualSize,
       height: visualSize,
       borderRadius,
+      ...customRadii,
       backgroundColor: getBgColor(),
     },
     variant === 'outlined' && {
@@ -124,7 +132,6 @@ const IconButton = forwardRef<View, IconButtonProps>(({
       borderWidth: tokens.focusRing.width,
       borderColor: tokens.focusRing.color,
     },
-    !disabled && hovered && Platform.OS === 'web' && variant !== 'standard' && { opacity: 0.92 },
   ];
 
   return (
@@ -152,13 +159,16 @@ const IconButton = forwardRef<View, IconButtonProps>(({
       style={({ pressed }) => [
         styles.touchTarget,
         { width: touchSize, height: touchSize },
-        pressed && !disabled && { opacity: 0.7 },
+        pressed && !disabled && Platform.OS !== 'web' && { opacity: 0.7 },
         style,
       ]}
     >
-      <View style={containerStyle}>
-        {renderIcon(icon, icon.library ?? 'Feather', iconSize, getIconColor())}
-      </View>
+      {({ pressed }) => (
+        <View style={containerStyle}>
+          {!disabled && <WebStateLayer color={getIconColor()} hovered={hovered} pressed={pressed} />}
+          {renderIcon(icon, icon.library ?? 'Feather', iconSize, getIconColor())}
+        </View>
+      )}
     </Pressable>
   );
 });

@@ -16,6 +16,7 @@ import { useTheme } from '../../theme';
 import { renderIcon, type IconLibrary } from '../../icons';
 import type { InteractiveComponentProps, LoadableComponentProps } from '../shared/types';
 import { blurOnWeb, platformShadow } from '../shared/utils';
+import { WebStateLayer } from '../shared/web-state-layer';
 
 // 2. TYPES
 
@@ -265,15 +266,6 @@ const Button = forwardRef<View, ButtonProps>(({
       });
     }
 
-    // M3 state layer: subtle overlay on hover (8% opacity) and press (12% opacity)
-    if (Platform.OS === 'web' && !disabled) {
-      if (pressed) {
-        (baseStyle as ViewStyle[]).push({ opacity: 0.88 });
-      } else if (hovered) {
-        (baseStyle as ViewStyle[]).push({ opacity: 0.92 });
-      }
-    }
-
     // subtle transform for hover/press unless user requests reduced motion
     if (!reduceMotionEnabled) {
       if (pressed) {
@@ -385,19 +377,24 @@ const Button = forwardRef<View, ButtonProps>(({
           : undefined
       }
     >
-      <View style={[styles.contentContainer, { height: visualHeight }]}> 
-        {renderButtonIcon('left')}
-        <Typography
-          variant="labelLarge"
-          weight="medium"
-          color={textColor}
-          numberOfLines={1}
-          align="center"
-        >
-          {title}
-        </Typography>
-        {renderButtonIcon('right')}
-      </View>
+      {({ pressed }) => (
+        <>
+          {!disabled && <WebStateLayer color={textColor} hovered={hovered} pressed={pressed} />}
+          <View style={[styles.contentContainer, { height: visualHeight }]}>
+            {renderButtonIcon('left')}
+            <Typography
+              variant="labelLarge"
+              weight="medium"
+              color={textColor}
+              numberOfLines={1}
+              align="center"
+            >
+              {title}
+            </Typography>
+            {renderButtonIcon('right')}
+          </View>
+        </>
+      )}
     </Pressable>
   );
 });

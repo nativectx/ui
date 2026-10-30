@@ -15,6 +15,7 @@ import { useTheme } from '../../theme';
 import { renderIcon } from '../../icons';
 import type { InteractiveComponentProps } from '../shared/types';
 import { blurOnWeb, platformShadow } from '../shared/utils';
+import { WebStateLayer } from '../shared/web-state-layer';
 import type { IconConfig } from './button';
 
 // 2. TYPES
@@ -210,19 +211,24 @@ const FAB = forwardRef<View, FABProps>(({
           : undefined
       }
     >
-      <View style={[styles.content, { gap: theme.spacing.sm }]}>
-        {renderIcon(icon, iconLibrary, iconSize, iconColor)}
-        {isExtended && (
-          <Typography
-            variant="labelLarge"
-            weight="medium"
-            color={colors.fg}
-            numberOfLines={1}
-          >
-            {label}
-          </Typography>
-        )}
-      </View>
+      {({ pressed }) => (
+        <>
+          {!disabled && <WebStateLayer color={colors.fg} hovered={hovered} pressed={pressed} />}
+          <View style={[styles.content, { gap: theme.spacing.sm }]}>
+            {renderIcon(icon, iconLibrary, iconSize, iconColor)}
+            {isExtended && (
+              <Typography
+                variant="labelLarge"
+                weight="medium"
+                color={colors.fg}
+                numberOfLines={1}
+              >
+                {label}
+              </Typography>
+            )}
+          </View>
+        </>
+      )}
     </Pressable>
   );
 });
