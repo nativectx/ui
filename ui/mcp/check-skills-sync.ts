@@ -27,8 +27,7 @@
  *     a platform the manifest excludes for it.
  *  7. Stale import paths — a `from '@nativectx/ui/…'` specifier that does not
  *     resolve against the `exports` map in ui/package.json.
- *  8. Stale package name — any residual `zero-to-app` outside
- *     nativectx-migration.md, where it is the whole subject.
+ *  8. Stale package name — any residual `zero-to-app` references.
  *  9. Count claims — "list_components() returns N components" and "N skill
  *     files" against the manifest and the shipped skill set.
  *
@@ -68,9 +67,6 @@ const root = join(__dirname, '..');
 const repoRoot = join(root, '..');
 const skillsDir = join(repoRoot, '.claude', 'skills');
 const manifestPath = join(root, 'dist', 'mcp', 'component-manifest.json');
-
-/** The one skill whose subject is the old package name, so it may say it. */
-const MIGRATION_SKILL = 'nativectx-migration.md';
 
 /**
  * Props every component accepts regardless of what the manifest extracted.
@@ -481,12 +477,6 @@ function checkImports(skill: Skill, exportNames: Set<string> | null, exportsMap:
       const { specifier } = statement;
       const line = lineOf(block, statement.index);
 
-      if (specifier === 'zero-to-app' || specifier.startsWith('zero-to-app/')) {
-        // Reported by checkStalePackageName as a text match too; the import
-        // form gets its own remedy because it is the one that breaks a build.
-        continue;
-      }
-
       if (specifier !== '@nativectx/ui' && !specifier.startsWith('@nativectx/ui/')) continue;
 
       const subpath = specifier === '@nativectx/ui' ? '.' : `./${specifier.slice('@nativectx/ui/'.length)}`;
@@ -683,33 +673,17 @@ function checkPlatformClaims(skill: Skill, components: ManifestComponent[]): voi
   }
 }
 
-/**
- * Residual references to the pre-rename package.
- *
- * Two exemptions, both because the mention is about the rename rather than a
- * leftover of it: the migration skill in full, and any single line that is
- * itself about migrating. A line such as "| `nativectx://migration` | Upgrading
- * from `zero-to-app` |" has to name the old package to mean anything.
- *
- * The third exemption is the checkout directory: repo-tree diagrams show the
- * clone's own folder name, which is a filesystem fact rather than a claim about
- * the published package.
- */
+/** Reject references to the old package name. */
 function checkStalePackageName(skill: Skill): void {
-  if (skill.file === MIGRATION_SKILL) return;
-
   for (const { line, text } of skill.allLines) {
     if (!/zero-to-app/.test(text)) continue;
-    if (/migrat(e|ed|ing|ion)/i.test(text)) continue;
-    if (skill.codeLines.has(line) && /^[\s│├└─|+`-]*zero-to-app\//.test(text)) continue;
 
     report(
       'error',
       skill.file,
       line,
       'Mentions `zero-to-app`, the pre-rename package name.',
-      `The package is \`@nativectx/ui\` and the brand is NativeCtx UI. ` +
-        `Only ${MIGRATION_SKILL} — and lines that are themselves about migrating — may name it.`,
+      'Use `@nativectx/ui` for the package and NativeCtx UI for the brand.',
     );
   }
 }

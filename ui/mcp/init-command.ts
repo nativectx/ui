@@ -49,9 +49,6 @@ export const MCP_SERVER_KEY = 'nativectx';
  */
 export const MCP_SERVER_ENTRY = { command: 'npx', args: ['-y', 'nativectx', 'mcp'] } as const;
 
-/** The pre-rename key, so an un-migrated project gets pointed at `migrate`. */
-const LEGACY_MCP_KEY = 'zero-to-app';
-
 export type McpStatus =
   | 'created' // no .mcp.json existed
   | 'added' // merged into an existing file
@@ -66,8 +63,6 @@ export interface McpPlan {
   detail: string;
   /** Server keys already in the file that this command did not touch. */
   preserved: string[];
-  /** True when the file still carries the pre-rename `zero-to-app` server key. */
-  legacyKeyPresent: boolean;
 }
 
 /**
@@ -123,7 +118,6 @@ export function planMcpConfig(raw: string | null): McpPlan {
       next: `${JSON.stringify(config, null, 2)}\n`,
       detail: `created with the "${MCP_SERVER_KEY}" server`,
       preserved: [],
-      legacyKeyPresent: false,
     };
   }
 
@@ -136,7 +130,6 @@ export function planMcpConfig(raw: string | null): McpPlan {
       next: null,
       detail: 'is not valid JSON — left untouched',
       preserved: [],
-      legacyKeyPresent: false,
     };
   }
 
@@ -146,7 +139,6 @@ export function planMcpConfig(raw: string | null): McpPlan {
       next: null,
       detail: 'is not a JSON object — left untouched',
       preserved: [],
-      legacyKeyPresent: false,
     };
   }
 
@@ -158,7 +150,6 @@ export function planMcpConfig(raw: string | null): McpPlan {
       : {};
 
   const preserved = Object.keys(servers).filter((key) => key !== MCP_SERVER_KEY);
-  const legacyKeyPresent = LEGACY_MCP_KEY in servers;
 
   if (MCP_SERVER_KEY in servers) {
     return isEquivalentEntry(servers[MCP_SERVER_KEY])
@@ -167,14 +158,12 @@ export function planMcpConfig(raw: string | null): McpPlan {
           next: null,
           detail: `already starts the "${MCP_SERVER_KEY}" server`,
           preserved,
-          legacyKeyPresent,
         }
       : {
           status: 'conflict',
           next: null,
           detail: `already has a different "${MCP_SERVER_KEY}" server — left untouched`,
           preserved,
-          legacyKeyPresent,
         };
   }
 
@@ -189,7 +178,6 @@ export function planMcpConfig(raw: string | null): McpPlan {
       `updated with the "${MCP_SERVER_KEY}" server` +
       (preserved.length > 0 ? `, alongside ${preserved.length} existing server(s)` : ''),
     preserved,
-    legacyKeyPresent,
   };
 }
 
@@ -238,8 +226,7 @@ export interface PeerSpec {
  * Read the peer contract off this package's own manifest.
  *
  * Deriving it means the check cannot drift from what the package actually
- * declares — the same reason `migrate` reads its own version rather than
- * hardcoding a range.
+ * declares.
  */
 export function readPeerSpecs(pkg: {
   peerDependencies?: Record<string, string>;
@@ -381,9 +368,6 @@ export function runInitCommand(argv: string[]): void {
   if (mcp.status === 'unparseable') {
     console.log(`     Fix the JSON and re-run, or add the entry by hand:`);
     console.log(`       "${MCP_SERVER_KEY}": ${JSON.stringify(MCP_SERVER_ENTRY)}`);
-  }
-  if (mcp.legacyKeyPresent) {
-    console.log(`     A "${LEGACY_MCP_KEY}" server is still configured — run \`npx nativectx migrate\`.`);
   }
 
   // 3 ── Peers

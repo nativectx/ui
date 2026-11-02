@@ -9,7 +9,7 @@ NativeCtx UI ships two AI integrations from one CLI:
 | Command | What it does |
 |---|---|
 | `npx nativectx init` | Sets up both of the below in one pass — installs the skills, merges the server entry into `.mcp.json`, and reports missing peers and provider wiring. `--dry-run` previews |
-| `npx nativectx skills` | Copies 6 skill files into `.claude/skills/` — static, read automatically by Claude Code. Add `--contributor` for the 2 about developing the library itself |
+| `npx nativectx skills` | Copies 5 skill files into `.claude/skills/` — static, read automatically by Claude Code. Add `--contributor` for the 2 about developing the library itself |
 | `npx nativectx mcp` | Starts the MCP server — live tools that read a manifest generated from component source |
 
 The skills stand alone. The MCP server is enrichment: it answers *lookups* (exact props, real token names, generated palettes) that would go stale if written down. When it's connected, prefer it over recalling props from memory.
@@ -31,7 +31,7 @@ The skills stand alone. The MCP server is enrichment: it answers *lookups* (exac
 }
 ```
 
-**Claude Desktop** — same block, in `claude_desktop_config.json` (`~/Library/Application Support/Claude/` on macOS). This file lives outside the project, so it isn't touched by `npx nativectx skills` or `npx nativectx migrate`.
+**Claude Desktop** — same block, in `claude_desktop_config.json` (`~/Library/Application Support/Claude/` on macOS). This file lives outside the project, so it isn't touched by `npx nativectx skills`.
 
 Restart the client after editing. Verify with `list_components()` — it should return 29 components.
 
@@ -74,7 +74,7 @@ Where the skills and the tools overlap, the tools win on *facts* — prop names,
 
 ## Resources
 
-The 8 skill files are also served as MCP resources, so a client without `.claude/skills/` can still read them:
+The 7 skill files are also served as MCP resources, so a client without `.claude/skills/` can still read them:
 
 | Resource URI | Content |
 |---|---|
@@ -84,7 +84,6 @@ The 8 skill files are also served as MCP resources, so a client without `.claude
 | `nativectx://navigation` | Navigation patterns and layout shapes |
 | `nativectx://dev` | Development commands and repo structure |
 | `nativectx://contributing` | Checklist for adding new components |
-| `nativectx://migration` | Upgrading from `zero-to-app` |
 | `nativectx://mcp` | This file |
 
 ---

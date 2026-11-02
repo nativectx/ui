@@ -224,10 +224,4 @@ export const useTokens = (): ThemeTokens => {
   return values.tokens;
 };
 
-/**
- * @deprecated Renamed to `NativeCtxProvider`. This alias will be removed in 0.3.0.
- * Run `npx nativectx migrate` to update automatically.
- */
-const ZeroToApp = NativeCtxProvider;
-
-export { ThemeContext, NativeCtxProvider, ZeroToApp };
+export { ThemeContext, NativeCtxProvider };

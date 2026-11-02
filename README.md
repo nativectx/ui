@@ -12,7 +12,7 @@ Generate iOS, Android, and web interfaces simultaneously with platform-specific 
 
 ## Why
 
-- **Claude writes it right the first time** — an MCP server and six Claude Skills install with the package. Claude calls live tools for props, tokens, and palettes mid-conversation instead of guessing at an API it half-remembers.
+- **Claude writes it right the first time** — an MCP server and five Claude Skills install with the package. Claude calls live tools for props, tokens, and palettes mid-conversation instead of guessing at an API it half-remembers.
 - **One tree, three platforms** — the same component code runs on iOS, Android, and web. No platform forks, no `Platform.select` scattered through your screens.
 - **Native where users expect native** — Switch, Slider, SegmentedControl, and ProgressIndicator render as real SwiftUI and Jetpack Compose via Expo UI. Tabs and headers use the platform's own, not JavaScript lookalikes.
 - **Material 3 design system** — one seed color generates the whole palette: semantic tokens, type scale, elevation, and shape flow through all 29 components. Accessible roles, focus management, and reduced motion come with them.
@@ -115,7 +115,7 @@ Component reference, theme tokens, hooks, and live examples: **[nativectx.com](h
 npx nativectx skills
 ```
 
-Copies the six app-building skills — setup, components, theme, navigation, mcp, migration — into `.claude/skills/`. Claude Code reads them automatically. Re-run after upgrading to refresh them.
+Copies the five app-building skills — setup, components, theme, navigation, mcp — into `.claude/skills/`. Claude Code reads them automatically. Re-run after upgrading to refresh them.
 
 Two further skills cover developing @nativectx/ui itself. They are held back by default so they don't compete for context in your app:
 
@@ -152,21 +152,7 @@ Already installed locally? Point at the bundled CLI instead: `node ./node_module
 | `generate_brand_config` | Output a complete `createBrand()` snippet |
 | `generate_navigation` | Scaffold flat tabs, tabs + sidebar, or tabs + stack |
 
-All eight skills are also readable on demand as MCP resources, whichever set you installed.
-
----
-
-## Upgrading from `zero-to-app`
-
-This library was formerly published as `zero-to-app`:
-
-```bash
-npx nativectx migrate
-```
-
-Rewrites the dependency, import specifiers, the renamed `ZeroToApp` → `NativeCtxProvider` provider, your `.mcp.json` entry, and the stale `zero-to-app-*.md` skill files. `--dry-run` previews; anything it can't safely automate is printed as a review list.
-
-`ZeroToApp` still works as a deprecated alias, so a dependency bump alone won't break your build — but it is removed in 0.3.0.
+All seven skills are also readable on demand as MCP resources, whichever set you installed.
 
 ---
 

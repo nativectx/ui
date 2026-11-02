@@ -179,19 +179,6 @@ describe('planMcpConfig — never clobbers', () => {
   });
 });
 
-describe('planMcpConfig — legacy key', () => {
-  it('flags a leftover zero-to-app server', () => {
-    const plan = planMcpConfig(JSON.stringify({ mcpServers: { 'zero-to-app': { command: 'npx' } } }));
-    expect(plan.legacyKeyPresent).toBe(true);
-    expect(plan.status).toBe('added');
-  });
-
-  it('does not flag a clean config', () => {
-    expect(planMcpConfig(null).legacyKeyPresent).toBe(false);
-    expect(planMcpConfig(JSON.stringify({ mcpServers: {} })).legacyKeyPresent).toBe(false);
-  });
-});
-
 describe('detectIndent', () => {
   it('reads the first indented line', () => {
     expect(detectIndent('{\n  "a": 1\n}')).toBe('  ');

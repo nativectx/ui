@@ -5,7 +5,6 @@ const PACKAGE_SKILLS = [
   'nativectx-contributing.md',
   'nativectx-dev.md',
   'nativectx-mcp.md',
-  'nativectx-migration.md',
   'nativectx-navigation.md',
   'nativectx-setup.md',
   'nativectx-theme.md',
@@ -14,7 +13,6 @@ const PACKAGE_SKILLS = [
 const CONSUMER_FILES = [
   'nativectx-components.md',
   'nativectx-mcp.md',
-  'nativectx-migration.md',
   'nativectx-navigation.md',
   'nativectx-setup.md',
   'nativectx-theme.md',
@@ -36,7 +34,7 @@ describe('skillName guard', () => {
   });
 
   it('rejects files this package does not own', () => {
-    expect(skillName('zero-to-app-setup.md')).toBeNull();
+    expect(skillName('other-package-setup.md')).toBeNull();
     expect(skillName('my-project-notes.md')).toBeNull();
     expect(skillName('nativectx-setup.txt')).toBeNull();
     expect(skillName('README.md')).toBeNull();
@@ -57,14 +55,14 @@ describe('planSkills partitioning', () => {
   it('installs only app-building skills by default', () => {
     const plan = planSkills(PACKAGE_SKILLS, []);
     expect(plan.install).toEqual(CONSUMER_FILES);
-    expect(plan.install).toHaveLength(6);
+    expect(plan.install).toHaveLength(5);
     expect(plan.heldBack).toEqual(CONTRIBUTOR_FILES);
   });
 
   it('installs everything in contributor mode', () => {
     const plan = planSkills(PACKAGE_SKILLS, [], { contributor: true });
     expect(plan.install).toEqual(PACKAGE_SKILLS);
-    expect(plan.install).toHaveLength(8);
+    expect(plan.install).toHaveLength(7);
     expect(plan.heldBack).toEqual([]);
   });
 
@@ -94,7 +92,7 @@ describe('planSkills prune', () => {
       'my-own-dev.md',
       'contributing.md',
       'nativectx-dev 2.md',
-      'zero-to-app-dev.md',
+      'other-package-dev.md',
       'team-conventions.md',
     ];
     expect(planSkills(PACKAGE_SKILLS, dest).prune).toEqual(CONTRIBUTOR_FILES);

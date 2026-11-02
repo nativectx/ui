@@ -424,7 +424,7 @@ The `.claude/skills/*.md` files are shipped inside the package and installed int
 | `nativectx-navigation.md` | navigation components only | Usage patterns, platform behaviour, layout wiring |
 | `nativectx-theme.md` | new theme tokens | Token group and what it drives |
 | `nativectx-mcp.md` | only if MCP tools/resources change | — |
-| `nativectx-setup.md` / `-migration.md` | only if install or upgrade steps change | — |
+| `nativectx-setup.md` | only if install steps change | — |
 | `nativectx-dev.md` / `nativectx-contributing.md` | only if the repo workflow changes | These two are contributor-only (`CONTRIBUTOR_SKILLS` in `ui/mcp/skills-command.ts`) and install behind `nativectx skills --contributor` |
 
 **Do not put prop tables, types, or defaults in a skill doc.** Prop-level detail is served live by `get_component` from the manifest; duplicating it in markdown is exactly the drift `pnpm check:skills` exists to catch. Skills teach patterns and composition; the MCP answers lookups.
