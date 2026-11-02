@@ -170,7 +170,7 @@ pnpm verify          # Everything CI runs: build, check, lint, typecheck, test
 - `apps/storybook/` — isolated component development
 - `apps/demo/` — the docs site, built with expo-router
 
-Publishing runs from the `Release` workflow on a `v*` tag; there is no local publish script, so a release always goes out from a green, committed tree.
+Publishing runs from the `Release` workflow on a `v*` tag; there is no local publish script, so a release always goes out from a green, committed tree. To retry only the production demo deployment, run `gh workflow run release.yml --ref master -f version=0.3.0 -f deploy_only=true`; this skips npm publishing.
 
 ---
 

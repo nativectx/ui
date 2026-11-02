@@ -10,6 +10,10 @@ on:
         description: 'Version to release (e.g., 1.0.2)'
         required: true
         type: string
+      deploy_only:
+        description: 'Deploy the demo without publishing npm packages'
+        type: boolean
+        default: false
       publish_cli:
         description: 'Also publish the nativectx CLI alias (requires its own trusted publisher)'
         type: boolean
@@ -18,6 +22,7 @@ on:
 jobs:
   release:
     name: Publish to npm
+    if: github.event_name != 'workflow_dispatch' || !inputs.deploy_only
     runs-on: ubuntu-latest
     environment: npm-publish
     permissions:
@@ -66,6 +71,7 @@ jobs:
     name: Deploy Demo to Production
     runs-on: ubuntu-latest
     needs: release
+    if: ${{ !cancelled() && (needs.release.result == 'success' || (github.event_name == 'workflow_dispatch' && inputs.deploy_only)) }}
 
     steps:
       - name: Checkout
@@ -78,7 +84,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: 'pnpm'
 
       - name: Setup EAS
