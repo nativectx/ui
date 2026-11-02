@@ -37,7 +37,6 @@ jobs:
         with:
           node-version: 24
           cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Setup npm for trusted publishing
         run: npm install --global npm@11
@@ -53,9 +52,7 @@ jobs:
 
       - name: Publish @nativectx/ui to npm with OIDC
         working-directory: ui
-        run: |
-          pnpm pack --pack-destination ../release-artifacts/ui
-          npm publish ../release-artifacts/ui/*.tgz --access public
+        run: npm publish --access public
 
       # pnpm pack resolves workspace:^ to the library's release version.
       - name: Publish nativectx CLI alias to npm with OIDC
