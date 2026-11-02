@@ -10,6 +10,10 @@ on:
         description: 'Version to release (e.g., 1.0.2)'
         required: true
         type: string
+      publish_cli:
+        description: 'Also publish the nativectx CLI alias (requires its own trusted publisher)'
+        type: boolean
+        default: true
 
 jobs:
   release:
@@ -31,9 +35,12 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
+
+      - name: Setup npm for trusted publishing
+        run: npm install --global npm@11
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -41,17 +48,22 @@ jobs:
       - name: Build package
         run: pnpm build
 
-      - name: Publish @nativectx/ui to npm
-        run: pnpm --filter @nativectx/ui publish --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Test package
+        run: pnpm test
 
-      # Must come second: the wrapper depends on @nativectx/ui, and pnpm
-      # resolves workspace:^ to a real range at publish time.
-      - name: Publish nativectx CLI alias to npm
-        run: pnpm --filter nativectx publish --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish @nativectx/ui to npm with OIDC
+        working-directory: ui
+        run: |
+          pnpm pack --pack-destination ../release-artifacts/ui
+          npm publish ../release-artifacts/ui/*.tgz --access public
+
+      # pnpm pack resolves workspace:^ to the library's release version.
+      - name: Publish nativectx CLI alias to npm with OIDC
+        if: github.event_name != 'workflow_dispatch' || inputs.publish_cli
+        working-directory: nativectx
+        run: |
+          pnpm pack --pack-destination ../release-artifacts/cli
+          npm publish ../release-artifacts/cli/*.tgz --access public
 
   deploy-production:
     name: Deploy Demo to Production
