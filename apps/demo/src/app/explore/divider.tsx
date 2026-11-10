@@ -18,7 +18,7 @@ const dividerProps: PropDefinition[] = [
     name: 'inset',
     type: "'none' | 'start' | 'middle'",
     default: "'none'",
-    description: 'Adds margin to one or both sides (start = left, middle = both)',
+    description: 'Adds margin to one or both sides (start = leading edge, middle = both)',
   },
   {
     name: 'color',
@@ -63,7 +63,7 @@ export default function DividerPage() {
   <Typography>Right</Typography>
 </View>`}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center', height: 32, gap: 0 }}>
+        <View testID="divider-vertical" style={{ flexDirection: 'row', alignItems: 'center', height: 32, gap: 0 }}>
           <Typography variant="bodyMedium">Left</Typography>
           <Divider orientation="vertical" style={{ marginHorizontal: 12 }} />
           <Typography variant="bodyMedium">Center</Typography>
@@ -81,11 +81,19 @@ export default function DividerPage() {
       >
         <View style={{ gap: spacing.md, width: '100%' }}>
           <Typography variant="labelSmall" muted>{'inset="none"'}</Typography>
-          <Divider inset="none" />
+          <View testID="divider-none"><Divider inset="none" /></View>
           <Typography variant="labelSmall" muted>{'inset="start"'}</Typography>
-          <Divider inset="start" />
+          <View testID="divider-start"><Divider inset="start" /></View>
           <Typography variant="labelSmall" muted>{'inset="middle"'}</Typography>
-          <Divider inset="middle" />
+          <View testID="divider-middle"><Divider inset="middle" /></View>
+        </View>
+      </DemoSection>
+
+      <DemoSection title="Right-to-left insets" description="Start follows the leading edge in right-to-left layouts.">
+        <View {...{ dir: 'rtl' }} style={{ direction: 'rtl', width: '100%', gap: spacing.md }}>
+          <View testID="divider-rtl-none"><Divider inset="none" /></View>
+          <View testID="divider-rtl-start"><Divider inset="start" /></View>
+          <View testID="divider-rtl-middle"><Divider inset="middle" /></View>
         </View>
       </DemoSection>
 

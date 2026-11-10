@@ -20,7 +20,8 @@ export interface DividerProps {
 // 3. COMPONENT
 
 /**
- * Horizontal divider line using M3 outline color.
+ * Divider line using M3 outline color. Horizontal dividers stretch within a
+ * column or block parent; supply an explicit width when composing one in a row.
  *
  * @category layout
  */
@@ -30,14 +31,14 @@ const Divider = ({ orientation = 'horizontal', inset = 'none', color, style }: D
 
   const insetStyle: ViewStyle =
     inset === 'start'
-      ? { marginLeft: 16 }
+      ? orientation === 'horizontal' ? { marginStart: 16 } : { marginLeft: 16 }
       : inset === 'middle'
-      ? { marginHorizontal: 16 }
+      ? orientation === 'horizontal' ? { marginStart: 16, marginEnd: 16 } : { marginHorizontal: 16 }
       : {};
 
   const lineStyle: ViewStyle =
     orientation === 'horizontal'
-      ? { height: StyleSheet.hairlineWidth, width: '100%' }
+      ? { height: StyleSheet.hairlineWidth, alignSelf: 'stretch' }
       : { width: StyleSheet.hairlineWidth, height: '100%' };
 
   return (
