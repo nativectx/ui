@@ -158,6 +158,10 @@ All seven skills are also readable on demand as MCP resources, whichever set you
 
 ## Development
 
+Proposed navigation, overlay and icon work from the Key Lens layout audit is
+tracked in [Layout capabilities](docs/proposals/layout-capabilities.md). These
+capabilities are proposals, not current component APIs.
+
 ```bash
 pnpm setup           # Install deps and build the library — start here
 pnpm dev:storybook   # Component development
