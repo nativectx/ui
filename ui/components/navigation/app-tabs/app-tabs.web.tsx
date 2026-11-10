@@ -7,7 +7,7 @@ import {
   TabListProps,
 } from 'expo-router/ui';
 import React, { ReactNode, useState, useEffect } from 'react';
-import { Pressable, View, StyleSheet, Linking } from 'react-native';
+import { Pressable, View, StyleSheet, Linking, type ViewStyle } from 'react-native';
 import { useThemeContext } from '../../../theme';
 import { Typography } from '../../ui/typography';
 import { ThemedView } from '../../ui/themed-view';
@@ -174,29 +174,55 @@ interface TabButtonProps extends TabTriggerSlotProps {
   materialIcon?: MaterialIconName;
 }
 
+// Resolve the style before passing it through Expo Router's asChild slot: its
+// style merge cannot preserve a Pressable style callback.
+function useDesktopButton(selected = false) {
+  const { values: theme } = useThemeContext();
+  const [hovered, setHovered] = useState(false);
+  const [pressed, setPressed] = useState(false);
+  const style: ViewStyle = {
+    paddingHorizontal: theme.spacing.lg,
+    alignSelf: 'stretch',
+    justifyContent: 'center',
+    opacity: pressed ? 0.7 : 1,
+  };
+
+  return {
+    color: selected || hovered ? theme.primary : theme.onSurfaceVariant,
+    interactionProps: {
+      onHoverIn: () => setHovered(true),
+      onHoverOut: () => setHovered(false),
+      onPressIn: () => setPressed(true),
+      onPressOut: () => setPressed(false),
+      style,
+    },
+  };
+}
+
+function DesktopButtonContent({ children, icon, color }: {
+  children: ReactNode;
+  icon?: PlatformIcon | string;
+  color: string;
+}) {
+  const { values: theme } = useThemeContext();
+  return (
+    <View style={[styles.tabButtonContent, { gap: theme.spacing.sm }]}>
+      {icon && renderIcon(icon, 'MaterialIcons', 20, color)}
+      <Typography variant="labelLarge" weight="medium" color={color}>
+        {children}
+      </Typography>
+    </View>
+  );
+}
+
 function TabButton({ children, isFocused, webIcon, materialIcon, ...props }: TabButtonProps) {
   const { values: theme } = useThemeContext();
-  const spacing = theme.spacing;
-  const [hovered, setHovered] = useState(false);
-
-  const iconToRender = webIcon || (materialIcon ? { library: 'MaterialIcons' as const, name: resolveMaterialIconName(materialIcon) } : undefined);
-  const iconColor = isFocused || hovered ? theme.primary : theme.onSurfaceVariant;
+  const { color, interactionProps } = useDesktopButton(isFocused);
+  const icon = webIcon || (materialIcon ? { library: 'MaterialIcons' as const, name: resolveMaterialIconName(materialIcon) } : undefined);
 
   return (
-    <Pressable
-      {...props}
-      onHoverIn={() => setHovered(true)}
-      onHoverOut={() => setHovered(false)}
-      style={({ pressed }: any) => [
-        { paddingHorizontal: spacing.lg, alignSelf: 'stretch', justifyContent: 'center' },
-        pressed && { opacity: 0.7 },
-      ]}>
-      <View style={[styles.tabButtonContent, { gap: spacing.sm }]}>
-        {iconToRender && renderIcon(iconToRender, 'MaterialIcons', 20, iconColor)}
-        <Typography variant="labelLarge" weight="medium" color={iconColor}>
-          {children}
-        </Typography>
-      </View>
+    <Pressable {...props} {...interactionProps}>
+      <DesktopButtonContent icon={icon} color={color}>{children}</DesktopButtonContent>
       {isFocused && (
         <View style={[styles.activeIndicator, { backgroundColor: theme.primary }]} />
       )}
@@ -275,27 +301,15 @@ function CustomTabList({
 // --- Desktop external link button ---
 
 function ExternalLinkButton({ href, label, icon }: AppTabsExternalLink) {
-  const { values: theme } = useThemeContext();
-  const spacing = theme.spacing;
-  const [hovered, setHovered] = useState(false);
-
-  const color = hovered ? theme.primary : theme.onSurfaceVariant;
+  const { color, interactionProps } = useDesktopButton();
 
   return (
-    <Link href={href as any} target="_blank" asChild>
+    <Link href={href as any} target="_blank" rel="noopener noreferrer" asChild>
       <Pressable
-        onHoverIn={() => setHovered(true)}
-        onHoverOut={() => setHovered(false)}
-        style={({ pressed }: any) => [
-          { paddingHorizontal: spacing.lg, alignSelf: 'stretch', justifyContent: 'center', borderRadius: theme.shape.buttonBorderRadius },
-          pressed && { opacity: 0.7 },
-        ]}>
-        <View style={[styles.tabButtonContent, { gap: spacing.sm }]}>
-          {icon && renderIcon(icon, 'MaterialIcons', 20, color)}
-          <Typography variant="labelLarge" weight="medium" color={color}>
-            {label}
-          </Typography>
-        </View>
+        {...interactionProps}
+        // RN Web forwards anchor attributes through hrefAttrs when Link uses asChild.
+        {...{ hrefAttrs: { target: '_blank', rel: 'noopener noreferrer' } }}>
+        <DesktopButtonContent icon={icon} color={color}>{label}</DesktopButtonContent>
       </Pressable>
     </Link>
   );
