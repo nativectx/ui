@@ -12,14 +12,6 @@ function TabLayoutInner() {
       href: 'https://docs.expo.dev',
       icon: { library: 'Feather', name: 'book-open' },
     },
-    {
-      label: 'React Docs',
-      href: 'https://react.dev',
-    },
-    {
-      label: 'TypeScript Docs',
-      href: 'https://www.typescriptlang.org/docs/',
-    },
   ];
 
   return (
